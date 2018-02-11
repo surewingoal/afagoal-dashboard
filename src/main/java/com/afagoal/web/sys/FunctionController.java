@@ -29,12 +29,12 @@ public class FunctionController {
     @Autowired
     private SysFunctionDao sysFunctionDao;
 
-    @RequestMapping("/sys/function/list_page")
+    @RequestMapping("/sys/function")
     public String listPage() {
         return "system/function/functions";
     }
 
-    @RequestMapping("/sys/function/info_page")
+    @RequestMapping("/sys/function/info")
     public String infoPage(@RequestParam(value = "id", required = false) Integer id,
                            @RequestParam(value = "pid", required = false) Integer pid,
                            ModelMap modelMap) {
