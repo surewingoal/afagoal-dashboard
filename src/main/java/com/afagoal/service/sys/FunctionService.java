@@ -26,19 +26,20 @@ public class FunctionService {
 
     public List<Tree<SysFunction>> treeFunction(){
         List<BooleanExpression> booleanExpressions = new ArrayList();
+        booleanExpressions.add(functionDao.getQEntity().state.ne((byte) 99));
         List<SysFunction> functions = functionDao.getEntities(booleanExpressions,null);
 
         List<Tree<SysFunction>> trees = new ArrayList();
 
         functions.forEach(function -> {
             Tree<SysFunction> tree = new Tree();
-            tree.setId(function.getId());
-            tree.setParentId(function.getFunctionParentId());
+            tree.setId(String.valueOf(function.getId()));
+            tree.setParentId(String.valueOf(function.getPid()));
             tree.setText(function.getFunctionName());
-            Map<String,Object> attributrs = new HashMap();
-            attributrs.put("url",function.getFunctionUrl());
-            attributrs.put("icon",null);
-            tree.setAttributes(attributrs);
+            Map<String,Object> attributes = new HashMap();
+            attributes.put("url",function.getFunctionUrl());
+            attributes.put("icon",function.getIcon());
+            tree.setAttributes(attributes);
 
             trees.add(tree);
         });

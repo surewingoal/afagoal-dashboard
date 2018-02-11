@@ -59,7 +59,7 @@ public class BuildTree {
 		if (nodes == null) {
 			return null;
 		}
-		List<Tree<T>> topNodes = new ArrayList<Tree<T>>();
+		List<Tree<T>> topNodes = new ArrayList();
 
 		for (Tree<T> children : nodes) {
 
