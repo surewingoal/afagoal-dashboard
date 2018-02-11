@@ -37,12 +37,14 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Response jackson(JsonProcessingException e) {
 //        log.error("json异常", e);
+        e.printStackTrace();
         return Response.errorJson;
     }
 
     @ExceptionHandler(org.springframework.validation.BindException.class)
     @ResponseBody
     public Response bindException(BindException ex) {
+        ex.printStackTrace();
         List<ObjectError> allErrors = ex.getAllErrors();
         String s = allErrors.stream().map(ObjectError::getDefaultMessage).collect(joining("\n"));
         return Response.error(s);

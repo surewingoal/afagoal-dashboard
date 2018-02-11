@@ -56,6 +56,8 @@ public class DBConfig {
         );
         Map<String, Object> map = new HashMap<>();
         map.put("hibernate.physical_naming_strategy", new SpringPhysicalNamingStrategy());
+        map.put("hibernate.show_sql",Boolean.FALSE);
+        map.put("hibernate.format_sql",Boolean.FALSE);
         factoryBean.setJpaPropertyMap(map);
         return factoryBean;
     }
