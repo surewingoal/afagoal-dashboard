@@ -137,8 +137,6 @@
     }
 
     function validateRule() {
-//        var icon = "<i class='fa fa-times-circle'></i> ";
-        var icon = "";
         $("#signupForm").validate({
                                       rules : {
                                           name : {
@@ -150,10 +148,10 @@
                                       },
                                       messages : {
                                           name : {
-                                              required : icon + "请输入菜单名"
+                                              required : "请输入菜单名"
                                           },
                                           type : {
-                                              required : icon + "请选择菜单类型"
+                                              required : "请选择菜单类型"
                                           }
                                       }
                                   })
