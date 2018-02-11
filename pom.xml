@@ -27,6 +27,13 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.afagoal</groupId>
+            <artifactId>core</artifactId>
+            <version>${afagoal.core.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -65,11 +72,13 @@
             <artifactId>fastjson</artifactId>
             <version>1.1.35</version>
         </dependency>
+
         <dependency>
-            <groupId>com.afagoal</groupId>
-            <artifactId>core</artifactId>
-            <version>${afagoal.core.version}</version>
+            <groupId>com.getsentry.raven</groupId>
+            <artifactId>raven-logback</artifactId>
+            <version>8.0.2</version>
         </dependency>
+
     </dependencies>
 
     <build>
