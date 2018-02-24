@@ -2,6 +2,7 @@ package com.afagoal.web.sys;
 
 import com.afagoal.dao.system.SysFunctionDao;
 import com.afagoal.entity.system.SysFunction;
+import com.afagoal.util.PageData;
 import com.afagoal.util.Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -64,10 +66,11 @@ public class FunctionController {
 
     @RequestMapping(value = "/sys/function/list", method = RequestMethod.GET)
     @ResponseBody
-    public List<SysFunction> listInfo() {
+    public List<SysFunction> listInfo(@RequestParam(value = "page" ,defaultValue = "0") Integer page,
+                                      @RequestParam(value = "size" ,defaultValue = "1000000") Integer size) {
         List<BooleanExpression> booleanExpressions = new ArrayList();
         booleanExpressions.add(sysFunctionDao.getQEntity().state.ne((byte)99));
-        List<SysFunction> functions = sysFunctionDao.getEntities(booleanExpressions, null);
+        List<SysFunction> functions = sysFunctionDao.getEntities(booleanExpressions, new PageRequest(page,size));
         return functions;
     }
 
@@ -102,6 +105,22 @@ public class FunctionController {
         String[] idArr = ids.split(",");
         sysFunctionDao.delete(idArr);
         return Response.ok("操作成功！");
+    }
+
+
+    @RequestMapping(value = "/sys/function/page", method = RequestMethod.GET)
+    @ResponseBody
+    public PageData page(@RequestParam(value = "page" ,defaultValue = "0") Integer page,
+                         @RequestParam(value = "function_name" ,required = false) String functionName,
+                         @RequestParam(value = "size" ,defaultValue = "10") Integer size) {
+        List<BooleanExpression> booleanExpressions = new ArrayList();
+        if(!StringUtils.isEmpty(functionName)){
+            booleanExpressions.add(sysFunctionDao.getQEntity().functionName.like("%" + functionName + "%"));
+        }
+        booleanExpressions.add(sysFunctionDao.getQEntity().state.ne((byte)99));
+        List<SysFunction> functions = sysFunctionDao.getEntities(booleanExpressions, new PageRequest(page,size));
+        Long count = sysFunctionDao.getCount(booleanExpressions);
+        return new PageData(functions,count.intValue());
     }
 
 }

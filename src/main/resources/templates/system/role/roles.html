@@ -68,7 +68,8 @@
     $(document).ready(function() {
         load();
     });
-    var load = function() {
+
+    function load() {
         $('#exampleTable')
                 .bootstrapTable(
                         {
@@ -96,8 +97,8 @@
                             queryParams : function(params) {
                                 return {
                                     // 说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
-                                    pageSize : params.limit,
-                                    offset: params.offset,
+                                    size : params.limit,
+                                    page : params.offset,
 //                                    name : $('#searchName').val(),
 //                                    deptId : deptId
                                 };
@@ -135,10 +136,7 @@
                                         var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
                                                 + row.id
                                                 + '\')"><i class="fa fa-remove"></i></a> ';
-                                        var f = '<a class="btn btn-success btn-sm ' + s_resetPwd_h + '" href="#" title="重置密码"  mce_href="#" onclick="resetPwd(\''
-                                                + row.id
-                                                + '\')"><i class="fa fa-key"></i></a> ';
-                                        return e + d + f;
+                                        return e + d;
                                     }
                                 } ]
                         });
@@ -163,9 +161,6 @@
             $.ajax({
                        url : prefix + "/delete?ids=" + id,
                        type : "delete",
-//                       data : {
-//                           'ids' : id
-//                       },
                        success : function(data) {
                            if (data.rc == 0) {
                                layer.msg("删除成功");
@@ -188,8 +183,33 @@
                    });
     }
     function batchRemove() {
-        // var rows = $('#exampleTable').bootstrapTable('getSelections');
-
+        var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
+        if (rows.length == 0) {
+            layer.msg("请选择要删除的数据");
+            return;
+        }
+        layer.confirm("确认要删除选中的'" + rows.length + "'条数据吗?", {
+            btn : [ '确定', '取消' ]
+            // 按钮
+        }, function() {
+            var ids = new Array();
+            // 遍历所有选择的行数据，取每条数据对应的ID
+            $.each(rows, function(i, row) {
+                ids[i] = row['id'];
+            });
+            $.ajax({
+                       type : 'DELETE',
+                       url : prefix + "/delete?ids=" + ids.toString(),
+                       success : function(data) {
+                           if (data.rc == 0) {
+                               layer.msg("删除成功");
+                               reLoad();
+                           } else {
+                               layer.msg(data.msg);
+                           }
+                       }
+                   });
+        }, function() {});
     }
 </script>
 </body>

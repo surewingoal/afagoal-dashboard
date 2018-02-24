@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,11 +51,11 @@ public class RoleController {
 
     @RequestMapping("sys/role/list")
     @ResponseBody
-    public PageData roles(@RequestParam(required = false,value = "role_nName") String roleName,
-                          @RequestParam(defaultValue = "10",value = "pageSize") int pageSize,
-                          @RequestParam(defaultValue = "0",value = "offset") int pageNumber){
+    public PageData roles(@RequestParam(required = false,value = "role_name") String roleName,
+                          @RequestParam(defaultValue = "0",value = "page") int page,
+                          @RequestParam(defaultValue = "10",value = "size") int size){
         List<BooleanExpression> booleanExpressions = new ArrayList();
-        Pageable pageable = new PageRequest(pageNumber,pageSize);
+        Pageable pageable = new PageRequest(page,size);
         if(StringUtils.isNotEmpty(roleName)){
             booleanExpressions.add(sysRoleDao.getQEntity().roleName.like("%" + roleName +"%"));
         }
@@ -77,7 +78,7 @@ public class RoleController {
         return Response.ok("保存成功！");
     }
 
-    @RequestMapping("sys/role/delete")
+    @DeleteMapping("sys/role/delete")
     @ResponseBody
     @Transactional
     public Response delete(String ids){
