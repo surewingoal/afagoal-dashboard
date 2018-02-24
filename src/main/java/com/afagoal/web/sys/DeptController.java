@@ -2,7 +2,7 @@ package com.afagoal.web.sys;
 
 import com.afagoal.dao.system.SysDeptDao;
 import com.afagoal.entity.system.SysDept;
-import com.afagoal.util.PageData;
+import com.afagoal.service.sys.DeptService;
 import com.afagoal.util.Response;
 import com.afagoal.util.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -32,6 +32,9 @@ public class DeptController {
 
     @Autowired
     private SysDeptDao sysDeptDao;
+    @Autowired
+    private DeptService deptService;
+
 
     @RequestMapping("/sys/dept")
     public String listPage() {
@@ -110,11 +113,16 @@ public class DeptController {
     }
 
 
-//    @GetMapping(value = "/sys/sysDeptDao/role_tree")
-//    @ResponseBody
-//    public Tree<SysDept> roleFunctionTree(@RequestParam(value = "role_id",required = false) Integer roleId){
-//        Tree<SysDept> roleFunctionTree = deptService.roleFunctionTree(roleId);
-//        return roleFunctionTree;
-//    }
+    @GetMapping(value = "/sys/dept/tree")
+    @ResponseBody
+    public Tree<SysDept> roleFunctionTree(){
+        Tree<SysDept> roleFunctionTree = deptService.deptTree();
+        return roleFunctionTree;
+    }
+
+    @RequestMapping("/sys/dept/treeView")
+    public String deptTreeView(){
+        return "system/dept/dept_tree";
+    }
 
 }
