@@ -145,17 +145,26 @@
             ids[i] = row['id'] + "," + row['pid'];
         });
         $.ajax({
-                   type : 'POST',
+                   cache : true,
+                   type : "POST",
                    url : "/sys/role_function/save",
                    data : {
                        functionIds : ids.toString(),
                        roleId : $('#role_id').val()
                    },
+                   async : false,
+                   error : function(request) {
+                       layer.alert("Connection error");
+                   },
                    success : function(data) {
                        if (data.rc == 0) {
-                           layer.msg("操作成功！");
+                           parent.layer.msg("保存成功");
+                           parent.reLoad();
+                           var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                           parent.layer.close(index);
+
                        } else {
-                           layer.msg(data.msg);
+                           layer.alert(data.msg)
                        }
                    }
                });

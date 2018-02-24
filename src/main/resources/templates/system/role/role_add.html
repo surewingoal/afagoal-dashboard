@@ -24,6 +24,15 @@
                                        th:value="${role?.introduce}"/>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <input id="functionIds" name="functionIds" class="form-control" type="hidden"/>
+                            <label class="col-sm-3 control-label">菜单权限：</label>
+                            <div class="col-sm-8">
+                                <div id="functionTree"></div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-3">
                                 <button type="submit" class="btn btn-info">提交</button>
@@ -39,19 +48,22 @@
 <script >
 
     var prefix = "/sys/role";
-
+    var functionIds = '';
 
     $(function() {
+        getMenuTreeData();
         validateRule();
     });
 
 
     $.validator.setDefaults({
                                 submitHandler : function() {
+                                    getAllSelectNodes();
                                     submit01();
                                 }
                             });
     function submit01() {
+        $('#functionIds').val(functionIds);
         $.ajax({
                    cache : true,
                    type : "POST",
@@ -88,6 +100,37 @@
                                           }
                                       }
                                   })
+    }
+
+    function getMenuTreeData() {
+        $.ajax({
+                   type : "GET",
+                   url : "/sys/function/role_tree?role_id=" + $("#id").val(),
+                   success : function(functionTree) {
+                       loadMenuTree(functionTree);
+                   }
+               });
+    }
+    function loadMenuTree(functionTree) {
+        $('#functionTree').jstree({
+                                  'core' : {
+                                      'data' : functionTree
+                                  },
+                                  "checkbox" : {
+                                      "three_state" : true,
+                                  },
+                                  "plugins" : [ "wholerow", "checkbox" ]
+                              });
+    }
+
+    function getAllSelectNodes() {
+        var ref = $('#functionTree').jstree(true); // 获得整个树
+
+        functionIds = ref.get_selected(); // 获得所有选中节点的，返回值为数组
+
+        $("#functionTree").find(".jstree-undetermined").each(function(i, element) {
+            functionIds.push($(element).closest('.jstree-node').attr("id"));
+        });
     }
 
 </script>

@@ -11,6 +11,7 @@ import com.afagoal.util.Response;
 import com.afagoal.util.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,10 @@ public class RoleFunctionController {
             return Response.error("请选择授权的菜单！");
         }
         String[] functions = roleFunctionRequestDto.getFunctionIds().split(",");
-        roleFunctionService.save(roleFunctionRequestDto.getRoleId(), functions);
+        List<Integer> list = Arrays.asList(functions).stream()
+                .map(function -> Integer.valueOf(function))
+                .collect(Collectors.toList());
+        roleFunctionService.save(roleFunctionRequestDto.getRoleId(),list);
         return Response.ok("操作成功！");
     }
 
@@ -101,7 +105,10 @@ public class RoleFunctionController {
             return Response.error("请选择对应的角色！");
         }
         String[] functions = roleFunctionRequestDto.getFunctionIds().split(",");
-        roleFunctionService.delete(roleFunctionRequestDto.getRoleId(), functions);
+        List<Integer> list = Arrays.asList(functions).stream()
+                .map(function -> Integer.valueOf(function))
+                .collect(Collectors.toList());
+        roleFunctionService.delete(roleFunctionRequestDto.getRoleId(), list);
         return Response.ok("操作成功！");
     }
 

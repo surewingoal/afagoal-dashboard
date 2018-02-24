@@ -7,7 +7,7 @@
     <div class="col-sm-12">
         <div class="ibox">
             <div class="ibox-body">
-                <div id="exampleToolbar" role="group" class="fixed-table-toolbar">
+                <div class="fixed-table-toolbar">
                     <div class="columns pull-left">
                          <button type="button"
                               class="btn btn-primary" title="在根节点下添加菜单" onclick="add()">
@@ -79,7 +79,7 @@
                             // showToggle : true,
                             // showColumns : true,
                             iconSize : 'outline',
-                            toolbar : '#exampleToolbar',
+//                            toolbar : '#exampleToolbar',
                             striped : true, // 设置为true会有隔行变色效果
                             dataType : "json", // 服务器返回的数据类型
                             pagination : true, // 设置为true会在底部显示分页条
@@ -99,8 +99,7 @@
                                     // 说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                                     size : params.limit,
                                     page : params.offset,
-//                                    name : $('#searchName').val(),
-//                                    deptId : deptId
+                                    role_name : $('#searchName').val()
                                 };
                             },
                             // //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -142,7 +141,7 @@
                         });
     }
     function reLoad() {
-        load();
+        $('#exampleTable').bootstrapTable('refresh');
     }
     function add() {
         layer.open({
@@ -178,7 +177,7 @@
                        title : '修改角色',
                        maxmin : true,
                        shadeClose : false, // 点击遮罩关闭层
-                       area : [ '600px', '350px' ],
+                       area : [ '800px', '350px' ],
                        content : prefix + '/info?id=' + id // iframe的url
                    });
     }

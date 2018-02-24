@@ -2,6 +2,7 @@ package com.afagoal.service.sys;
 
 import com.afagoal.dao.system.SysRoleDao;
 import com.afagoal.dao.system.SysRoleFunctionDao;
+import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysRole;
 import com.afagoal.entity.system.SysRoleFunction;
 import com.afagoal.util.BuildTree;
@@ -62,7 +63,7 @@ public class RoleFunctionService {
     }
 
     @Transactional
-    public void save(Integer roleId, String[] functions) {
+    public void save(Integer roleId, List<Integer> functions) {
         List<SysRoleFunction> list = new ArrayList();
 
         List<BooleanExpression> booleanExpressions = new ArrayList();
@@ -72,10 +73,11 @@ public class RoleFunctionService {
                 .map(roleFunction -> roleFunction.getFunctionId())
                 .collect(Collectors.toSet());
 
-        Set<Integer> functionSet = Arrays.stream(functions)
-                .map(function -> Integer.valueOf(function))
+        Set<Integer> functionSet = functions.stream()
+                .map(function -> function)
                 .collect(Collectors.toSet());
         functionSet.remove(0);
+        functionSet.remove(-1);
 
         functionSet.forEach(function -> {
             if(!existFunctionIds.contains(Integer.valueOf(function))){
@@ -91,10 +93,10 @@ public class RoleFunctionService {
 
 
     @Transactional
-    public void delete(Integer roleId, String[] functions) {
-        Set<Integer> functionSet = Arrays.stream(functions)
+    public void delete(Integer roleId, List<Integer> functions) {
+        List<Integer> functionList = functions.stream()
                 .map(functionId -> Integer.valueOf(functionId))
-                .collect(Collectors.toSet());
-        sysRoleFunctionDao.delete(roleId,functionSet);
+                .collect(Collectors.toList());
+        sysRoleFunctionDao.delete(roleId,functionList);
     }
 }

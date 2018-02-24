@@ -2,8 +2,10 @@ package com.afagoal.web.sys;
 
 import com.afagoal.dao.system.SysFunctionDao;
 import com.afagoal.entity.system.SysFunction;
+import com.afagoal.service.sys.FunctionService;
 import com.afagoal.util.PageData;
 import com.afagoal.util.Response;
+import com.afagoal.util.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +33,8 @@ public class FunctionController {
 
     @Autowired
     private SysFunctionDao sysFunctionDao;
+    @Autowired
+    private FunctionService functionService;
 
     @RequestMapping("/sys/function")
     public String listPage() {
@@ -121,6 +126,13 @@ public class FunctionController {
         List<SysFunction> functions = sysFunctionDao.getEntities(booleanExpressions, new PageRequest(page,size));
         Long count = sysFunctionDao.getCount(booleanExpressions);
         return new PageData(functions,count.intValue());
+    }
+
+    @GetMapping(value = "/sys/function/role_tree")
+    @ResponseBody
+    public Tree<SysFunction> roleFunctionTree(@RequestParam(value = "role_id",required = false) Integer roleId){
+        Tree<SysFunction> roleFunctionTree = functionService.roleFunctionTree(roleId);
+        return roleFunctionTree;
     }
 
 }
