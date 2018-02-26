@@ -24,14 +24,14 @@ public class LoginController {
     @Autowired
     private FunctionService functionService;
 
-    @RequestMapping({ "/index" })
+    @RequestMapping({"/index","/"})
     String index(Model model) {
         SysUser user = SecurityContext.currentUser();
         List<Tree<SysFunction>> menus = functionService.userFunction(user.getId());
         model.addAttribute("menus", menus);
-        model.addAttribute("name", "afagoal");
+        model.addAttribute("name", user.getRealName());
         model.addAttribute("picUrl","/img/photo_s.jpg");
-        model.addAttribute("username", "afagoal");
+        model.addAttribute("username", user.getUserName());
         return "index";
     }
 
@@ -40,7 +40,7 @@ public class LoginController {
         return "main";
     }
 
-    @RequestMapping({"/login","/"})
+    @RequestMapping({"/login"})
     public String login(@RequestParam(value = "authentication_error" ,required = false) Boolean error){
         return "login";
     }
