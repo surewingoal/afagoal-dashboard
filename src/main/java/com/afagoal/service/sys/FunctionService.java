@@ -36,6 +36,15 @@ public class FunctionService {
         booleanExpressions.add(functionDao.getQEntity().state.ne((byte) 99));
         List<SysFunction> functions = functionDao.getEntities(booleanExpressions,null);
 
+        return functionTree(functions);
+    }
+
+    public List<Tree<SysFunction>> userFunction(Integer userId){
+        List<SysFunction> functions = functionDao.userFunction(userId);
+        return functionTree(functions);
+    }
+
+    private List<Tree<SysFunction>> functionTree(List<SysFunction> functions){
         List<Tree<SysFunction>> trees = new ArrayList();
 
         functions.forEach(function -> {
