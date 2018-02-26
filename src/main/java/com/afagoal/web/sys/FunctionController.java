@@ -3,9 +3,9 @@ package com.afagoal.web.sys;
 import com.afagoal.dao.system.SysFunctionDao;
 import com.afagoal.entity.system.SysFunction;
 import com.afagoal.service.sys.FunctionService;
-import com.afagoal.util.PageData;
-import com.afagoal.util.Response;
-import com.afagoal.util.Tree;
+import com.afagoal.utildto.PageData;
+import com.afagoal.utildto.Response;
+import com.afagoal.utildto.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.ArrayList;

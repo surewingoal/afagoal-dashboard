@@ -4,8 +4,8 @@ import com.afagoal.dao.system.SysFunctionDao;
 import com.afagoal.dao.system.SysRoleFunctionDao;
 import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysRoleFunction;
-import com.afagoal.util.BuildTree;
-import com.afagoal.util.Tree;
+import com.afagoal.utils.TreeUtils;
+import com.afagoal.utildto.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class FunctionService {
 
             trees.add(tree);
         });
-        return BuildTree.buildList(trees,"0");
+        return TreeUtils.buildList(trees,"0");
     }
 
     public Tree<SysFunction> roleFunctionTree(Integer roleId) {
@@ -86,7 +86,7 @@ public class FunctionService {
             trees.add(tree);
         });
 
-        Tree<SysFunction> tree = BuildTree.build(trees);
+        Tree<SysFunction> tree = TreeUtils.build(trees);
 
         return tree;
     }

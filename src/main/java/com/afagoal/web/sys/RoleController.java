@@ -4,8 +4,8 @@ import com.afagoal.dao.system.SysRoleDao;
 import com.afagoal.dto.sys.RoleRequestDto;
 import com.afagoal.entity.system.SysRole;
 import com.afagoal.service.sys.RoleService;
-import com.afagoal.util.PageData;
-import com.afagoal.util.Response;
+import com.afagoal.utildto.PageData;
+import com.afagoal.utildto.Response;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.ArrayList;

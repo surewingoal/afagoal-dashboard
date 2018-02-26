@@ -2,8 +2,8 @@ package com.afagoal.web.sys;
 
 import com.afagoal.dao.system.SysUserDao;
 import com.afagoal.entity.system.SysUser;
-import com.afagoal.util.PageData;
-import com.afagoal.util.Response;
+import com.afagoal.utildto.PageData;
+import com.afagoal.utildto.Response;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 

@@ -24,6 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <afagoal.core.version>1.0-SNAPSHOT</afagoal.core.version>
+        <afagoal.common.version>1.0-SNAPSHOT</afagoal.common.version>
     </properties>
 
     <dependencies>
@@ -32,6 +33,12 @@
             <groupId>com.afagoal</groupId>
             <artifactId>core</artifactId>
             <version>${afagoal.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.afagoal</groupId>
+            <artifactId>common</artifactId>
+            <version>${afagoal.common.version}</version>
         </dependency>
 
         <dependency>

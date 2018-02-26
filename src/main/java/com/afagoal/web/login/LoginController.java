@@ -4,7 +4,7 @@ import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysUser;
 import com.afagoal.security.SecurityContext;
 import com.afagoal.service.sys.FunctionService;
-import com.afagoal.util.Tree;
+import com.afagoal.utildto.Tree;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

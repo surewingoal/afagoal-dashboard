@@ -3,8 +3,8 @@ package com.afagoal.web.sys;
 import com.afagoal.dao.system.SysDeptDao;
 import com.afagoal.entity.system.SysDept;
 import com.afagoal.service.sys.DeptService;
-import com.afagoal.util.Response;
-import com.afagoal.util.Tree;
+import com.afagoal.utildto.Response;
+import com.afagoal.utildto.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import org.springframework.beans.factory.annotation.Autowired;

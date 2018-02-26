@@ -1,6 +1,6 @@
 package com.afagoal.exception;
 
-import com.afagoal.util.Response;
+import com.afagoal.utildto.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 

@@ -6,8 +6,8 @@
 # https://github.com/sequelpro/sequelpro
 #
 # Host: 127.0.0.1 (MySQL 5.7.19)
-# Database: parking_sys
-# Generation Time: 2018-02-26 04:35:44 +0000
+# Database: afagoal_sys
+# Generation Time: 2018-02-26 06:12:31 +0000
 # ************************************************************
 
 
@@ -114,8 +114,8 @@ LOCK TABLES `sys_role` WRITE;
 
 INSERT INTO `sys_role` (`id`, `role_name`, `introduce`, `created_at`, `updated_at`, `created_by`, `updated_by`, `state`)
 VALUES
-	(1,'admin','admin','2018-02-11 17:32:05','2018-02-26 12:01:25','',NULL,0),
-	(2,'user','user','2018-02-11 17:32:05','2018-02-24 13:54:25','',NULL,0),
+	(1,'superAdmin','超级管理员','2018-02-11 17:32:05','2018-02-26 14:01:49','',NULL,0),
+	(2,'user','普通用户','2018-02-11 17:32:05','2018-02-26 14:02:00','',NULL,0),
 	(9,'测试','测试','2018-02-23 15:53:03','2018-02-23 15:53:03',NULL,NULL,99),
 	(10,'测试123','测试qwe12312312312','2018-02-23 16:08:02','2018-02-23 16:08:13',NULL,NULL,99),
 	(11,'ceshi','ceshi ','2018-02-24 10:39:24','2018-02-24 10:39:24',NULL,NULL,99),
@@ -157,6 +157,7 @@ VALUES
 	(1,23),
 	(1,24),
 	(1,25),
+	(1,28),
 	(1,29),
 	(2,28),
 	(20,2),
@@ -197,7 +198,7 @@ CREATE TABLE `sys_user` (
   `password` varchar(100) NOT NULL COMMENT '密码',
   `login_ip` varchar(16) DEFAULT '00.00.00.00' COMMENT 'ip地址',
   `login_times` int(6) DEFAULT '1' COMMENT '登录次数',
-  `email` varchar(20) DEFAULT '' COMMENT '邮箱',
+  `email` varchar(100) DEFAULT '' COMMENT '邮箱',
   `mobile` varchar(13) DEFAULT '' COMMENT '电话',
   `created_at` datetime DEFAULT '2017-01-01 00:00:00' COMMENT '创建日期',
   `updated_at` datetime DEFAULT '2017-01-01 00:00:00' COMMENT '修改日期',
@@ -214,10 +215,11 @@ LOCK TABLES `sys_user` WRITE;
 
 INSERT INTO `sys_user` (`id`, `user_name`, `nick_name`, `real_name`, `password`, `login_ip`, `login_times`, `email`, `mobile`, `created_at`, `updated_at`, `created_by`, `updated_by`, `state`, `dept_id`, `user_type`)
 VALUES
-	(1,'niepengju',NULL,'聂鹏举','123456',NULL,0,'niepangju@qq.com','18292323932','2017-01-01 00:00:00','2018-02-24 16:58:55','',NULL,0,38,1),
-	(2,'kuangxiong',NULL,'匡雄','123456',NULL,0,'kuangxiong@qq.com','19232329232','2017-01-01 00:00:00','2018-02-24 16:57:53','',NULL,0,38,1),
-	(3,'zhanglixuan',NULL,'张力轩','123456',NULL,0,'zhanglixuan@qq.com','18292167891','2018-02-24 16:56:17','2018-02-24 16:59:12',NULL,NULL,0,38,1),
-	(4,'xiaxi',NULL,'夏溪','123456',NULL,0,'xiaxi@qq.com','18292329232','2018-02-24 16:59:48','2018-02-24 16:59:48',NULL,NULL,0,38,1);
+	(1,'niepengju',NULL,'聂鹏举','123456',NULL,0,'niepangju@qq.com','18292323932','2017-01-01 00:00:00','2018-02-26 14:06:32','',NULL,0,38,0),
+	(2,'kuangxiong',NULL,'匡雄','123456',NULL,0,'kuangxiong@qq.com','19232329232','2017-01-01 00:00:00','2018-02-26 14:06:34','',NULL,0,38,0),
+	(3,'zhanglixuan',NULL,'张力轩','123456',NULL,0,'zhanglixuan@qq.com','18292167891','2018-02-24 16:56:17','2018-02-26 14:06:29',NULL,NULL,0,38,0),
+	(4,'xiaxi',NULL,'夏溪','123456',NULL,0,'xiaxi@qq.com','18292329232','2018-02-24 16:59:48','2018-02-26 14:06:26',NULL,NULL,0,38,0),
+	(8,'superadmin',NULL,'超级管理员','123456',NULL,0,'superadmin@afagoal.com','18290902930','2018-02-26 14:08:27','2018-02-26 14:08:45',NULL,NULL,0,35,1);
 
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -238,11 +240,11 @@ LOCK TABLES `sys_user_role` WRITE;
 
 INSERT INTO `sys_user_role` (`role_id`, `user_id`)
 VALUES
-	(1,4),
+	(1,8),
+	(2,4),
+	(2,3),
 	(2,2),
-	(1,1),
-	(1,2),
-	(1,3);
+	(2,1);
 
 /*!40000 ALTER TABLE `sys_user_role` ENABLE KEYS */;
 UNLOCK TABLES;

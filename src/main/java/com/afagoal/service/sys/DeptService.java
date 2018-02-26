@@ -2,8 +2,8 @@ package com.afagoal.service.sys;
 
 import com.afagoal.dao.system.SysDeptDao;
 import com.afagoal.entity.system.SysDept;
-import com.afagoal.util.BuildTree;
-import com.afagoal.util.Tree;
+import com.afagoal.utils.TreeUtils;
+import com.afagoal.utildto.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class DeptService {
             trees.add(tree);
 
         });
-        Tree<SysDept> t = BuildTree.build(trees);
+        Tree<SysDept> t = TreeUtils.build(trees);
         return t;
     }
 }

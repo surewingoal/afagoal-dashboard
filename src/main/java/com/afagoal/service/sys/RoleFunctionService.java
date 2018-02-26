@@ -2,15 +2,13 @@ package com.afagoal.service.sys;
 
 import com.afagoal.dao.system.SysRoleDao;
 import com.afagoal.dao.system.SysRoleFunctionDao;
-import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysRole;
 import com.afagoal.entity.system.SysRoleFunction;
-import com.afagoal.util.BuildTree;
-import com.afagoal.util.Tree;
+import com.afagoal.utils.TreeUtils;
+import com.afagoal.utildto.Tree;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +39,7 @@ public class RoleFunctionService {
         List<SysRole> roles = sysRoleDao.getEntities(list,null);
 
         List<Tree<SysRole>> trees = roleTrees(roles);
-        return BuildTree.build(trees);
+        return TreeUtils.build(trees);
     }
 
     private List<Tree<SysRole>> roleTrees(List<SysRole> roles) {
