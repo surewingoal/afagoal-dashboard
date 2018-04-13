@@ -36,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                 .loginProcessingUrl("/login")
                 .failureUrl("/login?authentication_error=true")
-                .successForwardUrl("/index")
+//                .successForwardUrl("/index")
+                .defaultSuccessUrl("/")
                 .loginPage("/login").permitAll();
 
         http.csrf().disable();
