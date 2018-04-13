@@ -2,6 +2,7 @@ package com.afagoal.web.sys;
 
 import com.afagoal.dao.system.SysUserDao;
 import com.afagoal.entity.system.SysUser;
+import com.afagoal.security.AfagoalPasswordEncoder;
 import com.afagoal.utildto.PageData;
 import com.afagoal.utildto.Response;
 import com.querydsl.core.types.OrderSpecifier;
@@ -88,6 +89,8 @@ public class UserController {
     @Transactional
     public Response save(SysUser user) {
         Assert.notNull(user, "用户信息不可为空！");
+        String password = AfagoalPasswordEncoder.secrecy(user.getPassword());
+        user.setPassword(password);
         if (null == user.getId()) {
             sysUserDao.save(user);
         } else {

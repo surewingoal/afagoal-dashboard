@@ -1,6 +1,7 @@
 package com.afagoal.config;
 
 import com.afagoal.dao.system.SysUserDao;
+import com.afagoal.security.AfagoalPasswordEncoder;
 import com.afagoal.security.AfagoalUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/fonts/**","/img/**", "/js/**","/editor-app/**").permitAll()
+                .antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/editor-app/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")
                 .and().formLogin()
@@ -45,12 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //TODO 暂时不加密   明文查询
-        auth.userDetailsService(userDetailsService()).passwordEncoder(NoOpPasswordEncoder.getInstance());
+        auth.userDetailsService(userDetailsService()).passwordEncoder(new AfagoalPasswordEncoder());
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new AfagoalUserDetailsService(sysUserDao);
     }
 
