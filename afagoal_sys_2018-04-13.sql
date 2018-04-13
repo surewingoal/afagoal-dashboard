@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.19)
 # Database: afagoal_sys
-# Generation Time: 2018-02-26 06:12:31 +0000
+# Generation Time: 2018-04-13 09:43:16 +0000
 # ************************************************************
 
 
@@ -86,7 +86,8 @@ VALUES
 	(24,'用户管理','/sys/user',2,'用户管理',1,'2018-02-11 15:01:35','2018-02-11 15:10:50',NULL,NULL,0,'fa fa-user'),
 	(25,'菜单授权','/sys/role_function',2,'角色菜单管理',1,'2018-02-23 18:05:02','2018-02-24 15:04:28',NULL,NULL,0,'fa fa-users'),
 	(28,'OA管理','',0,'OA管理',0,'2018-02-24 11:24:29','2018-02-24 11:24:29',NULL,NULL,0,'fa fa-cubes'),
-	(29,'部门管理','/sys/dept',2,'部门管理',1,'2018-02-24 14:48:30','2018-02-24 14:48:30',NULL,NULL,0,'fa fa-university');
+	(29,'部门管理','/sys/dept',2,'部门管理',1,'2018-02-24 14:48:30','2018-02-24 14:48:30',NULL,NULL,0,'fa fa-university'),
+	(30,'财务管理','',0,'财务管理',0,'2018-02-26 14:16:33','2018-02-26 14:16:33',NULL,NULL,0,'fa fa-building-o');
 
 /*!40000 ALTER TABLE `sys_function` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -114,23 +115,8 @@ LOCK TABLES `sys_role` WRITE;
 
 INSERT INTO `sys_role` (`id`, `role_name`, `introduce`, `created_at`, `updated_at`, `created_by`, `updated_by`, `state`)
 VALUES
-	(1,'superAdmin','超级管理员','2018-02-11 17:32:05','2018-02-26 14:01:49','',NULL,0),
-	(2,'user','普通用户','2018-02-11 17:32:05','2018-02-26 14:02:00','',NULL,0),
-	(9,'测试','测试','2018-02-23 15:53:03','2018-02-23 15:53:03',NULL,NULL,99),
-	(10,'测试123','测试qwe12312312312','2018-02-23 16:08:02','2018-02-23 16:08:13',NULL,NULL,99),
-	(11,'ceshi','ceshi ','2018-02-24 10:39:24','2018-02-24 10:39:24',NULL,NULL,99),
-	(12,'cehsi ','ceshi ','2018-02-24 10:48:03','2018-02-24 10:48:03',NULL,NULL,99),
-	(13,'测试','测试','2018-02-24 11:38:54','2018-02-24 11:38:54',NULL,NULL,99),
-	(14,'测','测','2018-02-24 11:39:41','2018-02-24 11:39:41',NULL,NULL,99),
-	(15,'111','111','2018-02-24 11:41:56','2018-02-24 11:41:56',NULL,NULL,99),
-	(16,'测试','测试','2018-02-24 13:28:46','2018-02-24 13:28:46',NULL,NULL,99),
-	(17,'测试','测试','2018-02-24 13:32:20','2018-02-24 13:34:49',NULL,NULL,99),
-	(18,'测试','测试','2018-02-24 13:36:37','2018-02-24 13:36:37',NULL,NULL,99),
-	(19,'测试','测试','2018-02-24 13:37:24','2018-02-24 13:53:07',NULL,NULL,99),
-	(20,'测试','测试qwe','2018-02-24 13:53:24','2018-02-24 13:54:06',NULL,NULL,99),
-	(21,'测试','测试','2018-02-24 13:54:53','2018-02-24 13:54:53',NULL,NULL,99),
-	(22,'测试','测试qwe','2018-02-24 14:04:04','2018-02-24 14:04:10',NULL,NULL,99),
-	(23,'测试','测试qwe12312312312','2018-02-24 14:05:20','2018-02-24 14:05:30',NULL,NULL,99);
+	(1,'superAdmin','超级管理员','2018-02-11 17:32:05','2018-02-26 14:16:57','',NULL,0),
+	(2,'user','普通用户','2018-02-11 17:32:05','2018-02-26 14:02:00','',NULL,0);
 
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -159,7 +145,9 @@ VALUES
 	(1,25),
 	(1,28),
 	(1,29),
+	(1,30),
 	(2,28),
+	(2,30),
 	(20,2),
 	(20,3),
 	(20,23),
@@ -199,7 +187,7 @@ CREATE TABLE `sys_user` (
   `login_ip` varchar(16) DEFAULT '00.00.00.00' COMMENT 'ip地址',
   `login_times` int(6) DEFAULT '1' COMMENT '登录次数',
   `email` varchar(100) DEFAULT '' COMMENT '邮箱',
-  `mobile` varchar(13) DEFAULT '' COMMENT '电话',
+  `mobile` varchar(40) DEFAULT '' COMMENT '电话',
   `created_at` datetime DEFAULT '2017-01-01 00:00:00' COMMENT '创建日期',
   `updated_at` datetime DEFAULT '2017-01-01 00:00:00' COMMENT '修改日期',
   `created_by` varchar(20) DEFAULT '' COMMENT '创建人',
@@ -215,11 +203,12 @@ LOCK TABLES `sys_user` WRITE;
 
 INSERT INTO `sys_user` (`id`, `user_name`, `nick_name`, `real_name`, `password`, `login_ip`, `login_times`, `email`, `mobile`, `created_at`, `updated_at`, `created_by`, `updated_by`, `state`, `dept_id`, `user_type`)
 VALUES
-	(1,'niepengju',NULL,'聂鹏举','123456',NULL,0,'niepangju@qq.com','18292323932','2017-01-01 00:00:00','2018-02-26 14:06:32','',NULL,0,38,0),
-	(2,'kuangxiong',NULL,'匡雄','123456',NULL,0,'kuangxiong@qq.com','19232329232','2017-01-01 00:00:00','2018-02-26 14:06:34','',NULL,0,38,0),
-	(3,'zhanglixuan',NULL,'张力轩','123456',NULL,0,'zhanglixuan@qq.com','18292167891','2018-02-24 16:56:17','2018-02-26 14:06:29',NULL,NULL,0,38,0),
-	(4,'xiaxi',NULL,'夏溪','123456',NULL,0,'xiaxi@qq.com','18292329232','2018-02-24 16:59:48','2018-02-26 14:06:26',NULL,NULL,0,38,0),
-	(8,'superadmin',NULL,'超级管理员','123456',NULL,0,'superadmin@afagoal.com','18290902930','2018-02-26 14:08:27','2018-02-26 14:08:45',NULL,NULL,0,35,1);
+	(1,'niepengju',NULL,'聂鹏举','0c9689cb4c811dc310111fdb2450d792',NULL,0,'niepangju@qq.com','o6QSv18ippGeNbS/szamKQ==','2017-01-01 00:00:00','2018-02-26 14:06:32','',NULL,0,38,0),
+	(2,'kuangxiong',NULL,'匡雄','0c9689cb4c811dc310111fdb2450d792',NULL,0,'kuangxiong@qq.com','o6QSv18ippGeNbS/szamKQ==','2017-01-01 00:00:00','2018-02-26 14:06:34','',NULL,0,38,0),
+	(3,'zhanglixuan',NULL,'张力轩','0c9689cb4c811dc310111fdb2450d792',NULL,0,'zhanglixuan@qq.com','o6QSv18ippGeNbS/szamKQ==','2018-02-24 16:56:17','2018-02-26 14:06:29',NULL,NULL,0,38,0),
+	(4,'xiaxi',NULL,'夏溪','0c9689cb4c811dc310111fdb2450d792',NULL,0,'xiaxi@qq.com','o6QSv18ippGeNbS/szamKQ==','2018-02-24 16:59:48','2018-02-26 14:06:26',NULL,NULL,0,38,0),
+	(8,'superadmin',NULL,'超级管理员','0c9689cb4c811dc310111fdb2450d792',NULL,0,'superadmin@afagoal.com','o6QSv18ippGeNbS/szamKQ==','2018-02-26 14:08:27','2018-02-26 14:08:45',NULL,NULL,0,35,1),
+	(9,'wutong',NULL,'吴仝','0c9689cb4c811dc310111fdb2450d792',NULL,0,'wutong@afagoal.com','o6QSv18ippGeNbS/szamKQ==','2018-04-13 17:29:06','2018-04-13 17:29:06',NULL,NULL,0,38,0);
 
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 UNLOCK TABLES;
