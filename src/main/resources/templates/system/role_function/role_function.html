@@ -61,7 +61,7 @@
                             striped : true, // 设置为true会有隔行变色效果
                             dataType : "json", // 服务器返回的数据类型
                             pagination : true, // 设置为true会在底部显示分页条
-                            // queryParamsType : "limit",
+                             queryParamsType : "limit",
                             // //设置为limit则会发送符合RESTFull格式的参数
                             singleSelect : false, // 设置为true将禁止多选
                             // contentType : "application/x-www-form-urlencoded",
@@ -76,7 +76,7 @@
                                 return {
                                     // 说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                                     size : params.limit,
-                                    page : params.offset,
+                                    page : params.offset / params.limit,
                                     role_id : role_id
                                 };
                             },

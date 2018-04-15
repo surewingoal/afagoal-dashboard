@@ -1,9 +1,9 @@
 spring.datasource.dashboard:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://139.199.111.196:3306/afagoal_sys?useUnicode=true&characterEncoding=utf8
-    username: afagoal_sys
-    password: sys_oa
+    url: jdbc:mysql://127.0.0.1:3306/afagoal_sys?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
     initialSize: 1
     minIdle: 3
     maxActive: 20

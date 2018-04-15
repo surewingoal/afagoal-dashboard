@@ -41,7 +41,7 @@ public class UserController {
 
     @GetMapping("/sys/user")
     public String users() {
-        return "/system/user/users";
+        return "system/user/users";
     }
 
     @GetMapping("/sys/user/info")
@@ -54,7 +54,7 @@ public class UserController {
                 modelMap.put("deptName", user.getDept().getDeptName());
             }
         }
-        return "/system/user/user_add";
+        return "system/user/user_add";
     }
 
     @GetMapping("/sys/user/list")

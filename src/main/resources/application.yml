@@ -2,8 +2,8 @@ spring.datasource.dashboard:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/afagoal_sys?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: root
+    username: afagoal_sys
+    password: sys_oa
     initialSize: 1
     minIdle: 3
     maxActive: 20
@@ -26,3 +26,7 @@ spring.datasource.dashboard:
     #connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     # \u5408\u5E76\u591A\u4E2ADruidDataSource\u7684\u76D1\u63A7\u6570\u636E
     #useGlobalDataSourceStat: true
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
