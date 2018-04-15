@@ -1,5 +1,6 @@
 package com.afagoal.web.sys;
 
+import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.dao.system.SysFunctionDao;
 import com.afagoal.entity.system.SysFunction;
 import com.afagoal.service.sys.FunctionService;
@@ -37,11 +38,13 @@ public class FunctionController {
     private FunctionService functionService;
 
     @RequestMapping("/sys/function")
+    @BehaviorLog("菜单管理")
     public String listPage() {
         return "system/function/functions";
     }
 
     @RequestMapping("/sys/function/info")
+    @BehaviorLog("菜单页面")
     public String infoPage(@RequestParam(value = "id", required = false) Integer id,
                            @RequestParam(value = "pid", required = false) Integer pid,
                            ModelMap modelMap) {
@@ -71,6 +74,7 @@ public class FunctionController {
 
     @RequestMapping(value = "/sys/function/list", method = RequestMethod.GET)
     @ResponseBody
+    @BehaviorLog("菜单列表")
     public List<SysFunction> listInfo(@RequestParam(value = "page" ,defaultValue = "0") Integer page,
                                       @RequestParam(value = "size" ,defaultValue = "1000000") Integer size) {
         List<BooleanExpression> booleanExpressions = new ArrayList();
@@ -81,6 +85,7 @@ public class FunctionController {
 
     @RequestMapping(value = "/sys/function/{id}", method = RequestMethod.GET)
     @ResponseBody
+    @BehaviorLog("菜单详情")
     public SysFunction info(@PathVariable(value = "id") Integer id) {
         if (null == id) {
             throw new RuntimeException("请选择相应的记录！");
@@ -91,6 +96,7 @@ public class FunctionController {
     @RequestMapping(value = "/sys/function/save", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
+    @BehaviorLog("添加菜单")
     public Response add(SysFunction function) {
         if (null != function.getId()) {
             sysFunctionDao.merge(function);
@@ -103,6 +109,7 @@ public class FunctionController {
     @RequestMapping(value = "/sys/function/delete",method = RequestMethod.DELETE)
     @ResponseBody
     @Transactional
+    @BehaviorLog("删除菜单")
     public Response delete(@RequestParam(value = "ids") String ids) {
         if (StringUtils.isEmpty(ids)) {
             return Response.error("请选择需要删除的记录！");

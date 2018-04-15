@@ -1,5 +1,6 @@
 package com.afagoal.web.sys;
 
+import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.dao.system.SysRoleDao;
 import com.afagoal.dto.sys.RoleRequestDto;
 import com.afagoal.entity.system.SysRole;
@@ -40,11 +41,13 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping("sys/role")
+    @BehaviorLog("角色管理")
     public String roleList() {
         return "system/role/roles";
     }
 
     @RequestMapping("sys/role/info")
+    @BehaviorLog("系统角色管理")
     public String roleInfo(@RequestParam(required = false) Integer id, ModelMap modelMap) {
         if (null != id) {
             SysRole sysRole = sysRoleDao.getById(id);
@@ -55,6 +58,7 @@ public class RoleController {
 
     @RequestMapping("sys/role/list")
     @ResponseBody
+    @BehaviorLog("角色列表")
     public PageData roles(@RequestParam(required = false, value = "role_name") String roleName,
                           @RequestParam(defaultValue = "0", value = "page") int page,
                           @RequestParam(defaultValue = "10", value = "size") int size) {
@@ -71,6 +75,7 @@ public class RoleController {
 
     @RequestMapping("sys/role/save")
     @ResponseBody
+    @BehaviorLog("添加管理")
     public Response save(RoleRequestDto roleDto) {
         Assert.notNull(roleDto, "对象不可为空！");
         roleService.save(roleDto);

@@ -1,5 +1,6 @@
 package com.afagoal.web.login;
 
+import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysUser;
 import com.afagoal.security.SecurityContext;
@@ -25,6 +26,7 @@ public class LoginController {
     private FunctionService functionService;
 
     @RequestMapping({"/index","/"})
+    @BehaviorLog("用户首页")
     String index(Model model) {
         SysUser user = SecurityContext.currentUser();
         List<Tree<SysFunction>> menus = functionService.userFunction(user.getId());

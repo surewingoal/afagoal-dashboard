@@ -1,5 +1,6 @@
 package com.afagoal.web.sys;
 
+import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.dao.system.SysDeptDao;
 import com.afagoal.entity.system.SysDept;
 import com.afagoal.service.sys.DeptService;
@@ -36,12 +37,15 @@ public class DeptController {
     private DeptService deptService;
 
 
+
     @RequestMapping("/sys/dept")
+    @BehaviorLog("部门管理")
     public String listPage() {
         return "system/dept/depts";
     }
 
     @RequestMapping("/sys/dept/info")
+    @BehaviorLog("添加部门页面")
     public String infoPage(@RequestParam(value = "id", required = false) Integer id,
                            @RequestParam(value = "pid", required = false) Integer pid,
                            ModelMap modelMap) {
@@ -71,6 +75,7 @@ public class DeptController {
 
     @RequestMapping(value = "/sys/dept/list", method = RequestMethod.GET)
     @ResponseBody
+    @BehaviorLog("部门列表")
     public List<SysDept> listInfo(@RequestParam(value = "page" ,defaultValue = "0") Integer page,
                                       @RequestParam(value = "size" ,defaultValue = "1000000") Integer size) {
         List<BooleanExpression> booleanExpressions = new ArrayList();
@@ -81,6 +86,7 @@ public class DeptController {
 
     @RequestMapping(value = "/sys/dept/{id}", method = RequestMethod.GET)
     @ResponseBody
+    @BehaviorLog("部门详情")
     public SysDept info(@PathVariable(value = "id") Integer id) {
         if (null == id) {
             throw new RuntimeException("请选择相应的记录！");
@@ -91,6 +97,7 @@ public class DeptController {
     @RequestMapping(value = "/sys/dept/save", method = RequestMethod.POST)
     @ResponseBody
     @Transactional
+    @BehaviorLog("添加部门")
     public Response add(SysDept dept) {
         if (null != dept.getId()) {
             sysDeptDao.merge(dept);
@@ -103,6 +110,7 @@ public class DeptController {
     @RequestMapping(value = "/sys/dept/delete",method = RequestMethod.DELETE)
     @ResponseBody
     @Transactional
+    @BehaviorLog("删除部门")
     public Response delete(@RequestParam(value = "ids") String ids) {
         if (StringUtils.isEmpty(ids)) {
             return Response.error("请选择需要删除的记录！");

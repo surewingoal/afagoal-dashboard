@@ -1,5 +1,6 @@
 package com.afagoal.web.sys;
 
+import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.dao.system.SysUserDao;
 import com.afagoal.entity.system.SysUser;
 import com.afagoal.security.AfagoalPasswordEncoder;
@@ -40,11 +41,13 @@ public class UserController {
     private SysUserDao sysUserDao;
 
     @GetMapping("/sys/user")
+    @BehaviorLog("用户管理")
     public String users() {
         return "system/user/users";
     }
 
     @GetMapping("/sys/user/info")
+    @BehaviorLog("用户页面")
     public String info(@RequestParam(value = "id", required = false) Integer id,
                        ModelMap modelMap) {
         if (!ObjectUtils.isEmpty(id)) {
@@ -59,6 +62,7 @@ public class UserController {
 
     @GetMapping("/sys/user/list")
     @ResponseBody
+    @BehaviorLog("用户列表")
     public PageData<SysUser> pageUsers(@RequestParam(required = false, value = "user_name") String userName,
                                        @RequestParam(required = false, value = "dept_id") Integer deptId,
                                        @RequestParam(defaultValue = "0", value = "page") int page,
@@ -87,6 +91,7 @@ public class UserController {
     @PostMapping("/sys/user/save")
     @ResponseBody
     @Transactional
+    @BehaviorLog("添加用户")
     public Response save(SysUser user) {
         Assert.notNull(user, "用户信息不可为空！");
         String password = AfagoalPasswordEncoder.secrecy(user.getPassword());
@@ -102,6 +107,7 @@ public class UserController {
     @DeleteMapping("/sys/user/delete")
     @ResponseBody
     @Transactional
+    @BehaviorLog("删除用户")
     public Response delete(@RequestParam(value = "ids") String ids) {
         if (StringUtils.isEmpty(ids)) {
             return Response.error("请选择删除的记录！");
