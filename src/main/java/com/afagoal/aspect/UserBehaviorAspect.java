@@ -80,7 +80,7 @@ public class UserBehaviorAspect implements InitializingBean {
         log.setCreatedAt(LocalDateTime.now());
         log.setCreatedBy("系统自动生成");
 
-        threadPoolExecutor.execute(new LogTask(log));
+//        threadPoolExecutor.execute(new LogTask(log));
     }
 
     private class LogTask implements Runnable {
