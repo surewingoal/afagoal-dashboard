@@ -2,11 +2,15 @@ package com.afagoal.web.blockchain;
 
 import com.afagoal.constant.BaseStateConstant;
 import com.afagoal.dao.blockchain.TokenDao;
+import com.afagoal.dao.blockchain.TokenLinkDao;
+import com.afagoal.dto.blockchain.TokenDto;
 import com.afagoal.entity.blockchain.Token;
+import com.afagoal.entity.blockchain.TokenLink;
 import com.afagoal.utildto.PageData;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by BaoCai on 18/5/19.
@@ -31,6 +36,8 @@ public class TokenController {
 
     @Autowired
     private TokenDao tokenDao;
+    @Autowired
+    private TokenLinkDao tokenLinkDao;
 
     @RequestMapping(value = "/blockchain/token")
     public String tokenPage() {
@@ -48,7 +55,10 @@ public class TokenController {
         booleanExpressions.add(tokenDao.getQEntity().state.ne(BaseStateConstant.DELETE_STATE));
         List<Token> tokens = tokenDao.getTokens(booleanExpressions,null,null);
         if(!CollectionUtils.isEmpty(tokens)){
-            map.put("token",tokens.get(0));
+            Token token = tokens.get(0);
+            Collection<TokenLink> tokenLinks = tokenLinkDao.getTokenLinks(token.getId());
+            token.setTokenLinks(tokenLinks);
+            map.put("token",token);
         }
         return "blockchain/token/token_info";
     }
@@ -83,7 +93,11 @@ public class TokenController {
                 orderSpecifiers, pageable);
         long count = tokenDao.getCount(booleanExpressionList);
 
-        return new PageData(tokens, (int) count);
+        List<TokenDto> dtos = tokens.stream()
+                .map(token -> TokenDto.instance(token))
+                .collect(Collectors.toList());
+
+        return new PageData(dtos, (int) count);
     }
 
 }

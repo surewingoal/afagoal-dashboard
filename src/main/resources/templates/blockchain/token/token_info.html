@@ -7,6 +7,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
+
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="signupForm">
                         <div class="form-group">
@@ -97,7 +98,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">任务描述：</label>
+                            <label class="col-sm-2 control-label">链接：</label>
+                            <div class="col-sm-8">
+                                <label th:each="link:${token?.tokenLinks}" class="radio-inline">
+                                    <a target="_Blank" class="btn btn-primary" th:href="${link.linkValue}" th:text="${link.linkType}"></a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">简介：</label>
                             <div class="col-sm-10">
                                 <p style="margin-top: 8px" th:text="${token?.overview}"></p>
                             </div>
