@@ -1,6 +1,7 @@
 package com.afagoal.web.blockchain;
 
-import com.afagoal.constant.BaseStateConstant;
+import com.afagoal.annotation.BehaviorLog;
+import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dao.blockchain.TokenLinkDao;
 import com.afagoal.dto.blockchain.TokenDto;
@@ -40,11 +41,13 @@ public class TokenController {
     private TokenLinkDao tokenLinkDao;
 
     @RequestMapping(value = "/blockchain/token")
+    @BehaviorLog("虚拟货币管理")
     public String tokenPage() {
         return "blockchain/token/tokens";
     }
 
     @RequestMapping(value = "/blockchain/token/info")
+    @BehaviorLog("虚拟货币详情")
     public String tokenInfo(@RequestParam(value = "id",required = false) String id,
                             ModelMap map){
         if(StringUtils.isEmpty(id)){
@@ -52,7 +55,7 @@ public class TokenController {
         }
         List<BooleanExpression> booleanExpressions = new ArrayList();
         booleanExpressions.add(tokenDao.getQEntity().id.eq(id));
-        booleanExpressions.add(tokenDao.getQEntity().state.ne(BaseStateConstant.DELETE_STATE));
+        booleanExpressions.add(tokenDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         List<Token> tokens = tokenDao.getTokens(booleanExpressions,null,null);
         if(!CollectionUtils.isEmpty(tokens)){
             Token token = tokens.get(0);
@@ -65,13 +68,14 @@ public class TokenController {
 
     @RequestMapping(value = "/blockchain/token/list")
     @ResponseBody
+    @BehaviorLog("虚拟货币列表")
     public PageData list(@RequestParam(value = "token_name", required = false) String tokenName,
                          @RequestParam(value = "token_code", required = false) String tokenCode,
                          @RequestParam(value = "country", required = false) String country,
                          @RequestParam(defaultValue = "0", value = "page") int page,
                          @RequestParam(defaultValue = "10", value = "size") int size) {
         List<BooleanExpression> booleanExpressionList = new ArrayList();
-        booleanExpressionList.add(tokenDao.getQEntity().state.ne(BaseStateConstant.DELETE_STATE));
+        booleanExpressionList.add(tokenDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         if (StringUtils.isNotEmpty(tokenCode)) {
             booleanExpressionList.add(tokenDao.getQEntity().tokenCode.like("%" + tokenCode + "%"));
         }

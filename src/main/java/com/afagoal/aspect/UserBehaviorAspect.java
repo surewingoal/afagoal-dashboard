@@ -1,7 +1,7 @@
 package com.afagoal.aspect;
 
 import com.afagoal.annotation.BehaviorLog;
-import com.afagoal.constant.BaseStateConstant;
+import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.behavior.UserBehaviorLogDao;
 import com.afagoal.entity.behavior.UserBehaviorLog;
 import com.afagoal.entity.system.SysUser;
@@ -58,7 +58,7 @@ public class UserBehaviorAspect implements InitializingBean {
         UserBehaviorLog log = new UserBehaviorLog();
         SysUser user = SecurityContext.currentUser();
         log.setUserName(user.getUserName());
-        log.setState(BaseStateConstant.DEFAULT_STATE);
+        log.setState(BaseConstant.DEFAULT_STATE);
         log.setUserId(user.getId());
         log.setUsingTime(time);
 
@@ -80,7 +80,7 @@ public class UserBehaviorAspect implements InitializingBean {
         log.setCreatedAt(LocalDateTime.now());
         log.setCreatedBy("系统自动生成");
 
-//        threadPoolExecutor.execute(new LogTask(log));
+        threadPoolExecutor.execute(new LogTask(log));
     }
 
     private class LogTask implements Runnable {

@@ -1,6 +1,5 @@
 package com.afagoal.web.userBehavior;
 
-import com.afagoal.constant.BaseStateConstant;
 import com.afagoal.dao.behavior.UserBehaviorLogDao;
 import com.afagoal.dto.userBehavior.UserBehaviorLogDto;
 import com.afagoal.entity.behavior.UserBehaviorLog;

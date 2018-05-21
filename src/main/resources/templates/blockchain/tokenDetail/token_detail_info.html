@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:include="include::header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">币种名称：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.tokenName}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">币种编码：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.tokenCode}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">今日价格：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.todayPrice}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">价格变动：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.priceChange}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">矿池容量：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.volume}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">统计时间：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.statisticTime}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">币种总值：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.totalValue}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">当日交易量：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.todayTransaction}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">USD盈利率：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.usdProfitability}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">ETH盈利率：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.ethProfitability}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">今日流量：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${detail?.circulatingSupply}"></p>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script >
+</script>
+</body>
+
+</html>

@@ -1,6 +1,7 @@
 package com.afagoal.web.login;
 
 import com.afagoal.annotation.BehaviorLog;
+import com.afagoal.constant.BaseConstant;
 import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysUser;
 import com.afagoal.security.SecurityContext;
@@ -29,7 +30,12 @@ public class LoginController {
     @BehaviorLog("用户首页")
     String index(Model model) {
         SysUser user = SecurityContext.currentUser();
-        List<Tree<SysFunction>> menus = functionService.userFunction(user.getId());
+        List<Tree<SysFunction>> menus;
+        if(BaseConstant.SUPERADMIN.equals(user.getUserName())){
+            menus = functionService.treeFunction();
+        }else{
+            menus = functionService.userFunction(user.getId());
+        }
         model.addAttribute("menus", menus);
         model.addAttribute("name", user.getRealName());
         model.addAttribute("picUrl","/img/photo_s.jpg");
