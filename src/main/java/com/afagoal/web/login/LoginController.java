@@ -1,6 +1,7 @@
 package com.afagoal.web.login;
 
 import com.afagoal.annotation.BehaviorLog;
+import com.afagoal.constant.BaseConstant;
 import com.afagoal.entity.system.SysFunction;
 import com.afagoal.entity.system.SysUser;
 import com.afagoal.security.SecurityContext;
@@ -25,25 +26,31 @@ public class LoginController {
     @Autowired
     private FunctionService functionService;
 
-    @RequestMapping({"/index","/"})
+    @RequestMapping({"/index", "/"})
     @BehaviorLog("用户首页")
     String index(Model model) {
         SysUser user = SecurityContext.currentUser();
-        List<Tree<SysFunction>> menus = functionService.userFunction(user.getId());
+
+        List<Tree<SysFunction>> menus;
+        if (BaseConstant.SUPERADMIN.equals(user.getUserName())) {
+            menus = functionService.treeFunction();
+        } else {
+            menus = functionService.userFunction(user.getId());
+        }
         model.addAttribute("menus", menus);
         model.addAttribute("name", user.getRealName());
-        model.addAttribute("picUrl","/img/photo_s.jpg");
+        model.addAttribute("picUrl", "/img/photo_s.jpg");
         model.addAttribute("username", user.getUserName());
         return "index";
     }
 
-    @RequestMapping({ "/main" })
-    public String main(){
+    @RequestMapping({"/main"})
+    public String main() {
         return "main";
     }
 
     @RequestMapping({"/login"})
-    public String login(@RequestParam(value = "authentication_error" ,required = false) Boolean error){
+    public String login(@RequestParam(value = "authentication_error", required = false) Boolean error) {
         return "login";
     }
 }
