@@ -31,12 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/editor-app/**").permitAll()
+                .antMatchers("/register/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")
                 .and().formLogin()
                 .loginProcessingUrl("/login")
                 .failureUrl("/login?authentication_error=true")
-//                .successForwardUrl("/index")
                 .defaultSuccessUrl("/")
                 .loginPage("/login").permitAll();
 

@@ -4,6 +4,7 @@ import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.dao.system.SysUserDao;
 import com.afagoal.entity.system.SysUser;
 import com.afagoal.security.AfagoalPasswordEncoder;
+import com.afagoal.service.sys.UserService;
 import com.afagoal.utildto.PageData;
 import com.afagoal.utildto.Response;
 import com.querydsl.core.types.OrderSpecifier;
@@ -39,6 +40,8 @@ public class UserController {
 
     @Autowired
     private SysUserDao sysUserDao;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/sys/user")
     @BehaviorLog("用户管理")
@@ -90,17 +93,9 @@ public class UserController {
 
     @PostMapping("/sys/user/save")
     @ResponseBody
-    @Transactional
-    @BehaviorLog("添加用户")
+    @BehaviorLog("管理员添加用户")
     public Response save(SysUser user) {
-        Assert.notNull(user, "用户信息不可为空！");
-        String password = AfagoalPasswordEncoder.secrecy(user.getPassword());
-        user.setPassword(password);
-        if (null == user.getId()) {
-            sysUserDao.save(user);
-        } else {
-            sysUserDao.merge(user);
-        }
+        userService.createUser(user);
         return Response.ok("保存成功！");
     }
 
