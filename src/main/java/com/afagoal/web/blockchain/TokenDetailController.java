@@ -39,6 +39,7 @@ public class TokenDetailController {
     @RequestMapping("/blockchain/token_detail")
     @BehaviorLog("币种每日详情")
     public String tokenDetailPage(ModelMap map) {
+        //TODO 获取默认token_id
         map.put("token_id", "1");
         return "blockchain/tokenDetail/token_details";
     }
@@ -53,6 +54,19 @@ public class TokenDetailController {
         TokenDetail detail = tokenDetailDao.getEntity(list);
         map.put("detail", detail);
         return "blockchain/tokenDetail/token_detail_info";
+    }
+
+    @RequestMapping("/blockchain/token_detail/echart")
+    @BehaviorLog("币种每日详情Echart")
+    public String tokenDetailEChart(ModelMap map) {
+        //TODO 获取默认token_id
+        map.put("token_id", "1");
+        List<BooleanExpression> list = new ArrayList();
+        list.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+        list.add(tokenDetailDao.getQEntity().id.eq("1"));
+        TokenDetail detail = tokenDetailDao.getEntity(list);
+        map.put("detail", detail);
+        return "blockchain/tokenDetail/token_detail_echart";
     }
 
     @RequestMapping("/blockchain/token_detail/list")
