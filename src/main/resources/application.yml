@@ -30,3 +30,6 @@ spring.datasource.dashboard:
 spring:
   thymeleaf:
     prefix: classpath:/templates/
+
+
+afagoal.session.enable: false

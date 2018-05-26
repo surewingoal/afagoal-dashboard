@@ -29,3 +29,8 @@ spring.datasource.dashboard:
 
 server:
   port: 18080
+
+
+
+
+afagoal.session.enable: false

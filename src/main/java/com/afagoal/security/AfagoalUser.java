@@ -16,6 +16,8 @@ public class AfagoalUser extends User {
 
     private Integer id;
 
+    private String info;
+
     public AfagoalUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
