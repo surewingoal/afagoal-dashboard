@@ -27,6 +27,11 @@
                     <div class="columns pull-right">
                         <button class="btn btn-success" onclick="reLoad()">查询</button>
                     </div>
+                    &nbsp;
+                    &nbsp;
+                    <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="formClear()">重置</button>
+                    </div>
 
 
                 </div>
@@ -156,6 +161,12 @@
     function tokenChange() {
         var token_id = $("#token_select").val();
         $("#token_id").val(token_id);
+    }
+
+    function formClear(){
+        $("#token_id").val("");
+        $("#searchName").val("");
+        $("#token_select").val("");
     }
 
     function initSelect() {
