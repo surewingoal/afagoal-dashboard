@@ -11,13 +11,37 @@
                     <div class="fixed-table-toolbar">
                         <input type="hidden" id="token_id" th:value="${detail?.id}" />
                         <input type="hidden" id="token_name" th:value="${detail?.tokenName}" />
-                        <div class="columns pull-right">
-                            <button class="btn btn-success" onclick="reLoad()">查询</button>
-                        </div>
-                        <div class="columns pull-right col-md-2 nopadding">
+
+
+                        <div class="columns pull-left col-md-2 nopadding">
                             <input id="searchName" type="text" class="form-control"
                                    placeholder="关键字查询"/>
                         </div>
+                        &nbsp;
+                        &nbsp;
+                        <div class="columns pull-left col-md-8 nopadding">
+                            <select id="token_select" class="selectpicker" onchange="tokenChange()"
+                                    data-live-search="true">
+                            </select>
+                        </div>
+
+                        <div class="columns pull-right">
+                            <button class="btn btn-success" onclick="reLoad()">查询</button>
+                        </div>
+                        &nbsp;
+                        &nbsp;
+                        <div class="columns pull-right">
+                            <button class="btn btn-success" onclick="formClear()">重置</button>
+                        </div>
+
+
+                        <!--<div class="columns pull-right">-->
+                            <!--<button class="btn btn-success" onclick="reLoad()">查询</button>-->
+                        <!--</div>-->
+                        <!--<div class="columns pull-right col-md-2 nopadding">-->
+                            <!--<input id="searchName" type="text" class="form-control"-->
+                                   <!--placeholder="关键字查询"/>-->
+                        <!--</div>-->
                     </div>
 
                     <div class="ibox float-e-margins">
@@ -61,14 +85,16 @@
 
 
     $(document).ready(function() {
+        initSelect();
         loadEchartData();
     });
 
     function loadEchartData() {
+        var tokenId = $("#token_id").val();
         $.ajax({
                    cache : true,
                    type : "POST",
-                   url : prefix + "/list",
+                   url : prefix + "/list?token_id=" + tokenId,
                    async : false,
                    error : function(request) {
                        layer.alert("Connection error");
@@ -134,6 +160,37 @@
         };
         barChart.setOption(baroption);
         window.onresize = barChart.resize;
+    }
+
+
+    function tokenChange() {
+        var token_id = $("#token_select").val();
+        $("#token_id").val(token_id);
+    }
+
+    function formClear(){
+        $("#token_id").val("");
+        $("#searchName").val("");
+        $("#token_select").val("");
+    }
+
+    function initSelect() {
+        var select = $("#token_select");
+        var option_value;
+
+        $.ajax({
+                   url : "/blockchain/token/simple_list",
+                   type : "get",
+                   success : function(dtos) {
+                       $.each(dtos,function(index,dto){
+                           option_value = '<option value="' + dto.id + '">' + dto.tokenName +  '</option>';
+                           select.append(option_value);
+                       });
+                       $("#token_select").selectpicker('refresh');
+                   }
+               });
+
+        tokenChange();
     }
 
 

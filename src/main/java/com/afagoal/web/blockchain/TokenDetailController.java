@@ -60,10 +60,10 @@ public class TokenDetailController {
     @BehaviorLog("币种每日详情Echart")
     public String tokenDetailEChart(ModelMap map) {
         //TODO 获取默认token_id
-        map.put("token_id", "1");
+        map.put("token_id", "0x001f0aa5da15585e5b2305dbab2bac425ea71007");
         List<BooleanExpression> list = new ArrayList();
         list.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
-        list.add(tokenDetailDao.getQEntity().id.eq("1"));
+        list.add(tokenDetailDao.getQEntity().id.eq("0x001f0aa5da15585e5b2305dbab2bac425ea71007"));
         TokenDetail detail = tokenDetailDao.getEntity(list);
         map.put("detail", detail);
         return "blockchain/tokenDetail/token_detail_echart";
@@ -78,11 +78,10 @@ public class TokenDetailController {
                                       @RequestParam(value = "key", required = false) String key,
                                       @RequestParam(defaultValue = "0", value = "page") int page,
                                       @RequestParam(defaultValue = "10", value = "size") int size) {
-        //TODO 时间查询，token下拉选
         List<BooleanExpression> booleanExpressionList = new ArrayList();
         booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         LocalDate end = LocalDate.now();
-        LocalDate start = LocalDate.now().plusDays(-10);
+        LocalDate start = LocalDate.now().plusDays(-60);
         if (StringUtils.isNotEmpty(endDate)) {
             end = DateUtils.valueOfDate(endDate);
         }

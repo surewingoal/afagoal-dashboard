@@ -44,10 +44,10 @@ public class TokenTopHolderController {
     @RequestMapping("/blockchain/token_top_holder/info")
     @BehaviorLog("币种排名详情")
     public String info(@RequestParam(value = "id") String id,
-                       ModelMap map){
+                       ModelMap map) {
         TokenTopHolder tokenTopHolder = tokenTopHolderDao.getById(id);
-        if(tokenTopHolder!= null){
-            map.put("tokenTopHolder",TokenTopHolderDto.instance(tokenTopHolder));
+        if (tokenTopHolder != null) {
+            map.put("tokenTopHolder", TokenTopHolderDto.instance(tokenTopHolder));
         }
         return "blockchain/tokenTopHolder/token_top_holder_info";
     }
@@ -55,8 +55,7 @@ public class TokenTopHolderController {
     @RequestMapping("/blockchain/token_top_holder/list")
     @ResponseBody
     @BehaviorLog("币种排名列表")
-    public PageData<TokenTopHolderDto> list(@RequestParam(value = "start_date", required = false) String startDate,
-                                            @RequestParam(value = "end_date", required = false) String endDate,
+    public PageData<TokenTopHolderDto> list(@RequestParam(value = "start_date", required = false) String date,
                                             @RequestParam(value = "token_id", required = false) String tokenId,
                                             @RequestParam(value = "key", required = false) String key,
                                             @RequestParam(defaultValue = "0", value = "page") int page,
@@ -64,12 +63,9 @@ public class TokenTopHolderController {
         List<BooleanExpression> booleanExpressionList = new ArrayList();
         booleanExpressionList.add(tokenTopHolderDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         LocalDate end = LocalDate.now();
-        LocalDate start = LocalDate.now().plusDays(-10);
-        if (StringUtils.isNotEmpty(endDate)) {
-            end = DateUtils.valueOfDate(endDate);
-        }
-        if (StringUtils.isNotEmpty(startDate)) {
-            start = DateUtils.valueOfDate(startDate);
+        LocalDate start = LocalDate.now();
+        if (StringUtils.isNotEmpty(date)) {
+            start = DateUtils.valueOfDate(date);
         }
         if (StringUtils.isNotEmpty(key)) {
             booleanExpressionList.add(tokenTopHolderDao.getQEntity().tokenCode.like("%" + key + "%").or(
@@ -83,7 +79,6 @@ public class TokenTopHolderController {
 
 
         List<OrderSpecifier> orderSpecifiers = new ArrayList();
-        orderSpecifiers.add(tokenTopHolderDao.getQEntity().statisticTime.desc());
         orderSpecifiers.add(tokenTopHolderDao.getQEntity().rank.asc());
 
         Pageable pageable = new PageRequest(page, size);
@@ -93,6 +88,6 @@ public class TokenTopHolderController {
         List<TokenTopHolderDto> dtos = tokenTopHolders.stream()
                 .map(tokenTopHolder -> TokenTopHolderDto.instance(tokenTopHolder))
                 .collect(Collectors.toList());
-        return new PageData(dtos,count.intValue());
+        return new PageData(dtos, count.intValue());
     }
 }

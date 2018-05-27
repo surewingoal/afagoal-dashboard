@@ -15,9 +15,8 @@
                                placeholder="关键字查询"/>
                         <input id="token_id" type="hidden" th:value="${token_id}"/>
                     </div>
-
-
-
+                    &nbsp;
+                    &nbsp;
                     <div class="columns pull-left col-md-8 nopadding">
                         <select id="token_select" class="selectpicker" onchange="tokenChange()"
                                 data-live-search="true">
@@ -153,7 +152,7 @@
                        title: '当日详情',
                        maxmin: true,
                        shadeClose: false, // 点击遮罩关闭层
-                       area: ['800px', '600px'],
+                       area: ['800px', '480px'],
                        content: prefix + '/info?id=' + id // iframe的url
                    });
     }
@@ -185,6 +184,7 @@
                    }
                });
 
+        tokenChange();
     }
 
 </script>

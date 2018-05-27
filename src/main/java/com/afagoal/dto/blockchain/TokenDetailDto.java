@@ -30,7 +30,7 @@ public class TokenDetailDto {
 
     private String tokenId;
 
-    private BigDecimal priceChange;
+    private String priceChange;
 
     @JsonSerialize(using = CustomDateTimeSerialize.class)
     private LocalDateTime statisticTime;
@@ -70,7 +70,9 @@ public class TokenDetailDto {
             dto.setEth(NumUtils.moneyFormat(detail.getEth(),NumUtils.UNIT_ETH));
         }
         dto.setEthProfitability(detail.getEthProfitability());
-        dto.setPriceChange(detail.getPriceChange());
+        if(null != detail.getPriceChange()){
+            dto.setPriceChange(NumUtils.percentageFormat(detail.getPriceChange()));
+        }
         dto.setTodayTransaction(detail.getTodayTransaction());
         dto.setUsdProfitability(detail.getUsdProfitability());
         dto.setStatisticTime(detail.getStatisticTime());
