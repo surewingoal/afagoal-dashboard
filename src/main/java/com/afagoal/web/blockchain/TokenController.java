@@ -48,20 +48,20 @@ public class TokenController {
 
     @RequestMapping(value = "/blockchain/token/info")
     @BehaviorLog("虚拟货币详情")
-    public String tokenInfo(@RequestParam(value = "id",required = false) String id,
-                            ModelMap map){
-        if(StringUtils.isEmpty(id)){
+    public String tokenInfo(@RequestParam(value = "id", required = false) String id,
+                            ModelMap map) {
+        if (StringUtils.isEmpty(id)) {
             throw new RuntimeException("请上传token id !");
         }
         List<BooleanExpression> booleanExpressions = new ArrayList();
         booleanExpressions.add(tokenDao.getQEntity().id.eq(id));
         booleanExpressions.add(tokenDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
-        List<Token> tokens = tokenDao.getTokens(booleanExpressions,null,null);
-        if(!CollectionUtils.isEmpty(tokens)){
+        List<Token> tokens = tokenDao.getTokens(booleanExpressions, null, null);
+        if (!CollectionUtils.isEmpty(tokens)) {
             Token token = tokens.get(0);
             Collection<TokenLink> tokenLinks = tokenLinkDao.getTokenLinks(token.getId());
             token.setTokenLinks(tokenLinks);
-            map.put("token",token);
+            map.put("token", TokenDto.instance(token));
         }
         return "blockchain/token/token_info";
     }
@@ -69,38 +69,27 @@ public class TokenController {
     @RequestMapping(value = "/blockchain/token/list")
     @ResponseBody
     @BehaviorLog("虚拟货币列表")
-    public PageData list(@RequestParam(value = "token_name", required = false) String tokenName,
-                         @RequestParam(value = "token_code", required = false) String tokenCode,
-                         @RequestParam(value = "country", required = false) String country,
+    public PageData list(@RequestParam(value = "key", required = false) String key,
                          @RequestParam(defaultValue = "0", value = "page") int page,
                          @RequestParam(defaultValue = "10", value = "size") int size) {
         List<BooleanExpression> booleanExpressionList = new ArrayList();
+
         booleanExpressionList.add(tokenDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
-        if (StringUtils.isNotEmpty(tokenCode)) {
-            booleanExpressionList.add(tokenDao.getQEntity().tokenCode.like("%" + tokenCode + "%"));
-        }
-
-        if (StringUtils.isNotEmpty(country)) {
-            booleanExpressionList.add(tokenDao.getQEntity().country.like("%" + country + "%"));
-        }
-
-        if (StringUtils.isNotEmpty(tokenName)) {
-            booleanExpressionList.add(tokenDao.getQEntity().tokenName.like("%" + tokenName + "%"));
+        if (StringUtils.isNotEmpty(key)) {
+            booleanExpressionList.add(tokenDao.getQEntity().tokenCode.like("%" + key + "%")
+            .or(tokenDao.getQEntity().country.like("%" + key + "%"))
+            .or(tokenDao.getQEntity().tokenName.like("%" + key + "%")));
         }
 
         Pageable pageable = new PageRequest(page, size);
-
         List<OrderSpecifier> orderSpecifiers = new ArrayList();
         orderSpecifiers.add(tokenDao.getQEntity().weight.desc());
-
         List<Token> tokens = tokenDao.getTokens(booleanExpressionList,
                 orderSpecifiers, pageable);
         long count = tokenDao.getCount(booleanExpressionList);
-
         List<TokenDto> dtos = tokens.stream()
                 .map(token -> TokenDto.instance(token))
                 .collect(Collectors.toList());
-
         return new PageData(dtos, (int) count);
     }
 

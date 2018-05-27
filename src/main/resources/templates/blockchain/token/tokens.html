@@ -8,20 +8,10 @@
         <div class="ibox">
             <div class="ibox-body">
                 <div class="fixed-table-toolbar">
-                    <!--<div class="columns pull-left">-->
-                        <!--<button type="button"-->
-                                <!--class="btn btn-primary" title="在根节点下添加菜单" onclick="add()">-->
-                            <!--<i class="fa fa-plus" aria-hidden="true"></i>添加-->
-                        <!--</button>-->
-                        <!--<button type="button"-->
-                                <!--class="btn btn-danger" onclick="batchRemove()">-->
-                            <!--<i class="fa fa-trash" aria-hidden="true"></i>删除-->
-                        <!--</button>-->
-                    <!--</div>-->
-
                     <div class="columns pull-right">
                         <button class="btn btn-success" onclick="reLoad()">查询</button>
                     </div>
+
                     <div class="columns pull-right col-md-2 nopadding">
                         <input id="searchName" type="text" class="form-control"
                                placeholder="关键字查询"/>
@@ -37,7 +27,7 @@
 <div th:include="include::footer"></div>
 <script>
     var prefix = "/blockchain/token"
-    $(document).ready(function() {
+    $(document).ready(function () {
         load();
     });
 
@@ -45,33 +35,33 @@
         $('#exampleTable')
                 .bootstrapTable(
                         {
-                            method : 'get', // 服务器数据的请求方式 get or post
-                            url : prefix + "/list", // 服务器数据的加载地址
+                            method: 'get', // 服务器数据的请求方式 get or post
+                            url: prefix + "/list", // 服务器数据的加载地址
                             // showRefresh : true,
                             // showToggle : true,
                             // showColumns : true,
-                            iconSize : 'outline',
+                            iconSize: 'outline',
 //                            toolbar : '#exampleToolbar',
-                            striped : true, // 设置为true会有隔行变色效果
-                            dataType : "json", // 服务器返回的数据类型
-                            pagination : true, // 设置为true会在底部显示分页条
-                            queryParamsType : "limit",
+                            striped: true, // 设置为true会有隔行变色效果
+                            dataType: "json", // 服务器返回的数据类型
+                            pagination: true, // 设置为true会在底部显示分页条
+                            queryParamsType: "limit",
                             // //设置为limit则会发送符合RESTFull格式的参数
-                            singleSelect : false, // 设置为true将禁止多选
+                            singleSelect: false, // 设置为true将禁止多选
                             // contentType : "application/x-www-form-urlencoded",
                             // //发送到服务器的数据编码类型
-                            pageSize : 10, // 如果设置了分页，每页数据条数
-                            pageNumber : 1, // 如果设置了分布，首页页码
+                            pageSize: 10, // 如果设置了分页，每页数据条数
+                            pageNumber: 1, // 如果设置了分布，首页页码
                             // search : true, // 是否显示搜索框
-                            showColumns : false, // 是否显示内容下拉框（选择显示的列）
-                            sidePagination : "server", // 设置在哪里进行分页，可选值为"client" 或者
+                            showColumns: false, // 是否显示内容下拉框（选择显示的列）
+                            sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者
                             // "server"
-                            queryParams : function(params) {
+                            queryParams: function (params) {
                                 return {
                                     // 说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
-                                    size : params.limit,
-                                    page : params.offset / params.limit,
-                                    role_name : $('#searchName').val()
+                                    size: params.limit,
+                                    page: params.offset / params.limit,
+                                    key: $('#searchName').val()
                                 };
                             },
                             // //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -80,79 +70,66 @@
                             // pageSize, pageNumber, searchText, sortName,
                             // sortOrder.
                             // 返回false将会终止请求
-                            columns : [
+                            columns: [
                                 {
-                                    field : 'id', // 列字段名
-                                    title : '序号' // 列标题
+                                    field: 'tokenName',
+                                    title: '币种名称'
                                 },
                                 {
-                                    field : 'tokenName',
-                                    title : '币种名称'
+                                    field: 'tokenCode',
+                                    title: '币种编码'
                                 },
                                 {
-                                    field : 'tokenCode',
-                                    title : '币种编码'
+                                    field: 'totalSupply',
+                                    title: '币种总量'
                                 },
                                 {
-                                    field : 'totalSupply',
-                                    title : '币种总量'
+                                    field: 'holders',
+                                    title: '持有人数'
                                 },
                                 {
-                                    field : 'holders',
-                                    title : '持有人数'
+                                    field: 'transfers',
+                                    title: '交易次数'
                                 },
                                 {
-                                    field : 'transfers',
-                                    title : '交易次数'
+                                    field: 'country',
+                                    title: '发布国家'
                                 },
                                 {
-                                    field : 'country',
-                                    title : '发布国家'
+                                    field: 'highestPrice',
+                                    title: '最高价格'
                                 },
                                 {
-                                    field : 'highestPrice',
-                                    title : '最高价格'
+                                    field: 'lowestPrice',
+                                    title: '最低价格'
                                 },
                                 {
-                                    field : 'lowestPrice',
-                                    title : '最低价格'
+                                    field: 'highestTransaction',
+                                    title: '最高交易量'
                                 },
                                 {
-                                    field : 'highestTransaction',
-                                    title : '最高交易量'
+                                    field: 'lowestTransaction',
+                                    title: '最低交易量'
                                 },
                                 {
-                                    field : 'lowestTransaction',
-                                    title : '最低交易量'
-                                },
-//                                {
-//                                    field : 'icoStartDate',
-//                                    title : 'ICO开始时间'
-//                                },
-//                                {
-//                                    field : 'icoEndDate',
-//                                    title : 'ICO结束时间'
-//                                },
-
-                                {
-                                    field : 'icoPrice',
-                                    title : 'ICO价格'
+                                    field: 'icoPrice',
+                                    title: 'ICO价格'
                                 },
                                 {
-                                    field : 'totalRaised',
-                                    title : 'ICO总值'
+                                    field: 'totalRaised',
+                                    title: 'ICO总值'
                                 },
                                 {
-                                    title : '操作',
-                                    field : 'id',
-                                    align : 'center',
-                                    formatter : function(value, row, index) {
+                                    title: '操作',
+                                    field: 'id',
+                                    align: 'center',
+                                    formatter: function (value, row, index) {
                                         var e = '<a  class="btn btn-primary" href="#" mce_href="#" title="查看" onclick="info(\''
                                                 + row.id
                                                 + '\')"><i class="fa fa-edit "></i></a> ';
                                         return e;
                                     }
-                                } ]
+                                }]
                         });
     }
     function reLoad() {
@@ -160,12 +137,12 @@
     }
     function info(id) {
         layer.open({
-                       type : 2,
-                       title : '币种详情',
-                       maxmin : true,
-                       shadeClose : false, // 点击遮罩关闭层
-                       area : [ '800px', '600px' ],
-                       content : prefix + '/info?id=' + id // iframe的url
+                       type: 2,
+                       title: '币种详情',
+                       maxmin: true,
+                       shadeClose: false, // 点击遮罩关闭层
+                       area: ['900px', '700px'],
+                       content: prefix + '/info?id=' + id // iframe的url
                    });
     }
 </script>

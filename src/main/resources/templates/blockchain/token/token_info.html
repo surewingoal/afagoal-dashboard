@@ -37,20 +37,9 @@
                             <div class="col-sm-4">
                                 <p style="margin-top: 8px" th:text="${token?.transfers}"></p>
                             </div>
-                            <label class="col-sm-2 control-label">精确位数：</label>
+                            <label class="col-sm-2 control-label">decimals：</label>
                             <div class="col-sm-4">
                                 <p style="margin-top: 8px" th:text="${token?.decimals}"></p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">合同：</label>
-                            <div class="col-sm-4">
-                                <p style="margin-top: 8px" th:text="${token?.contract}"></p>
-                            </div>
-                            <label class="col-sm-2 control-label">发行国家：</label>
-                            <div class="col-sm-4">
-                                <p style="margin-top: 8px" th:text="${token?.country}"></p>
                             </div>
                         </div>
 
@@ -65,11 +54,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">最高交易数量：</label>
+                            <label class="col-sm-2 control-label">最高交易量：</label>
                             <div class="col-sm-4">
                                 <p style="margin-top: 8px" th:text="${token?.highestTransaction}"></p>
                             </div>
-                            <label class="col-sm-2 control-label">最低交易数量：</label>
+                            <label class="col-sm-2 control-label">最低交易量：</label>
                             <div class="col-sm-4">
                                 <p style="margin-top: 8px" th:text="${token?.lowestTransaction}"></p>
                             </div>
@@ -87,13 +76,21 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">ICO价格：</label>
+                            <label class="col-sm-2 control-label">发行国家：</label>
                             <div class="col-sm-4">
-                                <p style="margin-top: 8px" th:text="${token?.icoPrice}"></p>
+                                <p style="margin-top: 8px" th:text="${token?.country}"></p>
                             </div>
+
                             <label class="col-sm-2 control-label">ICO总量：</label>
                             <div class="col-sm-4">
                                 <p style="margin-top: 8px" th:text="${token?.totalRaised}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">ICO价格：</label>
+                            <div class="col-sm-8">
+                                <p style="margin-top: 8px" th:text="${token?.icoPrice}"></p>
                             </div>
                         </div>
 
@@ -103,13 +100,6 @@
                                 <label th:each="link:${token?.tokenLinks}" class="radio-inline">
                                     <a target="_Blank" class="btn btn-primary" th:href="${link.linkValue}" th:text="${link.linkType}"></a>
                                 </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">简介：</label>
-                            <div class="col-sm-10">
-                                <p style="margin-top: 8px" th:text="${token?.overview}"></p>
                             </div>
                         </div>
                     </form>
