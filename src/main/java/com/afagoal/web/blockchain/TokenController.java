@@ -5,6 +5,7 @@ import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dao.blockchain.TokenLinkDao;
 import com.afagoal.dto.blockchain.TokenDto;
+import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenLink;
 import com.afagoal.utildto.PageData;
@@ -77,8 +78,8 @@ public class TokenController {
         booleanExpressionList.add(tokenDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         if (StringUtils.isNotEmpty(key)) {
             booleanExpressionList.add(tokenDao.getQEntity().tokenCode.like("%" + key + "%")
-            .or(tokenDao.getQEntity().country.like("%" + key + "%"))
-            .or(tokenDao.getQEntity().tokenName.like("%" + key + "%")));
+                    .or(tokenDao.getQEntity().country.like("%" + key + "%"))
+                    .or(tokenDao.getQEntity().tokenName.like("%" + key + "%")));
         }
 
         Pageable pageable = new PageRequest(page, size);
@@ -91,6 +92,13 @@ public class TokenController {
                 .map(token -> TokenDto.instance(token))
                 .collect(Collectors.toList());
         return new PageData(dtos, (int) count);
+    }
+
+    @RequestMapping(value = "/blockchain/token/simple_list")
+    @ResponseBody
+    public List<TokenSimpleDto> simpleTokens() {
+        List<TokenSimpleDto> dtos = tokenDao.simpleTokens();
+        return dtos;
     }
 
 }

@@ -52,7 +52,7 @@ public class TokenDetailController {
         list.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         list.add(tokenDetailDao.getQEntity().id.eq(id));
         TokenDetail detail = tokenDetailDao.getEntity(list);
-        map.put("detail", detail);
+        map.put("detail", TokenDetailDto.instance(detail));
         return "blockchain/tokenDetail/token_detail_info";
     }
 
@@ -78,7 +78,6 @@ public class TokenDetailController {
                                       @RequestParam(value = "key", required = false) String key,
                                       @RequestParam(defaultValue = "0", value = "page") int page,
                                       @RequestParam(defaultValue = "10", value = "size") int size) {
-
         //TODO 时间查询，token下拉选
         List<BooleanExpression> booleanExpressionList = new ArrayList();
         booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
@@ -91,9 +90,9 @@ public class TokenDetailController {
             start = DateUtils.valueOfDate(startDate);
         }
         if (StringUtils.isNotEmpty(key)) {
-            booleanExpressionList.add(tokenDetailDao.getQEntity().tokenCode.like("%" + key + "%").or(
-                    tokenDetailDao.getQEntity().tokenName.like("%" + key + "%")
-            ));
+            booleanExpressionList.add(tokenDetailDao.getQEntity().tokenCode.like("%" + key + "%")
+                    .or(tokenDetailDao.getQEntity().tokenName.like("%" + key + "%")
+                    ));
         }
         if (StringUtils.isNotEmpty(tokenId)) {
             booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));

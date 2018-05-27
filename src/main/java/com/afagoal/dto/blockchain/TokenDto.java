@@ -3,6 +3,7 @@ package com.afagoal.dto.blockchain;
 import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenExt;
 import com.afagoal.entity.blockchain.TokenLink;
+import com.afagoal.utils.num.NumUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.beans.BeanUtils;
@@ -23,11 +24,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TokenDto {
-
-    @JsonIgnore
-    private static final DecimalFormat NUM_FORMAT = new DecimalFormat("#.00000");
-    @JsonIgnore
-    private static final String UNIT_USD = " USD";
 
     private String id;
 
@@ -83,7 +79,7 @@ public class TokenDto {
         dto.setTotalCap(token.getTotalCap());
 
         if (null != token.getTotalRaised()) {
-            String totalRaised = NUM_FORMAT.format(token.getTotalRaised()) + UNIT_USD;
+            String totalRaised = NumUtils.moneyFormat(token.getTotalRaised());
             dto.setTotalRaised(totalRaised);
         }
 
@@ -93,11 +89,11 @@ public class TokenDto {
             dto.setHolders(tokenExt.getHolders());
             dto.setTransfers(tokenExt.getTransfers());
             if (null != tokenExt.getHighestPrice()) {
-                String heightPrice = NUM_FORMAT.format(tokenExt.getHighestPrice()) + UNIT_USD;
+                String heightPrice =NumUtils.moneyFormat(tokenExt.getHighestPrice());
                 dto.setHighestPrice(heightPrice);
             }
             if (null != tokenExt.getLowestPrice()) {
-                String lowestPrice = NUM_FORMAT.format(tokenExt.getLowestPrice()) + UNIT_USD;
+                String lowestPrice = NumUtils.moneyFormat(tokenExt.getLowestPrice());
                 dto.setLowestPrice(lowestPrice);
             }
             dto.setHighestTransaction(tokenExt.getHighestTransaction());

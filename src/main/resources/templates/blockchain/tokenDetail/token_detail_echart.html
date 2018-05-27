@@ -77,7 +77,7 @@
                        var dtos = data.rows;
                        $.each(dtos,function(index,dto){
                            categoryData[index] = dto.statisticTime;
-                           priceData[index] = (dto.todayPrice);
+                           priceData[index] = (dto.usd);
                        });
                        initEcharts();
                    }

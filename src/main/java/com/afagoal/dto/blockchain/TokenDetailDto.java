@@ -2,6 +2,7 @@ package com.afagoal.dto.blockchain;
 
 import com.afagoal.entity.blockchain.TokenDetail;
 import com.afagoal.utils.json.CustomDateTimeSerialize;
+import com.afagoal.utils.num.NumUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -29,32 +30,50 @@ public class TokenDetailDto {
 
     private String tokenId;
 
-    private BigDecimal todayPrice;
-
     private BigDecimal priceChange;
-
-    private Long volume;
 
     @JsonSerialize(using = CustomDateTimeSerialize.class)
     private LocalDateTime statisticTime;
 
-    private BigDecimal totalValue;
+    private String totalValue;
 
     private BigDecimal usdProfitability;  //usd盈利率
 
-    private BigDecimal usd;
+    private String usd;
 
     private BigDecimal ethProfitability;  //eth盈利率
 
-    private BigDecimal eth;
+    private String eth;
 
-    private BigDecimal circulatingSupply;  //今日流动量
+    private String circulatingSupply;  //今日流动量
 
     private Long todayTransaction;
 
-    public static TokenDetailDto instance(TokenDetail detail){
+    public static TokenDetailDto instance(TokenDetail detail) {
+        if (null == detail) {
+            return null;
+        }
         TokenDetailDto dto = new TokenDetailDto();
-        BeanUtils.copyProperties(detail,dto);
+        dto.setTokenName(detail.getTokenName());
+        dto.setTokenCode(detail.getTokenCode());
+        dto.setId(detail.getId());
+        if (null != detail.getCirculatingSupply()) {
+            dto.setCirculatingSupply(NumUtils.moneyFormat(detail.getCirculatingSupply()));
+        }
+        if (null != detail.getTotalValue()) {
+            dto.setTotalValue(NumUtils.moneyFormat(detail.getTotalValue()));
+        }
+        if (null != detail.getUsd()) {
+            dto.setUsd(NumUtils.moneyFormat(detail.getUsd()));
+        }
+        if (null != detail.getEth()) {
+            dto.setEth(NumUtils.moneyFormat(detail.getEth(),NumUtils.UNIT_ETH));
+        }
+        dto.setEthProfitability(detail.getEthProfitability());
+        dto.setPriceChange(detail.getPriceChange());
+        dto.setTodayTransaction(detail.getTodayTransaction());
+        dto.setUsdProfitability(detail.getUsdProfitability());
+        dto.setStatisticTime(detail.getStatisticTime());
         return dto;
     }
 }
