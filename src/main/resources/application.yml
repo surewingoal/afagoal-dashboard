@@ -31,10 +31,3 @@ spring.datasource.dashboard:
 spring:
   thymeleaf:
     prefix: classpath:/templates/
-server:
-  port: 8090
-#  ssl:
-#    key-store: classpath:keystore.p12
-#    key-store-password: 123456
-#    key-store-type: PKCS12
-#    key-alias: tomcat
