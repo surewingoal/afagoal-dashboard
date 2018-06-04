@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/editor-app/**").permitAll()
                 .antMatchers("/register/**").permitAll()
+                .antMatchers("/world_cup/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")
                 .and().formLogin()

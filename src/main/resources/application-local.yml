@@ -28,4 +28,4 @@ spring.datasource.dashboard:
     #useGlobalDataSourceStat: true
 
 server:
-  port: 18080
+  port: 8090
