@@ -3,6 +3,7 @@ package com.afagoal.task.token;
 import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.service.token.TokenDetailService;
+import com.afagoal.service.token.TokenService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,8 @@ public class TokenDetailTask {
     private TokenDetailService tokenDetailService;
     @Autowired
     private TokenDao todayDao;
+    @Autowired
+    private TokenService tokenService;
 
     @Scheduled(cron = "0 0 4 * * ? ")
     public void tokenDetailMerge() {
@@ -33,7 +36,7 @@ public class TokenDetailTask {
         long now = System.currentTimeMillis();
         System.out.println("token_detail merge start at : " + now);
         Pageable pageable = new PageRequest(0, TokenTaskHolder.DEFAULT_PAGE_SIZE);
-        List<TokenSimpleDto> tokenSimpleDtos = todayDao.simpleTokens();
+        List<TokenSimpleDto> tokenSimpleDtos = tokenService.simpleTokens();
         int startIndex = 0;
         int endIndex = Math.min(TokenTaskHolder.DEFAULT_PAGE_SIZE, tokenSimpleDtos.size());
         while (true) {

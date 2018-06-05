@@ -2,6 +2,7 @@ package com.afagoal.task.token;
 
 import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
+import com.afagoal.service.token.TokenService;
 import com.afagoal.service.token.TokenTopHolderService;
 
 import java.util.List;
@@ -23,12 +24,14 @@ public class TokenTopHolderTask {
     private TokenTopHolderService tokenTopHolderService;
     @Autowired
     private TokenDao tokenDao;
+    @Autowired
+    private TokenService tokenService;
 
 
     @Scheduled(cron = "0 5 4 * * ? ")
     public void tokenTopHolderMerge() {
         System.out.println("token_top_holder merge start at : " + System.currentTimeMillis());
-        List<TokenSimpleDto> simpleDtoList = tokenDao.simpleTokens();
+        List<TokenSimpleDto> simpleDtoList = tokenService.simpleTokens();
         simpleDtoList.forEach(token ->
                 TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopHolderRunnable(token.getId()))
         );

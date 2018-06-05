@@ -2,9 +2,13 @@ package com.afagoal.web.blockchain;
 
 import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.constant.BaseConstant;
+import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dao.blockchain.TokenDetailDao;
 import com.afagoal.dto.blockchain.TokenDetailDto;
+import com.afagoal.dto.blockchain.TokenDetailEchartDto;
+import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.TokenDetail;
+import com.afagoal.service.token.TokenService;
 import com.afagoal.utildto.PageData;
 import com.afagoal.utils.date.DateUtils;
 import com.querydsl.core.types.OrderSpecifier;
@@ -35,12 +39,14 @@ public class TokenDetailController {
 
     @Autowired
     private TokenDetailDao tokenDetailDao;
+    @Autowired
+    private TokenService tokenService;
 
     @RequestMapping("/blockchain/token_detail")
     @BehaviorLog("币种每日详情")
     public String tokenDetailPage(ModelMap map) {
-        //TODO 获取默认token_id
-        map.put("token_id", "1");
+        TokenSimpleDto hottestToken = tokenService.hottestToken();
+        map.put("token_id", hottestToken.getId());
         return "blockchain/tokenDetail/token_details";
     }
 
@@ -56,23 +62,28 @@ public class TokenDetailController {
         return "blockchain/tokenDetail/token_detail_info";
     }
 
-    @RequestMapping("/blockchain/token_detail/echart")
-    @BehaviorLog("币种每日详情Echart")
-    public String tokenDetailEChart(ModelMap map) {
-        //TODO 获取默认token_id
-        map.put("token_id", "0x001f0aa5da15585e5b2305dbab2bac425ea71007");
-        List<BooleanExpression> list = new ArrayList();
-        list.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
-        list.add(tokenDetailDao.getQEntity().id.eq("0x001f0aa5da15585e5b2305dbab2bac425ea71007"));
-        TokenDetail detail = tokenDetailDao.getEntity(list);
-        map.put("detail", detail);
-        return "blockchain/tokenDetail/token_detail_echart";
+    @RequestMapping("/blockchain/token_detail/echart_bar")
+    @BehaviorLog("币种每日详情Echart柱状图")
+    public String tokenDetailEChart_bar(ModelMap map) {
+        TokenSimpleDto hottestToken = tokenService.hottestToken();
+        map.put("token_id", hottestToken.getId());
+        map.put("detail", hottestToken);
+        return "blockchain/tokenDetail/token_detail_echart_bar";
+    }
+
+    @RequestMapping("/blockchain/token_detail/echart_k")
+    @BehaviorLog("币种每日详情Echart K线图")
+    public String tokenDetailEChart_K(ModelMap map) {
+        TokenSimpleDto hottestToken = tokenService.hottestToken();
+        map.put("token_id", hottestToken.getId());
+        map.put("detail", hottestToken);
+        return "blockchain/tokenDetail/token_detail_echart_k";
     }
 
     @RequestMapping("/blockchain/token_detail/list")
     @ResponseBody
     @BehaviorLog("币种每日详情列表")
-    public PageData<TokenDetail> list(@RequestParam(value = "start_date", required = false) String startDate,
+    public PageData<TokenDetailDto> list(@RequestParam(value = "start_date", required = false) String startDate,
                                       @RequestParam(value = "end_date", required = false) String endDate,
                                       @RequestParam(value = "token_id", required = false) String tokenId,
                                       @RequestParam(value = "key", required = false) String key,
@@ -87,6 +98,10 @@ public class TokenDetailController {
         }
         if (StringUtils.isNotEmpty(startDate)) {
             start = DateUtils.valueOfDate(startDate);
+        }
+        if (StringUtils.isEmpty(tokenId)) {
+            TokenSimpleDto hottestToken = tokenService.hottestToken();
+            tokenId = hottestToken.getId();
         }
         if (StringUtils.isNotEmpty(key)) {
             booleanExpressionList.add(tokenDetailDao.getQEntity().tokenCode.like("%" + key + "%")
@@ -112,6 +127,29 @@ public class TokenDetailController {
                 .collect(Collectors.toList());
 
         return new PageData(dtos, count.intValue());
+    }
+
+    @RequestMapping("/blockchain/token_detail/echart_list")
+    @ResponseBody
+    @BehaviorLog("币种每日详情echart数据")
+    public List<TokenDetailEchartDto> tokenDetailEchartDtos(@RequestParam(value = "token_id", required = false) String tokenId,
+                                                            @RequestParam(defaultValue = "0", value = "page") int page,
+                                                            @RequestParam(defaultValue = "100", value = "size") int size) {
+        if (StringUtils.isEmpty(tokenId)) {
+            TokenSimpleDto hottestToken = tokenService.hottestToken();
+            tokenId = hottestToken.getId();
+        }
+        List<BooleanExpression> booleanExpressionList = new ArrayList();
+        booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+        booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));
+        List<OrderSpecifier> orderSpecifiers = new ArrayList();
+        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.desc());
+        Pageable pageable = new PageRequest(page, size);
+        List<TokenDetail> details = tokenDetailDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
+        List<TokenDetailEchartDto> dtos = details.stream()
+                .map(detail -> TokenDetailEchartDto.instance(detail))
+                .collect(Collectors.toList());
+        return dtos;
     }
 
 }

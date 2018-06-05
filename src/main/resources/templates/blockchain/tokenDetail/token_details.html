@@ -90,10 +90,6 @@
                             // 返回false将会终止请求
                             columns: [
                                 {
-                                    field: 'id', // 列字段名
-                                    title: '序号' // 列标题
-                                },
-                                {
                                     field: 'tokenName',
                                     title: '币种名称'
                                 },
@@ -102,20 +98,28 @@
                                     title: '币种编码'
                                 },
                                 {
-                                    field: 'priceChange',
-                                    title: '价格浮动'
+                                    field: 'transfersUsd',
+                                    title: '当日市值'
                                 },
                                 {
-                                    field: 'statisticTime',
-                                    title: '统计时间'
+                                    field: 'priceChange',
+                                    title: '价格浮动'
                                 },
                                 {
                                     field: 'totalValue',
                                     title: '币种总值'
                                 },
                                 {
+                                    field: 'usd',
+                                    title: 'USD价格'
+                                },
+                                {
                                     field: 'usdProfitability',
                                     title: 'USD盈利率'
+                                },
+                                {
+                                    field: 'eth',
+                                    title: 'ETH价格'
                                 },
                                 {
                                     field: 'ethProfitability',
@@ -125,10 +129,17 @@
                                     field: 'circulatingSupply',
                                     title: '今日流动量'
                                 },
-
                                 {
-                                    field: 'todayTransaction',
-                                    title: '今日交易量'
+                                    field: 'ethProfitability',
+                                    title: 'ETH盈利率'
+                                },
+                                {
+                                    field: 'transfersToken',
+                                    title: '流通量'
+                                },
+                                {
+                                    field: 'statisticTime',
+                                    title: '统计时间'
                                 },
                                 {
                                     title: '操作',
@@ -152,7 +163,7 @@
                        title: '当日详情',
                        maxmin: true,
                        shadeClose: false, // 点击遮罩关闭层
-                       area: ['800px', '480px'],
+                       area: ['800px', '630px'],
                        content: prefix + '/info?id=' + id // iframe的url
                    });
     }

@@ -3,14 +3,13 @@ package com.afagoal.dto.blockchain;
 import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenExt;
 import com.afagoal.entity.blockchain.TokenLink;
+import com.afagoal.utils.json.CustomDateSerialize;
 import com.afagoal.utils.num.NumUtils;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -31,7 +30,7 @@ public class TokenDto {
 
     private String tokenCode;
 
-    private Long totalSupply;
+    private BigDecimal totalSupply;
 
     private Long holders;
 
@@ -49,8 +48,10 @@ public class TokenDto {
 
     private Long lowestTransaction;
 
+    @JsonSerialize(using = CustomDateSerialize.class)
     private LocalDate icoStartDate;
 
+    @JsonSerialize(using = CustomDateSerialize.class)
     private LocalDate icoEndDate;
 
     private String icoPrice;

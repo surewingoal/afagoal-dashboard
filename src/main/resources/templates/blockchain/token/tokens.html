@@ -55,6 +55,8 @@
                             // search : true, // 是否显示搜索框
                             showColumns: false, // 是否显示内容下拉框（选择显示的列）
                             sidePagination: "server", // 设置在哪里进行分页，可选值为"client" 或者
+                            fixedColumns: true,
+                            fixedNumber: 3,
                             // "server"
                             queryParams: function (params) {
                                 return {
@@ -73,6 +75,7 @@
                             columns: [
                                 {
                                     field: 'tokenName',
+                                    width : 'auto',
                                     title: '币种名称'
                                 },
                                 {
@@ -118,6 +121,14 @@
                                 {
                                     field: 'totalRaised',
                                     title: 'ICO总值'
+                                },
+                                {
+                                    field: 'icoStartDate',
+                                    title: 'ICO开始日期'
+                                },
+                                {
+                                    field: 'icoEndDate',
+                                    title: 'ICO结束日期'
                                 },
                                 {
                                     title: '操作',

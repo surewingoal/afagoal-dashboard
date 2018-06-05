@@ -8,6 +8,7 @@ import com.afagoal.dto.blockchain.TokenDto;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenLink;
+import com.afagoal.service.token.TokenService;
 import com.afagoal.utildto.PageData;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -40,6 +41,8 @@ public class TokenController {
     private TokenDao tokenDao;
     @Autowired
     private TokenLinkDao tokenLinkDao;
+    @Autowired
+    private TokenService tokenService;
 
     @RequestMapping(value = "/blockchain/token")
     @BehaviorLog("虚拟货币管理")
@@ -97,7 +100,7 @@ public class TokenController {
     @RequestMapping(value = "/blockchain/token/simple_list")
     @ResponseBody
     public List<TokenSimpleDto> simpleTokens() {
-        List<TokenSimpleDto> dtos = tokenDao.simpleTokens();
+        List<TokenSimpleDto> dtos = tokenService.simpleTokens();
         return dtos;
     }
 

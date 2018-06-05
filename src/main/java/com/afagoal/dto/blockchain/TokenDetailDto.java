@@ -49,6 +49,10 @@ public class TokenDetailDto {
 
     private Long todayTransaction;
 
+    private BigDecimal transfersUsd;
+
+    private BigDecimal transfersToken;
+
     public static TokenDetailDto instance(TokenDetail detail) {
         if (null == detail) {
             return null;
@@ -57,6 +61,8 @@ public class TokenDetailDto {
         dto.setTokenName(detail.getTokenName());
         dto.setTokenCode(detail.getTokenCode());
         dto.setId(detail.getId());
+        dto.setTransfersToken(detail.getTransfersToken());
+        dto.setTransfersUsd(detail.getTransfersUsd());
         if (null != detail.getCirculatingSupply()) {
             dto.setCirculatingSupply(NumUtils.moneyFormat(detail.getCirculatingSupply()));
         }
