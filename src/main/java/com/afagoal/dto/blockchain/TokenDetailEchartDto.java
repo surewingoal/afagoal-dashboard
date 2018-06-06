@@ -1,11 +1,9 @@
 package com.afagoal.dto.blockchain;
 
 import com.afagoal.entity.blockchain.TokenDetail;
-import com.afagoal.utils.json.CustomDateTimeSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.afagoal.utils.date.DateUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,16 +20,15 @@ public class TokenDetailEchartDto {
 
     private BigDecimal usd;
 
-    @JsonSerialize(using = CustomDateTimeSerialize.class)
-    private LocalDateTime statisticTime;
+    private String statisticTime;
 
-    public static TokenDetailEchartDto instance(TokenDetail detail){
-        if(null == detail){
+    public static TokenDetailEchartDto instance(TokenDetail detail) {
+        if (null == detail) {
             return null;
         }
         TokenDetailEchartDto dto = new TokenDetailEchartDto();
         dto.setId(detail.getId());
-        dto.setStatisticTime(detail.getStatisticTime());
+        dto.setStatisticTime(DateUtils.format(detail.getStatisticTime().toLocalDate()));
         dto.setUsd(detail.getUsd());
         return dto;
     }

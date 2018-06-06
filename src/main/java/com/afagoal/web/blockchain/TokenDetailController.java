@@ -2,7 +2,6 @@ package com.afagoal.web.blockchain;
 
 import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.constant.BaseConstant;
-import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dao.blockchain.TokenDetailDao;
 import com.afagoal.dto.blockchain.TokenDetailDto;
 import com.afagoal.dto.blockchain.TokenDetailEchartDto;
@@ -80,15 +79,24 @@ public class TokenDetailController {
         return "blockchain/tokenDetail/token_detail_echart_k";
     }
 
+    @RequestMapping("/blockchain/token_detail/echart_line")
+    @BehaviorLog("币种每日详情Echart折线图")
+    public String tokenDetailEChart_line(ModelMap map) {
+        TokenSimpleDto hottestToken = tokenService.hottestToken();
+        map.put("token_id", hottestToken.getId());
+        map.put("detail", hottestToken);
+        return "blockchain/tokenDetail/token_detail_echart_line";
+    }
+
     @RequestMapping("/blockchain/token_detail/list")
     @ResponseBody
     @BehaviorLog("币种每日详情列表")
     public PageData<TokenDetailDto> list(@RequestParam(value = "start_date", required = false) String startDate,
-                                      @RequestParam(value = "end_date", required = false) String endDate,
-                                      @RequestParam(value = "token_id", required = false) String tokenId,
-                                      @RequestParam(value = "key", required = false) String key,
-                                      @RequestParam(defaultValue = "0", value = "page") int page,
-                                      @RequestParam(defaultValue = "10", value = "size") int size) {
+                                         @RequestParam(value = "end_date", required = false) String endDate,
+                                         @RequestParam(value = "token_id", required = false) String tokenId,
+                                         @RequestParam(value = "key", required = false) String key,
+                                         @RequestParam(defaultValue = "0", value = "page") int page,
+                                         @RequestParam(defaultValue = "10", value = "size") int size) {
         List<BooleanExpression> booleanExpressionList = new ArrayList();
         booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         LocalDate end = LocalDate.now();

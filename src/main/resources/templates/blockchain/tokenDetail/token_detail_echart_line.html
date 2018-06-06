@@ -32,7 +32,7 @@
 
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>价格变动</h5>
+                            <h5>币种价格折线图</h5>
                             <!--<div class="ibox-tools">-->
                             <!--<a class="collapse-link">-->
                             <!--<i class="fa fa-chevron-up"></i>-->
@@ -52,7 +52,7 @@
                             <!--</div>-->
                         </div>
                         <div class="ibox-content">
-                            <div style="height:520px" class="echarts" id="echarts-bar-chart"></div>
+                            <div style="height:520px;" class="echarts" id="echarts-chart"></div>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
 <script>
     var categoryData = new Array();
     var priceData = new Array();
-    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+    var echart = echarts.init(document.getElementById("echarts-chart"));
     var prefix = "/blockchain/token_detail";
 
     $(document).ready(function () {
@@ -87,7 +87,7 @@
                    success: function (data) {
                        $.each(data, function (index, dto) {
                            categoryData[index] = dto.statisticTime;
-                           priceData[index] = (dto.usd);
+                           priceData[index] = dto.usd;
                        });
                        initEcharts();
                    }
@@ -96,9 +96,9 @@
 
     function initEcharts() {
         var tokenName = $("#token_name").val();
-        var baroption = {
+        var option = {
             title: {
-                text: tokenName + '币种每日价格变动表'
+                text: tokenName + '价格浮动'
             },
             tooltip: {
                 trigger: 'axis'
@@ -106,44 +106,38 @@
             legend: {
                 data: ['币种价格']
             },
-            grid: {
-                x: 30,
-                x2: 40,
-                y2: 24
+            xAxis: {
+                type: 'category',
+                data: categoryData
             },
-            calculable: true,
-            xAxis: [
-                {
-                    type: 'category',
-                    data: categoryData
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name: '币种价格',
-                    type: 'bar',
-                    data: priceData,
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: priceData,
+                type: 'line',
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                },
+                itemStyle:{
+                    normal:{
+                        lineStyle:{
+                            color:'#a94442'
+                        }
                     }
                 }
-            ]
+            }],
         };
-        barChart.setOption(baroption);
-        window.onresize = barChart.resize;
+        echart.setOption(option);
+        window.onresize = echart.resize;
     }
 
     function tokenChange() {
@@ -174,7 +168,6 @@
     function reLoad() {
         loadEchartData();
     }
-
 
 </script>
 </body>
