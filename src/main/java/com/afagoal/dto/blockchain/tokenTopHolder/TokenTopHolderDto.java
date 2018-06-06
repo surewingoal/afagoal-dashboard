@@ -1,4 +1,4 @@
-package com.afagoal.dto.blockchain;
+package com.afagoal.dto.blockchain.tokenTopHolder;
 
 import com.afagoal.entity.blockchain.TokenTopHolder;
 import com.afagoal.utils.json.CustomDateTimeSerialize;

@@ -4,7 +4,7 @@ import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dao.blockchain.TokenLinkDao;
-import com.afagoal.dto.blockchain.TokenDto;
+import com.afagoal.dto.blockchain.token.TokenDto;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenLink;

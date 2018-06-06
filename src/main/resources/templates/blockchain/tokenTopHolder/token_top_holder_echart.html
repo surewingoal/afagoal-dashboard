@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:include="include::header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-body">
+                        <input type="hidden" id="token_id" th:value="${token_id}"/>
+                        <input type="hidden" id="address" th:value="${address}"/>
+                        <input type="hidden" id="id" th:value="${id}"/>
+
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5 th:text="${address}"></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div style="height:520px;" class="echarts" id="echarts-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<!-- ECharts -->
+<script src="/js/plugins/echarts/echarts-all.js"></script>
+<script>
+
+    var echart = echarts.init(document.getElementById("echarts-chart"));
+    var address ;
+    var tokenId ;
+    var dates = new Array();
+    var ranks = new Array();
+    var percentages = new Array();
+    var quantilies = new Array();
+
+    $(document).ready(function () {
+        loadEchartData();
+    });
+
+
+    function loadEchartData() {
+        tokenId = $("#token_id").val();
+        address = $("#address").val();
+        var id = $("#id").val();
+        $.ajax({
+                   cache: true,
+                   type: "GET",
+                   url: "/blockchain/token_top_holder/echart_list?id=" + id,
+                   async: false,
+                   error: function (request) {
+                       layer.alert("Connection error");
+                   },
+                   success: function (data) {
+                       $.each(data, function (index, dto) {
+                           dates[index] = dto.statisticTime;
+                           ranks[index] = dto.rank;
+                           percentages[index] = dto.percentage;
+                           quantilies[index] = dto.quantily;
+                       });
+                       initEcharts();
+                   }
+               });
+    }
+
+
+    function initEcharts() {
+
+        address = $("#address").val();
+        var option = {
+            title: {
+                text: '持有者'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['排名','持有量','持仓比']
+            },
+            grid: {
+                left: '5%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dates
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'排名',
+                    type:'line',
+                    stack: '总量',
+                    data: ranks
+                },
+                {
+                    name:'持有量',
+                    type:'line',
+                    stack: '总量',
+                    data: quantilies
+                },
+                {
+                    name:'持仓比',
+                    type:'line',
+                    stack: '总量',
+                    data: percentages
+                }
+            ]
+        };
+
+        echart.setOption(option);
+        window.onresize = echart.resize;
+    }
+
+</script>
+</body>
+
+</html>

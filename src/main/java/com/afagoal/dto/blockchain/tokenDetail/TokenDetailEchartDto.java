@@ -1,4 +1,4 @@
-package com.afagoal.dto.blockchain;
+package com.afagoal.dto.blockchain.tokenDetail;
 
 import com.afagoal.entity.blockchain.TokenDetail;
 import com.afagoal.utils.date.DateUtils;

@@ -2,7 +2,9 @@ package com.afagoal.service.token;
 
 import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenTopHolderDao;
+import com.afagoal.dto.blockchain.tokenTopHolder.TokenTopHolderEchartDto;
 import com.afagoal.entity.blockchain.TokenTopHolder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.math.BigDecimal;
@@ -62,4 +64,19 @@ public class TokenTopHolderService {
         return tokenTopHolderDao.getEntities(booleanExpressions, null);
     }
 
+    public List<TokenTopHolderEchartDto> echartTopHolders(String tokenId, String address) {
+        List<BooleanExpression> booleanExpressionList = new ArrayList();
+        booleanExpressionList.add(tokenTopHolderDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+        booleanExpressionList.add(tokenTopHolderDao.getQEntity().tokenId.eq(tokenId));
+        booleanExpressionList.add(tokenTopHolderDao.getQEntity().address.eq(address));
+
+        List<OrderSpecifier> orders = new ArrayList();
+        orders.add(tokenTopHolderDao.getQEntity().statisticTime.desc());
+
+        List<TokenTopHolder> tokenTopHolders = tokenTopHolderDao.getEntities(booleanExpressionList, null);
+
+        return tokenTopHolders.stream()
+                .map(tokenTopHolder -> TokenTopHolderEchartDto.instance(tokenTopHolder))
+                .collect(Collectors.toList());
+    }
 }

@@ -1,4 +1,4 @@
-package com.afagoal.dto.blockchain;
+package com.afagoal.dto.blockchain.token;
 
 import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenExt;

@@ -1,12 +1,9 @@
-package com.afagoal.dto.blockchain;
+package com.afagoal.dto.blockchain.tokenDetail;
 
 import com.afagoal.entity.blockchain.TokenDetail;
 import com.afagoal.utils.json.CustomDateTimeSerialize;
 import com.afagoal.utils.num.NumUtils;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
