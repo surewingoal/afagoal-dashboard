@@ -1,6 +1,5 @@
 package com.afagoal.task.token;
 
-import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.service.token.TokenDetailService;
 import com.afagoal.service.token.TokenService;
@@ -25,8 +24,6 @@ public class TokenDetailTask {
 
     @Autowired
     private TokenDetailService tokenDetailService;
-    @Autowired
-    private TokenDao todayDao;
     @Autowired
     private TokenService tokenService;
 

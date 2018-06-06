@@ -26,8 +26,7 @@ public class TokenExtTask {
     @Autowired
     private TokenService tokenService;
 
-//    @Scheduled(cron = "0 15 4 * * ? ")
-    @Scheduled(cron = "0 26 18 * * ? ")
+    @Scheduled(cron = "0 15 4 * * ? ")
     public void tokenExtMerge() {
         long now = System.currentTimeMillis();
         System.out.println("token_ext merge start at : " + now);
