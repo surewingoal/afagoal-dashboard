@@ -1,6 +1,5 @@
 package com.afagoal.dto.wc;
 
-import com.afagoal.entity.wc.WorldCupGuess;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
