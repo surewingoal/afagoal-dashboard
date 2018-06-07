@@ -27,7 +27,7 @@ public class TokenDetailTask {
     @Autowired
     private TokenService tokenService;
 
-    @Scheduled(cron = "0 0 4 * * ? ")
+    @Scheduled(cron = "0 10 4 * * ? ")
     public void tokenDetailMerge() {
 
         long now = System.currentTimeMillis();

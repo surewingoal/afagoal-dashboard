@@ -27,7 +27,7 @@ public class TokenTopPercentageTask {
     @Autowired
     private TokenService tokenService;
 
-    @Scheduled(cron = "0 10 4 * * ? ")
+    @Scheduled(cron = "0 40 4 * * ? ")
     public void tokenTopPercentageMerge() {
         System.out.println("token_top_holder merge start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> dtoList = tokenService.simpleTokens();

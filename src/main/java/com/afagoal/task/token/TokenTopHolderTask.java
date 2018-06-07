@@ -23,12 +23,10 @@ public class TokenTopHolderTask {
     @Autowired
     private TokenTopHolderService tokenTopHolderService;
     @Autowired
-    private TokenDao tokenDao;
-    @Autowired
     private TokenService tokenService;
 
 
-    @Scheduled(cron = "0 5 4 * * ? ")
+    @Scheduled(cron = "0 20 4 * * ? ")
     public void tokenTopHolderMerge() {
         System.out.println("token_top_holder merge start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> simpleDtoList = tokenService.simpleTokens();
