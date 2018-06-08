@@ -44,6 +44,9 @@ public class WorldCupGuessController {
     @Transactional
     @ResponseBody
     public Response guess(@RequestBody WorldGuessRequestDto requestDto) {
+        if (null == requestDto.getChampion() || null == CountryEnum.valueOfEnum(requestDto.getChampion())) {
+            return Response.error("请填入世界杯参赛队伍名称！");
+        }
         WorldCupGuess worldCupGuessEntity = new WorldCupGuess();
         BeanUtils.copyProperties(requestDto, worldCupGuessEntity);
         worldCupGuessDao.save(worldCupGuessEntity);
@@ -113,7 +116,10 @@ public class WorldCupGuessController {
         list.add(worldCupGuessDao.getQEntity().city.eq(city));
         if (0 < worldCupGuessDao.getCount(list)) {
             WorldCupGuess worldCupGuess = worldCupGuessDao.getEntity(list);
-            return Response.ok(worldCupGuess.getChampion());
+            String guessChampion = worldCupGuess.getChampion();
+            Long guessNum = CountryEnum.guessNum.get(guessChampion);
+            GuessNumDto guessNumDto = GuessNumDto.instance(guessChampion, guessNum);
+            return Response.ok(guessNumDto);
         }
         return Response.ok(null);
     }
