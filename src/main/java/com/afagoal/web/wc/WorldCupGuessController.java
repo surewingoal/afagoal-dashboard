@@ -107,15 +107,16 @@ public class WorldCupGuessController {
                                  @RequestParam(value = "gender") Byte gender) {
         List<BooleanExpression> list = new ArrayList();
         list.add(worldCupGuessDao.getQEntity().avatarUrl.eq(avatarUrl));
-        if (0 < worldCupGuessDao.getCount(list)) {
-            return Response.ok(null);
+        WorldCupGuess worldCupGuess = worldCupGuessDao.getEntity(list);
+        if (null == worldCupGuess) {
+            list.clear();
+            list.add(worldCupGuessDao.getQEntity().wechatNickName.eq(wechatNickName));
+            list.add(worldCupGuessDao.getQEntity().gender.eq(gender));
+            list.add(worldCupGuessDao.getQEntity().city.eq(city));
+            worldCupGuess = worldCupGuessDao.getEntity(list);
         }
-        list.clear();
-        list.add(worldCupGuessDao.getQEntity().wechatNickName.eq(wechatNickName));
-        list.add(worldCupGuessDao.getQEntity().gender.eq(gender));
-        list.add(worldCupGuessDao.getQEntity().city.eq(city));
-        if (0 < worldCupGuessDao.getCount(list)) {
-            WorldCupGuess worldCupGuess = worldCupGuessDao.getEntity(list);
+
+        if (worldCupGuess != null) {
             String guessChampion = worldCupGuess.getChampion();
             Long guessNum = CountryEnum.guessNum.get(guessChampion);
             GuessNumDto guessNumDto = GuessNumDto.instance(guessChampion, guessNum);
