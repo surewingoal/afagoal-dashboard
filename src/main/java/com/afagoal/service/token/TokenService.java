@@ -4,13 +4,11 @@ import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dao.blockchain.TokenExtDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
-import com.afagoal.entity.blockchain.Token;
 import com.afagoal.entity.blockchain.TokenDetail;
 import com.afagoal.entity.blockchain.TokenExt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
