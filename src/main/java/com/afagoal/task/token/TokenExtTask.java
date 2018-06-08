@@ -43,6 +43,11 @@ public class TokenExtTask {
         }
     }
 
+    @Scheduled(cron = "0 0 0 * * ? ")
+    public void cacheTokenToNull() {
+        tokenService.cacheTokenToNull();
+    }
+
     @Getter
     private class TokenExtMergeTask implements Runnable {
         private List<TokenDetail> details;

@@ -90,12 +90,21 @@ public class TokenService {
 
     public List<TokenSimpleDto> simpleTokens() {
         if (null == cacheTokenSimpleDtos) {
-            cacheTokenSimpleDtos = tokenDao.simpleTokens();
+            synchronized (this) {
+                if (null == cacheTokenSimpleDtos) {
+                    System.out.println("query for cacheToken from DB!");
+                    cacheTokenSimpleDtos = tokenDao.simpleTokens();
+                }
+            }
         }
         return cacheTokenSimpleDtos;
     }
 
     public TokenSimpleDto hottestToken() {
         return simpleTokens().get(0);
+    }
+
+    public void cacheTokenToNull() {
+        cacheTokenSimpleDtos = null;
     }
 }
