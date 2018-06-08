@@ -80,7 +80,6 @@ public class WorldCupGuessController {
         if (0 < worldCupGuessDao.getCount(list)) {
             return Response.ok(Boolean.TRUE);
         }
-
         return Response.ok(Boolean.FALSE);
     }
 
@@ -95,6 +94,28 @@ public class WorldCupGuessController {
                 .map(advertisement -> AdvertisementDto.instance(advertisement))
                 .collect(Collectors.toList());
         return Response.ok(dtos);
+    }
+
+    @GetMapping("/world_cup/guess/voted_country")
+    @ResponseBody
+    public Response votedCountry(@RequestParam(value = "avatar_url") String avatarUrl,
+                                 @RequestParam(value = "wechat_nick_name") String wechatNickName,
+                                 @RequestParam(value = "city") String city,
+                                 @RequestParam(value = "gender") Byte gender) {
+        List<BooleanExpression> list = new ArrayList();
+        list.add(worldCupGuessDao.getQEntity().avatarUrl.eq(avatarUrl));
+        if (0 < worldCupGuessDao.getCount(list)) {
+            return Response.ok(null);
+        }
+        list.clear();
+        list.add(worldCupGuessDao.getQEntity().wechatNickName.eq(wechatNickName));
+        list.add(worldCupGuessDao.getQEntity().gender.eq(gender));
+        list.add(worldCupGuessDao.getQEntity().city.eq(city));
+        if (0 < worldCupGuessDao.getCount(list)) {
+            WorldCupGuess worldCupGuess = worldCupGuessDao.getEntity(list);
+            return Response.ok(worldCupGuess.getChampion());
+        }
+        return Response.ok(null);
     }
 
 }
