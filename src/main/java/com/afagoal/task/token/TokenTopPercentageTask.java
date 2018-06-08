@@ -1,6 +1,5 @@
 package com.afagoal.task.token;
 
-import com.afagoal.dao.blockchain.TokenDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.service.token.TokenService;
 import com.afagoal.service.token.TokenTopPercentageService;
@@ -22,8 +21,6 @@ public class TokenTopPercentageTask {
 
     @Autowired
     private TokenTopPercentageService tokenTopPercentageService;
-    @Autowired
-    private TokenDao tokenDao;
     @Autowired
     private TokenService tokenService;
 
