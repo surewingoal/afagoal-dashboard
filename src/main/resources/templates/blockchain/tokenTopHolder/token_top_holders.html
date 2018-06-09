@@ -16,10 +16,6 @@
                         </select>
                     </div>
 
-                    <div class="columns pull-right">
-                        <button class="btn btn-success" onclick="reLoad()">查询</button>
-                    </div>
-
                 </div>
                 <table id="exampleTable" data-mobile-responsive="true">
                 </table>
@@ -161,6 +157,8 @@
     function tokenChange() {
         var token_id = $("#token_select").val();
         $("#token_id").val(token_id);
+
+        reLoad();
     }
 
     function initSelect() {

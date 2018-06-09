@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8" />
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-11">
+            <div class="ibox">
+                <div class="ibox-body">
+
+                    <input type="hidden" id="token_id" th:value="${token_id}"/>
+                    <input type="hidden" id="address" th:value="${address}"/>
+                    <input type="hidden" id="id" th:value="${id}"/>
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1"><i
+                                class="fa fa-file-text"></i>排名</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2"><i
+                                class="fa fa-briefcase"></i>占比</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-3"><i
+                                class="fa fa-briefcase"></i>占有量</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5 th:text="${address}"></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div style="height:520px;" class="echarts"
+                                         id="echarts-chart-rank"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-2" class="tab-pane ">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5 th:text="${address}"></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div style="height:520px;" class="echarts"
+                                         id="echarts-chart-percentage"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-3" class="tab-pane ">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5 th:text="${address}"></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div style="height:520px;" class="echarts"
+                                         id="echarts-chart-quantilies"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script src="/js/plugins/echarts/echarts-all.js"></script>
+<script>
+
+    var echartQuantilies = echarts.init(document.getElementById("echarts-chart-quantilies"));
+    var echartRank = echarts.init(document.getElementById("echarts-chart-rank"));
+    var echartsPercentage = echarts.init(document.getElementById("echarts-chart-percentage"));
+    var address;
+    var tokenId;
+    var dates = new Array();
+    var ranks = new Array();
+    var percentages = new Array();
+    var quantilies = new Array();
+
+    $(document).ready(function () {
+        loadEchartData();
+    });
+
+    function loadEchartData() {
+        tokenId = $("#token_id").val();
+        address = $("#address").val();
+        var id = $("#id").val();
+        $.ajax({
+                   cache: true,
+                   type: "GET",
+                   url: "/blockchain/token_top_holder/echart_list?id=" + id,
+                   async: false,
+                   error: function (request) {
+                       layer.alert("Connection error");
+                   },
+                   success: function (data) {
+                       $.each(data, function (index, dto) {
+                           dates[index] = dto.statisticTime;
+                           ranks[index] = dto.rank;
+                           percentages[index] = dto.percentage;
+                           quantilies[index] = dto.quantily;
+                       });
+                       initEchartsPercentage();
+                       initEchartsRank();
+                       initEchartQuantilies();
+                   }
+               });
+    }
+
+    function initEchartsRank() {
+        address = $("#address").val();
+        var rankOption = {
+            title: {
+                text: '持有者'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['排名']
+            },
+            grid: {
+                left: '5%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dates
+            },
+            yAxis: {
+                type: 'value',
+                scale: true
+            },
+            series: [
+                {
+                    name: '排名',
+                    type: 'line',
+                    stack: '总量',
+                    data: ranks
+                }
+            ]
+        };
+
+        echartRank.setOption(rankOption);
+        $(window).resize(echartRank.resize);
+    }
+
+
+    function initEchartQuantilies() {
+
+        address = $("#address").val();
+        var quantiliesOption = {
+            title: {
+                text: '持有者'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['持有量']
+            },
+            grid: {
+                left: '5%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dates
+            },
+            yAxis: {
+                type: 'value',
+                scale: true
+            },
+            series: [
+                {
+                    name: '持有量',
+                    type: 'line',
+                    stack: '总量',
+                    data: quantilies
+                }
+            ]
+        };
+
+        echartQuantilies.setOption(quantiliesOption);
+        $(window).resize(echartQuantilies.resize);
+    }
+
+    function initEchartsPercentage() {
+
+        address = $("#address").val();
+        var percentageOption = {
+            title: {
+                text: '持有者'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['持仓比']
+            },
+            grid: {
+                left: '5%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: dates
+            },
+            yAxis: {
+                type: 'value',
+                scale: true
+            },
+            series: [
+                {
+                    name: '持仓比',
+                    type: 'line',
+                    stack: '总量',
+                    data: percentages
+                }
+            ]
+        };
+
+        echartsPercentage.setOption(percentageOption);
+        $(window).resize(echartsPercentage.resize);
+    }
+
+</script>
+</body>
+</html>
