@@ -71,7 +71,7 @@ public class TokenTopHolderService {
         booleanExpressionList.add(tokenTopHolderDao.getQEntity().address.eq(address));
 
         List<OrderSpecifier> orders = new ArrayList();
-        orders.add(tokenTopHolderDao.getQEntity().statisticTime.desc());
+        orders.add(tokenTopHolderDao.getQEntity().statisticTime.asc());
 
         List<TokenTopHolder> tokenTopHolders = tokenTopHolderDao.getEntities(booleanExpressionList, null);
 

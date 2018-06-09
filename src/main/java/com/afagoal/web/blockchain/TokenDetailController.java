@@ -151,7 +151,7 @@ public class TokenDetailController {
         booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));
         List<OrderSpecifier> orderSpecifiers = new ArrayList();
-        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.desc());
+        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.asc());
         Pageable pageable = new PageRequest(page, size);
         List<TokenDetail> details = tokenDetailDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
         List<TokenDetailEchartDto> dtos = details.stream()
