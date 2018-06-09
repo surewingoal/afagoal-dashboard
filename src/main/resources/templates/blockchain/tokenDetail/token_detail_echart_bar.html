@@ -18,16 +18,6 @@
                             </select>
                         </div>
 
-                        <div class="columns pull-right">
-                            <button class="btn btn-success" onclick="reLoad()">刷新</button>
-                        </div>
-                        <!--<div class="columns pull-right">-->
-                        <!--<button class="btn btn-success" onclick="reLoad()">查询</button>-->
-                        <!--</div>-->
-                        <!--<div class="columns pull-right col-md-2 nopadding">-->
-                        <!--<input id="searchName" type="text" class="form-control"-->
-                        <!--placeholder="关键字查询"/>-->
-                        <!--</div>-->
                     </div>
 
                     <div class="ibox float-e-margins">
@@ -118,11 +108,11 @@
                     data: categoryData
                 }
             ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
+            yAxis: {
+                type : 'value',
+                name : '$',
+                scale: true
+            },
             series: [
                 {
                     name: '币种价格',
@@ -151,6 +141,8 @@
         var token_name = $("#" + token_id).text();
         $("#token_id").val(token_id);
         $("#token_name").val(token_name);
+
+        reLoad();
     }
 
     function initSelect() {

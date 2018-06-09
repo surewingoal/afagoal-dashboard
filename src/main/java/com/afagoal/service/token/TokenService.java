@@ -99,7 +99,7 @@ public class TokenService {
     }
 
     public TokenSimpleDto hottestToken() {
-        return simpleTokens().get(0);
+        return simpleTokens().get(1);
     }
 
     public void cacheTokenToNull() {

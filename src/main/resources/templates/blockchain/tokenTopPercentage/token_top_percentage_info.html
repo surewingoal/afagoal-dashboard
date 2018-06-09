@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:include="include::header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">币种名称：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${tokenTopPercentage?.tokenName}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">币种编码：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${tokenTopPercentage?.tokenCode}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">持有量：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${tokenTopPercentage?.holdNums}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">TOP类型：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${tokenTopPercentage?.topType}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">当日占比：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${tokenTopPercentage?.percentage}"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">统计时间：</label>
+                            <div class="col-sm-4">
+                                <p style="margin-top: 8px" th:text="${tokenTopPercentage?.statisticTime}"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script >
+</script>
+</body>
+
+</html>
