@@ -53,6 +53,16 @@ public class TokenDetailTask {
 
     }
 
+//    @Scheduled(cron = "0 0 5 * * ? ")
+    @Scheduled(cron = "0 58 20 * * ? ")
+    public void watchTokenValue() {
+        List<TokenSimpleDto> tokens = tokenService.simpleTokens();
+        tokens.forEach(token ->
+                TokenTaskHolder.TASK_EXECUTOR.execute(new TokenValueWatcherTask(token))
+        );
+
+    }
+
     @Getter
     private class TokenDetailRunnable implements Runnable {
 
@@ -68,6 +78,21 @@ public class TokenDetailTask {
         @Override
         public void run() {
             tokenDetailService.mergeDetails(this.getTokenIds(), this.getPageable());
+        }
+    }
+
+    @Getter
+    private class TokenValueWatcherTask implements Runnable {
+
+        private TokenSimpleDto token;
+
+        TokenValueWatcherTask(TokenSimpleDto token) {
+            this.token = token;
+        }
+
+        @Override
+        public void run() {
+            tokenDetailService.watchTokenValue(this.getToken());
         }
     }
 

@@ -48,7 +48,6 @@ public class TokenService {
         } else {
             tokenExt.setHighestPrice(tokenExt.getHighestPrice().max(detail.getUsd()));
             tokenExt.setLowestPrice(tokenExt.getLowestPrice().min(detail.getUsd()));
-
             tokenExt.setHighestTransaction(Math.max(tokenExt.getHighestTransaction(), detail.getTodayTransaction()));
             tokenExt.setLowestTransaction(Math.min(tokenExt.getLowestTransaction(), detail.getTodayTransaction()));
             tokenExt.setTransfers(detail.getTransfers());
@@ -86,6 +85,8 @@ public class TokenService {
         );
     }
 
+    //TODO  why session is closed without transactional annotation
+    @Transactional(readOnly = true)
     public List<TokenSimpleDto> simpleTokens() {
         if (null == cacheTokenSimpleDtos) {
             synchronized (this) {

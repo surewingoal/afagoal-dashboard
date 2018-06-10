@@ -1,10 +1,20 @@
 package com.afagoal.service.token;
 
+import com.afagoal.auxiliary.tokenEnum.TokenWatcherEnum;
+import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherConditionDao;
+import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherDao;
+import com.afagoal.dto.base.ValueDateModel;
 import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDetailDao;
+import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.TokenDetail;
+import com.afagoal.entity.blockchain.valueWatch.ValueWatcher;
+import com.afagoal.entity.blockchain.valueWatch.ValueWatcherCondition;
+import com.afagoal.utils.date.DateUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Created by BaoCai on 18/6/4.
@@ -23,8 +34,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TokenDetailService {
 
+    private static final int WATCHER_SIZE = 30;
+    private static final TokenWatcherEnum WATCHER_ENUM = TokenWatcherEnum.TOKEN_VALUE;
+
     @Autowired
     private TokenDetailDao tokenDetailDao;
+    @Autowired
+    private ValueWatcherConditionDao watcherConditionDao;
+    @Autowired
+    private ValueWatcherDao valueWatcherDao;
+
 
     @Transactional
     public void mergeDetails(List<String> tokenIds, Pageable pageable) {
@@ -62,4 +81,64 @@ public class TokenDetailService {
         return tokenDetailDao.getEntities(booleanExpressions, pageable);
     }
 
+    @Transactional
+    public void watchTokenValue(TokenSimpleDto token) {
+        List<ValueDateModel> historyValues = tokenDetailDao.valueDateModels(WATCHER_SIZE, token.getId());
+        if (CollectionUtils.isEmpty(historyValues)) {
+            return;
+        }
+        List<ValueWatcherCondition> conditions = watcherConditionDao.getByWatcherType(WATCHER_ENUM.getWatcherType());
+        ValueDateModel todayValue = historyValues.remove(0);
+
+        for (ValueWatcherCondition condition : conditions) {
+            ValueDateModel needWatch = WATCHER_ENUM.getWatcherMatch()
+                    .match(todayValue.getValue(), historyValues, condition.getChangeRank(), condition.getCompareTimes());
+            if (null != needWatch) {
+                createValueWatcher(needWatch, todayValue, condition, token);
+                break;
+            }
+        }
+
+    }
+
+    private void createValueWatcher(ValueDateModel needWatch,
+                                    ValueDateModel todayValue,
+                                    ValueWatcherCondition condition,
+                                    TokenSimpleDto token) {
+        ValueWatcher valueWatcher = new ValueWatcher();
+        valueWatcher.setToday(LocalDate.now());
+        BigDecimal nowValue = (BigDecimal) todayValue.getValue();
+        valueWatcher.setTodayValue(nowValue);
+        valueWatcher.setTokenId(token.getId());
+        valueWatcher.setWatchConditionId(condition.getId());
+        BigDecimal oldValue = (BigDecimal) needWatch.getValue();
+        valueWatcher.setTriggerValue(oldValue);
+        valueWatcher.setTriggerDate(needWatch.getStatisticTime().toLocalDate());
+        byte isUp = (byte) ((BigDecimal) todayValue.getValue()).compareTo(oldValue);
+        valueWatcher.setChangeSign(isUp);
+        valueWatcher.setRemindInfo(createRemindInfo(needWatch, todayValue, token, condition, isUp));
+        valueWatcherDao.save(valueWatcher);
+    }
+
+    private String createRemindInfo(ValueDateModel needWatch, ValueDateModel todayValue, TokenSimpleDto token, ValueWatcherCondition condition, byte isUp) {
+        StringBuilder builder = new StringBuilder();
+        String upOrDown = isUp == 1 ? "上涨" : "下降";
+        builder.append("您关注的币种:")
+                .append(token.getTokenName())
+                .append("最近价格波动比较大。")
+                .append(condition.getWatchDays())
+                .append("天内，价格")
+                .append(upOrDown)
+                .append(condition.getChangeRank())
+                .append(condition.getWatchUnit())
+                .append("。")
+                .append(DateUtils.format(needWatch.getStatisticTime().toLocalDate()))
+                .append("价格：")
+                .append(needWatch.getValue())
+                .append("$；")
+                .append("今日价格：")
+                .append(todayValue.getValue())
+                .append("$。");
+        return builder.toString();
+    }
 }

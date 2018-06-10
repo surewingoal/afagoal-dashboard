@@ -51,4 +51,10 @@ public class TokenTaskController {
     }
 
 
+    @PutMapping("/token_task/watch/detail")
+    public Response tokenWatchDetail() {
+        tokenDetailTask.watchTokenValue();
+        return Response.ok("started watch detail task !");
+    }
+
 }
