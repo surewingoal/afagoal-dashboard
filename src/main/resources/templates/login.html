@@ -38,17 +38,17 @@
                     欢迎使用 <strong>AFAGOAL管理系统</strong>
                 </h3>
                 <!--<ul class="m-b">-->
-                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>-->
-                        <!--springBoot-->
-                    <!--</li>-->
-                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> mybatis</li>-->
-                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> shiro</li>-->
-                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>-->
-                        <!--thymeleaf-->
-                    <!--</li>-->
-                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>-->
-                        <!--bootstrap-->
-                    <!--</li>-->
+                <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>-->
+                <!--springBoot-->
+                <!--</li>-->
+                <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> mybatis</li>-->
+                <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> shiro</li>-->
+                <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>-->
+                <!--thymeleaf-->
+                <!--</li>-->
+                <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>-->
+                <!--bootstrap-->
+                <!--</li>-->
 
                 <!--</ul>-->
 
@@ -62,29 +62,33 @@
                 <input type="password" name="password"
                        class="form-control pword m-b"/>
                 <button class="btn btn-login btn-block">登录</button>
+                <a class="btn  btn-primary btn-block" href="/register">注册</a>
                 <!--按钮模块-->
-                <div class="outside-login">
-                    <div class="outside-login-tit">
-                        <span>代码链接</span>
-                    </div>
-                    <div class="outside-login-cot">
-                        <a class="outside-login-btn wxoa actived oschina J-btnSwitchLoginType" target="_Blank"
-                           href="https://github.com/MrSummer33">
-                            <em><i class="fa fa-home"></i></em>
-                            <span>oschina主页</span>
-                        </a>
-                        <a class="outside-login-btn wxoa actived my J-btnSwitchLoginType" target="_Blank"
-                           href="https://github.com/MrSummer33">
-                            <em><i class="fa fa-git-square"></i></em>
-                            <span>码云仓库</span>
-                        </a>
-                        <a class="outside-login-btn wxoa actived git J-btnSwitchLoginType" target="_Blank"
-                           href="https://github.com/MrSummer33">
-                            <em><i class="fa fa-github"></i></em>
-                            <span>GitHub仓库</span>
-                        </a>
-                    </div>
-                </div>
+                <!--<div class="outside-login">-->
+                    <!--<div class="outside-login-tit">-->
+                        <!--<span>代码链接</span>-->
+                    <!--</div>-->
+                    <!--<div class="outside-login-cot">-->
+                        <!--<a class="outside-login-btn wxoa actived oschina J-btnSwitchLoginType"-->
+                           <!--target="_Blank"-->
+                           <!--href="https://github.com/MrSummer33">-->
+                            <!--<em><i class="fa fa-home"></i></em>-->
+                            <!--<span>oschina主页</span>-->
+                        <!--</a>-->
+                        <!--<a class="outside-login-btn wxoa actived my J-btnSwitchLoginType"-->
+                           <!--target="_Blank"-->
+                           <!--href="https://github.com/MrSummer33">-->
+                            <!--<em><i class="fa fa-git-square"></i></em>-->
+                            <!--<span>码云仓库</span>-->
+                        <!--</a>-->
+                        <!--<a class="outside-login-btn wxoa actived git J-btnSwitchLoginType"-->
+                           <!--target="_Blank"-->
+                           <!--href="https://github.com/MrSummer33">-->
+                            <!--<em><i class="fa fa-github"></i></em>-->
+                            <!--<span>GitHub仓库</span>-->
+                        <!--</a>-->
+                    <!--</div>-->
+                <!--</div>-->
 
             </form>
         </div>
@@ -94,7 +98,12 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript"> var ctx = [[@{/}]] ; </script>
+<script th:inline="javascript"> var ctx = [[
+@
+{/
+}
+]]
+; </script>
 <!-- 全局js -->
 <script src="/js/jquery.min.js?v=2.1.4" th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
 <script src="/js/bootstrap.min.js?v=3.3.6" th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
@@ -103,59 +112,60 @@
 <script src="/js/content.js?v=1.0.0" th:src="@{/js/content.js?v=1.0.0}"></script>
 
 <!-- jQuery Validation plugin javascript-->
-<script src="/js/plugins/validate/jquery.validate.min.js" th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
-<script src="/js/plugins/validate/messages_zh.min.js" th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+<script src="/js/plugins/validate/jquery.validate.min.js"
+        th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+<script src="/js/plugins/validate/messages_zh.min.js"
+        th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
 <script src="/js/plugins/layer/layer.min.js" th:src="@{/js/plugins/layer/layer.min.js}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-
         console.log(ctx);
         validateRule();
-
     });
 
     $.validator.setDefaults({
-        submitHandler: function () {
-            login();
-        }
-    });
+                                submitHandler: function () {
+                                    login();
+                                }
+                            });
 
     function login() {
         $.ajax({
-            type: "POST",
-            url: ctx+"login",
-            data: $('#signupForm').serialize(),
-            success: function (r) {
-                if (r.code == 0) {
-                    parent.location.href = '/index';
-                } else {
-                    layer.msg(r.msg);
-                }
-            }
-        });
+                   type: "POST",
+                   url: ctx + "login",
+                   data: $('#signupForm').serialize(),
+                   success: function (r) {
+                       if (r.code == 0) {
+                           parent.location.href = '/index';
+                       } else {
+                           layer.msg(r.msg);
+                       }
+                   }
+               });
     }
 
     function validateRule() {
         var icon = "<i class='fa fa-times-circle'></i> ";
         $("#signupForm").validate({
-            rules: {
-                username: {
-                    required: true
-                },
-                password: {
-                    required: true
-                }
-            },
-            messages: {
-                username: {
-                    required: icon + "请输入您的用户名",
-                },
-                password: {
-                    required: icon + "请输入您的密码",
-                }
-            }
-        })
+                                      rules: {
+                                          username: {
+                                              required: true
+                                          },
+                                          password: {
+                                              required: true
+                                          }
+                                      },
+                                      messages: {
+                                          username: {
+                                              required: icon + "请输入您的用户名",
+                                          },
+                                          password: {
+                                              required: icon + "请输入您的密码",
+                                          }
+                                      }
+                                  })
     }
+
 </script>
 
 </body>

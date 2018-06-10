@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}"/>
+    <title>AFAGOAL</title>
+    <meta name="keywords" content="AFAGOAL管理系统"/>
+    <meta name="description" content="AFAGOAL管理系统"/>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet"/>
+    <link href="/css/animate.css" rel="stylesheet"/>
+    <link href="/css/style.css" rel="stylesheet"/>
+    <link href="/css/login.css" rel="stylesheet"/>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+
+</head>
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="signin-info">
+                <div class="logopanel m-b">
+                    <h1>AFAGOAL</h1>
+                </div>
+                <div class="m-b"></div>
+                <h3>
+                    欢迎注册 <strong>AFAGOAL系统</strong>
+                </h3>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post">
+                        <h3 class="text-center">欢迎注册AFAGOAL后台系统</h3>
+                        <div class="form-group">
+                            <div style="width:22%;padding-top:18px;float:left;">真实姓名：</div>
+                            <div style="width:70%;float:left;">
+                                <input id="realName"
+                                       name="realName"
+                                       class="form-control"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="width:22%;padding-top:18px;float:left;">登录姓名：</div>
+                            <div style="width:70%;float:left;">
+                                <input id="userName"
+                                         name="userName"
+                                         class="form-control"
+                                         type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="width:22%;padding-top:18px;float:left;">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</div>
+                            <div style="width:70%;float:left;">
+                                <input id="password"
+                                       name="password"
+                                       class="form-control"
+                                       type="password"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="width:22%;padding-top:18px;float:left;">确认密码：</div>
+                            <div style="width:70%;float:left;">
+                                <input id="repassword"
+                                       name="repassword"
+                                       class="form-control"
+                                       type="password"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="width:22%;padding-top:18px;float:left;">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</div>
+                            <div style="width:70%;float:left;">
+                                <input id="email"
+                                       name="email"
+                                       class="form-control"
+                                       type="text"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="width:22%;padding-top:18px;float:left;">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：</div>
+                            <div style="width:70%;float:left;">
+                                <input id="mobile"
+                                       name="mobile"
+                                       class="form-control"
+                                       type="text"/>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-info btn-block">注册</button>
+                        <a class="btn  btn-primary btn-block" href="/login">跳转登录</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="signup-footer">
+        <div class="pull-left">&copy; 2017 All Rights Reserved. AFAGOAL
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script>
+
+    var prefix = "/register/commit";
+
+    $(function () {
+        validateRule();
+    });
+
+    $.validator.setDefaults({
+                                submitHandler: function () {
+                                    submit01();
+                                }
+                            });
+    function submit01() {
+        $.ajax({
+                   cache: true,
+                   type: "POST",
+                   url: "/register/commit",
+                   data: $('#signupForm').serialize(),
+                   async: false,
+                   error: function (request) {
+                       layer.alert("Connection error");
+                   },
+                   success: function (data) {
+                       if (data.rc == 0) {
+                           parent.layer.msg("注册成功！");
+                       } else {
+                           layer.alert(data.msg)
+                       }
+                   }
+               });
+    }
+
+    function validateRule() {
+        $("#signupForm").validate({
+                                      rules: {
+                                          realName: {
+                                              required: true
+                                          },
+                                          userName: {
+                                              required: true
+                                          },
+                                          password: {
+                                              required: true
+                                          },
+                                          mobile: {
+                                              required: true
+                                          }
+                                      },
+                                      messages: {
+                                          userName: {
+                                              required: "请输入真实姓名"
+                                          },
+                                          userName: {
+                                              required: "请输入登录名"
+                                          },
+                                          password: {
+                                              required: "请输入用户明密码"
+                                          },
+                                          mobile: {
+                                              required: "请输入电话号码"
+                                          }
+                                      }
+                                  });
+    }
+
+</script>
+</body>
+
+</html>
