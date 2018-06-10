@@ -14,7 +14,6 @@ public class SecurityContext {
 
     public static SysUser currentUser() {
         Object userObject = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(userObject);
         AfagoalUser user;
         if (userObject instanceof AfagoalUser) {
             user = (AfagoalUser) userObject;

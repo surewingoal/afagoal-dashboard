@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "/editor-app/**").permitAll()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/world_cup/**").permitAll()
+                .antMatchers("/token_task/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutUrl("/logout")
                 .and().formLogin()
