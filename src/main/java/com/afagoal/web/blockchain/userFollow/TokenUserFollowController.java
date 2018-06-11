@@ -27,7 +27,7 @@ public class TokenUserFollowController {
     @PostMapping("/token_user/follow")
     public Response follow(@RequestParam(value = "token_id") String tokenId) {
         SysUser user = SecurityContext.currentUser();
-        TokenUserFollow oldFollow = tokenUserFollowDao.findByTokenId(tokenId, user.getId());
+        TokenUserFollow oldFollow = tokenUserFollowDao.findByTokenIdAndUser(tokenId, user.getId());
         if (null != oldFollow && TokenUserFollowDao.FOLLOW_STATE == oldFollow.getState()) {
             return Response.ok("你已关注该币种！");
         }
@@ -42,7 +42,7 @@ public class TokenUserFollowController {
     @PutMapping("/token_user/un_follow")
     public Response unFollow(@RequestParam(value = "token_id") String tokenId) {
         SysUser user = SecurityContext.currentUser();
-        TokenUserFollow oldFollow = tokenUserFollowDao.findByTokenId(tokenId, user.getId());
+        TokenUserFollow oldFollow = tokenUserFollowDao.findByTokenIdAndUser(tokenId, user.getId());
         if (null != oldFollow) {
             oldFollow.setState(TokenUserFollowDao.UN_FOLLOW_STATE);
             tokenUserFollowDao.save(oldFollow);

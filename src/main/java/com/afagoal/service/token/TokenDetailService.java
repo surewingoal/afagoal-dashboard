@@ -1,6 +1,8 @@
 package com.afagoal.service.token;
 
 import com.afagoal.auxiliary.tokenEnum.TokenWatcherEnum;
+import com.afagoal.config.AfagoalMainSender;
+import com.afagoal.dao.blockchain.userFollow.TokenUserFollowDao;
 import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherConditionDao;
 import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherDao;
 import com.afagoal.dto.base.ValueDateModel;
@@ -8,11 +10,13 @@ import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDetailDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.TokenDetail;
+import com.afagoal.entity.blockchain.userFollow.TokenUserFollow;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcher;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcherCondition;
 import com.afagoal.utils.date.DateUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +30,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import javax.mail.MessagingException;
 
 /**
  * Created by BaoCai on 18/6/4.
@@ -43,6 +49,12 @@ public class TokenDetailService {
     private ValueWatcherConditionDao watcherConditionDao;
     @Autowired
     private ValueWatcherDao valueWatcherDao;
+    @Autowired
+    private TokenUserFollowDao tokenUserFollowDao;
+    @Autowired
+    private AfagoalMainSender afagoalMainSender;
+
+    private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL价格波动";
 
 
     @Transactional
@@ -126,27 +138,43 @@ public class TokenDetailService {
         builder.append("您关注的币种:")
                 .append(token.getTokenName())
                 .append("最近价格波动比较大。")
+                .append("<br/>")
                 .append(condition.getWatchDays())
                 .append("天内，价格")
                 .append(upOrDown)
                 .append(condition.getChangeRank())
                 .append(condition.getWatchUnit())
                 .append("。")
+                .append("<br/>")
                 .append(DateUtils.format(needWatch.getStatisticTime().toLocalDate()))
                 .append("价格：")
                 .append(needWatch.getValue())
                 .append("$；")
                 .append("今日价格：")
+                .append("<br/>")
                 .append(todayValue.getValue())
                 .append("$。");
         return builder.toString();
     }
 
     @Transactional
-    //TODO
-    public void noticeUser() {
+    public void noticeUser(ValueWatcher valueWatcher) {
+        if (null == valueWatcher) {
+            return;
+        }
+        List<TokenUserFollow> followUsers = tokenUserFollowDao.findByTokenId(valueWatcher.getTokenId());
 
-        List<ValueWatcher> todayWatchers = valueWatcherDao.todayWatcher();
-
+        if (!CollectionUtils.isEmpty(followUsers)) {
+            followUsers.forEach(followUser -> {
+                try {
+                    afagoalMainSender.send(valueWatcher.getRemindInfo(), followUser.getUser().getEmail(), TOKEN_PRICE_CHANGE_SUBJECT);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            );
+        }
     }
 }

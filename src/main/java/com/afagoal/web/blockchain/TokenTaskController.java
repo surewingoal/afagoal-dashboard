@@ -57,4 +57,10 @@ public class TokenTaskController {
         return Response.ok("started watch detail task !");
     }
 
+    @PutMapping("/token_task/token/notice")
+    public Response tokenWatchNotice() {
+        tokenDetailTask.noticeUser();
+        return Response.ok("started token notice task !");
+    }
+
 }

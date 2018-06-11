@@ -1,6 +1,8 @@
 package com.afagoal.task.token;
 
+import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
+import com.afagoal.entity.blockchain.valueWatch.ValueWatcher;
 import com.afagoal.service.token.TokenDetailService;
 import com.afagoal.service.token.TokenService;
 
@@ -26,6 +28,8 @@ public class TokenDetailTask {
     private TokenDetailService tokenDetailService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private ValueWatcherDao valueWatcherDao;
 
     @Scheduled(cron = "0 10 4 * * ? ")
     public void tokenDetailMerge() {
@@ -62,8 +66,11 @@ public class TokenDetailTask {
     }
 
     @Scheduled(cron = "0 0 8 * * ? ")
-    public void noticeUser(){
-        TokenTaskHolder.TASK_EXECUTOR.execute( () -> tokenDetailService.noticeUser());
+    public void noticeUser() {
+        List<ValueWatcher> todayWatchers = valueWatcherDao.todayWatcher();
+        todayWatchers.forEach(valueWatcher ->
+                TokenTaskHolder.TASK_EXECUTOR.execute(() -> tokenDetailService.noticeUser(valueWatcher))
+        );
     }
 
     @Getter
