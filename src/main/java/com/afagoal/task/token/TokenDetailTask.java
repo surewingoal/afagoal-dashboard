@@ -53,14 +53,17 @@ public class TokenDetailTask {
 
     }
 
-//    @Scheduled(cron = "0 0 5 * * ? ")
-    @Scheduled(cron = "0 58 20 * * ? ")
+    @Scheduled(cron = "0 0 5 * * ? ")
     public void watchTokenValue() {
         List<TokenSimpleDto> tokens = tokenService.simpleTokens();
         tokens.forEach(token ->
                 TokenTaskHolder.TASK_EXECUTOR.execute(new TokenValueWatcherTask(token))
         );
+    }
 
+    @Scheduled(cron = "0 0 8 * * ? ")
+    public void noticeUser(){
+        TokenTaskHolder.TASK_EXECUTOR.execute( () -> tokenDetailService.noticeUser());
     }
 
     @Getter

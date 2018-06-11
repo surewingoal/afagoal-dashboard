@@ -141,4 +141,12 @@ public class TokenDetailService {
                 .append("$。");
         return builder.toString();
     }
+
+    @Transactional
+    //TODO
+    public void noticeUser() {
+
+        List<ValueWatcher> todayWatchers = valueWatcherDao.todayWatcher();
+
+    }
 }

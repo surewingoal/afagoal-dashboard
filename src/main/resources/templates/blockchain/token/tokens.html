@@ -75,7 +75,7 @@
                             columns: [
                                 {
                                     field: 'tokenName',
-                                    width : 'auto',
+                                    width: 'auto',
                                     title: '币种名称'
                                 },
                                 {
@@ -137,8 +137,16 @@
                                     formatter: function (value, row, index) {
                                         var e = '<a  class="btn btn-primary" href="#" mce_href="#" title="查看" onclick="info(\''
                                                 + row.id
-                                                + '\')"><i class="fa fa-edit "></i></a> ';
-                                        return e;
+                                                + '\')"><i class="fa">查看</i></a> ';
+
+                                        var f = '<a  class="btn btn-primary" href="#" mce_href="#" title="关注" onclick="follow(\''
+                                                + row.id
+                                                + '\')"><i class="fa">关注</i></a> ';
+
+                                        var u = '<a  class="btn btn-primary" href="#" mce_href="#" title="取关" onclick="unFollow(\''
+                                                + row.id
+                                                + '\')"><i class="fa">取关</i></a> ';
+                                        return e + "&nbsp;" + f + "&nbsp;"  + u;
                                     }
                                 }]
                         });
@@ -155,6 +163,32 @@
                        area: ['900px', '700px'],
                        content: prefix + '/info?id=' + id // iframe的url
                    });
+    }
+
+    function follow(id) {
+        $.ajax({
+                   type: 'post',
+                   url: '/token_user/follow',
+                   data: {
+                       token_id: id
+                   },
+                   success: function (r) {
+                       alert("关注成功！");
+                   }
+               });
+    }
+
+    function unFollow(id) {
+        $.ajax({
+                   type: 'put',
+                   url: '/token_user/un_follow',
+                   data: {
+                       token_id: id
+                   },
+                   success: function (r) {
+                       alert("取关成功！");
+                   }
+               });
     }
 </script>
 </body>
