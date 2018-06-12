@@ -37,7 +37,7 @@ afagoal.mail.from: 18296154779@163.com
 
 
 spring.mail.host: smtp.163.com
-spring.mail.host: 25
+spring.mail.port: 25
 spring.mail.username: 18296154779@163.com
 spring.mail.password: baocai123
 spring.mail.properties.mail.smtp.starttls.enable: true

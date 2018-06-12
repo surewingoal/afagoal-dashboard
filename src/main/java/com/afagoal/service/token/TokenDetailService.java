@@ -166,14 +166,14 @@ public class TokenDetailService {
 
         if (!CollectionUtils.isEmpty(followUsers)) {
             followUsers.forEach(followUser -> {
-                try {
-                    afagoalMainSender.send(valueWatcher.getRemindInfo(), followUser.getUser().getEmail(), TOKEN_PRICE_CHANGE_SUBJECT);
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
+                        try {
+                            afagoalMainSender.send(valueWatcher.getRemindInfo(), followUser.getUser().getEmail(), TOKEN_PRICE_CHANGE_SUBJECT);
+                        } catch (MessagingException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
             );
         }
     }
