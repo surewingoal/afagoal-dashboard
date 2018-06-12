@@ -85,7 +85,6 @@ public class TokenService {
         );
     }
 
-    //TODO  why session is closed without transactional annotation
     @Transactional(readOnly = true)
     public List<TokenSimpleDto> simpleTokens() {
         if (null == cacheTokenSimpleDtos) {
