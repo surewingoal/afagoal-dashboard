@@ -38,11 +38,11 @@ public class SendMailTest {
         sender.setHost("smtp.163.com");
         sender.setPort(25);
         sender.setUsername("18296154779@163.com");
-        sender.setPassword("baocai123");
+        sender.setPassword("baocai1234");
         sender.setDefaultEncoding("Utf-8");
         Properties p = new Properties();
         p.setProperty("mail.smtp.timeout", "25000");
-        p.setProperty("mail.smtp.auth", "false");
+        p.setProperty("mail.smtp.auth", "true");
         sender.setJavaMailProperties(p);
         return sender;
     }
