@@ -17,7 +17,8 @@ public class SendMailTest {
     @Test
     public void sendMailTest() throws MessagingException, UnsupportedEncodingException {
         AfagoalMainSender afagoalMainSender = new AfagoalMainSender(createMailSender());
-
+        afagoalMainSender.setFrom("18296154779@163.com");
+        afagoalMainSender.setOrganization("AFAGOAL");
         String content = "您关注的币种:XNN最近价格波动比较大。<br/>1天内，价格下降0.10%。<br/>2018-06-08价格：0.0067000000$；<br/>今日价格：0.0060000000$。";
         content += "<br/>";
         content += "<br/>";
