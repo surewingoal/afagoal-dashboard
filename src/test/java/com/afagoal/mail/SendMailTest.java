@@ -6,7 +6,13 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Created by BaoCai on 18/6/11.
@@ -15,7 +21,7 @@ import javax.mail.MessagingException;
 public class SendMailTest {
 
     @Test
-    public void sendMailTest() throws MessagingException, UnsupportedEncodingException {
+    public void springMailTest() throws MessagingException, UnsupportedEncodingException {
         AfagoalMainSender afagoalMainSender = new AfagoalMainSender(createMailSender());
         afagoalMainSender.setFrom("18296154779@163.com");
         afagoalMainSender.setOrganization("AFAGOAL");
@@ -24,8 +30,8 @@ public class SendMailTest {
         content += "<br/>";
         content += "<div style='float:right;'><a class='btn  btn-primary btn-block' href=http://localhost:18080/login>联系我们</a></div>";
 
-        afagoalMainSender.send(content,"xiaxi@jianbaolife.com","币种价格浮动");
-        afagoalMainSender.send(content,"756271987@qq.com","币种价格浮动");
+        afagoalMainSender.send(content, "xiaxi@jianbaolife.com", "币种价格浮动");
+        afagoalMainSender.send(content, "756271987@qq.com", "币种价格浮动");
     }
 
     /**
@@ -45,6 +51,37 @@ public class SendMailTest {
         p.setProperty("mail.smtp.auth", "true");
         sender.setJavaMailProperties(p);
         return sender;
+    }
+
+
+    @Test
+    public void sendMailTest() throws UnsupportedEncodingException, MessagingException {
+        Properties prop = new Properties();
+        prop.setProperty("mail.smtp.host", "smtp.163.com");
+        prop.setProperty("mail.transport.protocol", "smtp");
+        prop.setProperty("mail.smtp.auth", "true");
+        Session session = Session.getInstance(prop); // 创建出与指定邮件服务器会话的session
+        /*
+         * 为了看清javamail这套API到底是如何向服务器发邮件的，可以把session的Debug开关打开，
+         * 把这个调试开关打开，javamail这套API会把它与服务器的交互过程打印在命令行窗口
+         */
+        session.setDebug(true);
+        Message message = createMessage(session);
+
+        Transport ts = session.getTransport();
+        ts.connect("18296154779@163.com", "baocai1234"); // 连接上邮件服务器，其内部会自动帮你进行base64编码
+        ts.sendMessage(message, message.getAllRecipients()); // 向谁发送一封邮件
+        ts.close(); // 断开与服务器的连接
+    }
+
+    private static Message createMessage(Session session) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("18296154779@163.com"));
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress("xiaxi@jianbaolife.com"));
+        message.setSubject("hello");
+        message.setContent("hello hello baocai", "text/html");
+        message.saveChanges();
+        return message;
     }
 
 }
