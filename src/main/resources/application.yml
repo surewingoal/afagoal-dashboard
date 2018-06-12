@@ -33,10 +33,14 @@ spring:
     prefix: classpath:/templates/
 
 
-afagoal.mail:
-  messageFrom: 18296154779@163.com
-  senderUsername: 18296154779@163.com
-  senderPassword: baocai123
-  senderProperties:
-    mail.smtp.timeout: 25000
-    mail.smtp.auth: false
+afagoal.mail.from: 18296154779@163.com
+
+
+spring.mail.host: smtp.163.com
+spring.mail.host: 25
+spring.mail.username: 18296154779@163.com
+spring.mail.password: baocai123
+spring.mail.properties.mail.smtp.starttls.enable: true
+spring.mail.properties.mail.smtp.starttls.required: true
+spring.mail.properties.mail.smtp.timeout: 25000
+spring.mail.properties.mail.smtp.auth: true

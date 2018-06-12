@@ -3,9 +3,12 @@ package com.afagoal.config;
 import com.afagoal.mail.AfagoalMainProperties;
 import com.afagoal.mail.AfagoalMainSender;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
@@ -15,24 +18,15 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class MailConfig {
 
-    @Bean(name = "mailSender")
-    public JavaMailSenderImpl createMailSender(AfagoalMainProperties afagoalMainProperties) {
-        JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(afagoalMainProperties.getSenderHost());
-        sender.setPort(afagoalMainProperties.getSenderPost());
-        sender.setUsername(afagoalMainProperties.getSenderUsername());
-        sender.setPassword(afagoalMainProperties.getSenderPassword());
-        sender.setDefaultEncoding(afagoalMainProperties.getSenderDefaultEncoding());
-        sender.setJavaMailProperties(afagoalMainProperties.getSenderProperties());
-        return sender;
-    }
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Bean
-    public AfagoalMainSender afagoalMainSender(JavaMailSenderImpl mailSender, AfagoalMainProperties afagoalMainProperties) {
-        AfagoalMainSender afagoalMainSender = new AfagoalMainSender(mailSender);
-        afagoalMainSender.setOrganization(afagoalMainProperties.getMessageOrganization());
-        afagoalMainSender.setBaseContent(afagoalMainProperties.getMessageBaseContent());
-        afagoalMainSender.setFrom(afagoalMainProperties.getMessageFrom());
+    public AfagoalMainSender afagoalMainSender(AfagoalMainProperties afagoalMainProperties) {
+        AfagoalMainSender afagoalMainSender = new AfagoalMainSender(javaMailSender);
+        afagoalMainSender.setOrganization(afagoalMainProperties.getOrganization());
+        afagoalMainSender.setBaseContent(afagoalMainProperties.getBaseContent());
+        afagoalMainSender.setFrom(afagoalMainProperties.getFrom());
         return afagoalMainSender;
     }
 
