@@ -1,7 +1,7 @@
 package com.afagoal.service.token;
 
 import com.afagoal.auxiliary.tokenEnum.TokenWatcherEnum;
-import com.afagoal.config.AfagoalMainSender;
+import com.afagoal.mail.AfagoalMainSender;
 import com.afagoal.dao.blockchain.userFollow.TokenUserFollowDao;
 import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherConditionDao;
 import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherDao;

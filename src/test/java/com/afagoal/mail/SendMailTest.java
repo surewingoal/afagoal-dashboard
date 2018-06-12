@@ -1,16 +1,12 @@
 package com.afagoal.mail;
 
-import com.afagoal.config.AfagoalMainSender;
-
 import org.junit.Test;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 /**
  * Created by BaoCai on 18/6/11.

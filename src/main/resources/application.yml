@@ -31,3 +31,12 @@ spring.datasource.dashboard:
 spring:
   thymeleaf:
     prefix: classpath:/templates/
+
+
+afagoal.mail:
+  messageFrom: 18296154779@163.com
+  senderUsername: 18296154779@163.com
+  senderPassword: baocai123
+  senderProperties:
+    mail.smtp.timeout: 25000
+    mail.smtp.auth: false
