@@ -20,15 +20,15 @@ public class MailConfig {
     private JavaMailSender javaMailSender;
 
     @Bean
-    public AfagoalMainSender afagoalMainSender(AfagoalMailProperties afagoalMainProperties) {
+    public AfagoalMainSender afagoalMainSender(AfagoalMailProperties afagoalMailProperties) {
         AfagoalMainSender afagoalMainSender = new AfagoalMainSender(javaMailSender);
-        afagoalMainSender.setOrganization(afagoalMainProperties.getOrganization());
-        afagoalMainSender.setBaseContent(afagoalMainProperties.getBaseContent());
-        afagoalMainSender.setFrom(afagoalMainProperties.getFrom());
+        afagoalMainSender.setOrganization(afagoalMailProperties.getOrganization());
+        afagoalMainSender.setBaseContent(afagoalMailProperties.getBaseContent());
+        afagoalMainSender.setFrom(afagoalMailProperties.getFrom());
         return afagoalMainSender;
     }
 
-    @Bean(name = "afagoalMainProperties")
+    @Bean(name = "afagoalMailProperties")
     @ConfigurationProperties(prefix = "afagoal.mail")
     public AfagoalMailProperties afagoalMainProperties() {
         return new AfagoalMailProperties();
