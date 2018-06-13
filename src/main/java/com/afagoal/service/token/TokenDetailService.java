@@ -56,8 +56,6 @@ public class TokenDetailService {
     private AfagoalMainSender afagoalMainSender;
 
 
-
-
     @Transactional
     public void mergeDetails(List<String> tokenIds, Pageable pageable) {
         List<TokenDetail> todayDetails = detailsOfOneDay(LocalDateTime.now(), tokenIds, pageable);
@@ -122,6 +120,7 @@ public class TokenDetailService {
         valueWatcher.setToday(LocalDate.now());
         BigDecimal nowValue = (BigDecimal) todayValue.getValue();
         valueWatcher.setTodayValue(nowValue);
+        valueWatcher.setWatchType(condition.getWatchType());
         valueWatcher.setTokenId(token.getId());
         valueWatcher.setWatchConditionId(condition.getId());
         BigDecimal oldValue = (BigDecimal) needWatch.getValue();
