@@ -51,16 +51,22 @@ public class TokenTaskController {
     }
 
 
-    @PutMapping("/token_task/watch/detail")
+    @PutMapping("/token_task/token_detail/watch")
     public Response tokenWatchDetail() {
         tokenDetailTask.watchTokenValue();
         return Response.ok("started watch detail task !");
     }
 
-    @PutMapping("/token_task/token/notice")
+    @PutMapping("/token_task/watch/notice")
     public Response tokenWatchNotice() {
         tokenDetailTask.noticeUser();
         return Response.ok("started token notice task !");
+    }
+
+    @PutMapping("/token_task/top_percentage/watch")
+    public Response tokenTopPercentageWatchTask() {
+        tokenTopPercentageTask.tokenTopPercentageWatch();
+        return Response.ok("started top percentage watch task !");
     }
 
 }

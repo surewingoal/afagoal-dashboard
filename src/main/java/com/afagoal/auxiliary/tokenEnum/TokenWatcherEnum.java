@@ -1,6 +1,7 @@
 package com.afagoal.auxiliary.tokenEnum;
 
 import com.afagoal.auxiliary.tokenValueWatcher.DefaultWatcherMatch;
+import com.afagoal.auxiliary.tokenValueWatcher.RemindInfoGenerator;
 import com.afagoal.auxiliary.tokenValueWatcher.WatcherMatch;
 
 import lombok.Getter;
@@ -11,18 +12,19 @@ import lombok.Getter;
  */
 @Getter
 public enum TokenWatcherEnum {
-    TOKEN_VALUE((byte) 1, DefaultWatcherMatch.watcherMatch,"币种价格");
+    TOKEN_VALUE((byte) 1, DefaultWatcherMatch.watcherMatch,RemindInfoGenerator.TOKEN_VALUE_GENERATOR),
+    TOKEN_TOP_PERCENTAGE_10((byte) 3, DefaultWatcherMatch.watcherMatch,RemindInfoGenerator.TOP_PERCENTAGE_10_GENERATOR);
 
     private Byte watcherType;
 
     private WatcherMatch watcherMatch;
 
-    private String intro;
+    private RemindInfoGenerator remindInfoGenerator;
 
-    TokenWatcherEnum(Byte watcherType, WatcherMatch watcherMatch,String intro) {
+    TokenWatcherEnum(Byte watcherType, WatcherMatch watcherMatch,RemindInfoGenerator remindInfoGenerator) {
         this.watcherType = watcherType;
         this.watcherMatch = watcherMatch;
-        this.intro = intro;
+        this.remindInfoGenerator = remindInfoGenerator;
     }
 
 }

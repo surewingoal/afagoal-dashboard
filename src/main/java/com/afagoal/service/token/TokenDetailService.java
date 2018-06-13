@@ -38,7 +38,6 @@ import javax.mail.MessagingException;
 @Service
 public class TokenDetailService {
 
-    private static final int WATCHER_SIZE = 30;
     private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL币种价格波动";
 
     @Autowired
@@ -91,7 +90,7 @@ public class TokenDetailService {
 
     @Transactional
     public void watchTokenValue(TokenSimpleDto token) {
-        List<ValueDateModel> historyValues = tokenDetailDao.valueDateModels(WATCHER_SIZE, token.getId());
+        List<ValueDateModel> historyValues = tokenDetailDao.valueDateModels(ValueWatcherGenerator.WATCHER_SIZE, token.getId());
         if (CollectionUtils.isEmpty(historyValues)) {
             return;
         }

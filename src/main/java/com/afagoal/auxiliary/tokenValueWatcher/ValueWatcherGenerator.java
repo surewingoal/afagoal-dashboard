@@ -5,7 +5,6 @@ import com.afagoal.dto.base.ValueDateModel;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcher;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcherCondition;
-import com.afagoal.utils.date.DateUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,6 +16,7 @@ import java.time.LocalDate;
 public class ValueWatcherGenerator {
 
 
+    public static final int WATCHER_SIZE = 30;
     private static final BigDecimal IGNORE_VALUE = new BigDecimal("0.0000000001");
 
     public static ValueWatcher createValueWatcher(ValueDateModel needWatch,
@@ -41,44 +41,8 @@ public class ValueWatcherGenerator {
             realValueChange = nowValue.subtract(oldValue).divide(oldValue, 2, BigDecimal.ROUND_HALF_UP);
             valueWatcher.setRealValueChange(realValueChange);
         }
-        valueWatcher.setRemindInfo(createRemindInfo(needWatch, todayValue, token, condition, isUp, realValueChange, tokenWatcherEnum.getIntro()));
+        valueWatcher.setRemindInfo(tokenWatcherEnum.getRemindInfoGenerator().createRemindInfo(needWatch, todayValue, token, condition, isUp, realValueChange));
         return valueWatcher;
-    }
-
-    private static String createRemindInfo(ValueDateModel needWatch,
-                                           ValueDateModel todayValue,
-                                           TokenSimpleDto token,
-                                           ValueWatcherCondition condition,
-                                           byte isUp,
-                                           BigDecimal realValueChange,
-                                           String intro) {
-        StringBuilder builder = new StringBuilder();
-        if (null == realValueChange) {
-            realValueChange = condition.getChangeRank();
-        }
-        String upOrDown = isUp == 1 ? "上涨" : "下降";
-        builder.append("您关注的币种:")
-                .append(token.getTokenName())
-                .append("最近")
-                .append(intro)
-                .append("波动较大。")
-                .append("<br/>")
-                .append(condition.getWatchDays())
-                .append("天内，价格")
-                .append(upOrDown)
-                .append(realValueChange.doubleValue() * 100)
-                .append(condition.getWatchUnit())
-                .append("。")
-                .append("<br/>")
-                .append(DateUtils.format(needWatch.getStatisticTime().toLocalDate()))
-                .append("价格：")
-                .append(needWatch.getValue())
-                .append("$；")
-                .append("今日价格：")
-                .append("<br/>")
-                .append(todayValue.getValue())
-                .append("$。");
-        return builder.toString();
     }
 
 }

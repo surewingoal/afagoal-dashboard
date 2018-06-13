@@ -38,7 +38,7 @@ public class TokenTopPercentageTask {
         System.out.println("token_top_percentage_watch start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> tokens = tokenService.simpleTokens();
         tokens.forEach(token ->
-            TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopPercentageWatchRunnable(token))
+                TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopPercentageWatchRunnable(token))
         );
     }
 
@@ -58,7 +58,7 @@ public class TokenTopPercentageTask {
     }
 
     @Getter
-    private class TokenTopPercentageWatchRunnable implements Runnable{
+    private class TokenTopPercentageWatchRunnable implements Runnable {
 
         private TokenSimpleDto token;
 
