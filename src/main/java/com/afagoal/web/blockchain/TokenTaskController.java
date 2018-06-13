@@ -38,12 +38,6 @@ public class TokenTaskController {
         return Response.ok("started detail task !");
     }
 
-    @PutMapping("/token_task/top_percentage")
-    public Response tokenTopPercentageTask() {
-        tokenTopPercentageTask.tokenTopPercentageMerge();
-        return Response.ok("started top percentage task !");
-    }
-
     @PutMapping("/token_task/top_holder")
     public Response tokenTopHolderTask() {
         tokenTopHolderTask.tokenTopHolderMerge();

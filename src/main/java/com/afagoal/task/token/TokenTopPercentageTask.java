@@ -24,15 +24,6 @@ public class TokenTopPercentageTask {
     @Autowired
     private TokenService tokenService;
 
-    @Scheduled(cron = "0 40 4 * * ? ")
-    public void tokenTopPercentageMerge() {
-        System.out.println("token_top_percentage merge start at : " + System.currentTimeMillis());
-        List<TokenSimpleDto> tokens = tokenService.simpleTokens();
-        tokens.forEach(token ->
-                TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopPercentageRunnable(token.getId()))
-        );
-    }
-
     @Scheduled(cron = "0 10 5 * * ? ")
     public void tokenTopPercentageWatch() {
         System.out.println("token_top_percentage_watch start at : " + System.currentTimeMillis());
@@ -40,21 +31,6 @@ public class TokenTopPercentageTask {
         tokens.forEach(token ->
                 TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopPercentageWatchRunnable(token))
         );
-    }
-
-    @Getter
-    private class TokenTopPercentageRunnable implements Runnable {
-
-        private String tokenId;
-
-        public TokenTopPercentageRunnable(String tokenId) {
-            this.tokenId = tokenId;
-        }
-
-        @Override
-        public void run() {
-            tokenTopPercentageService.mergeTokenTopPercentage(this.getTokenId());
-        }
     }
 
     @Getter
