@@ -54,7 +54,7 @@ public class TokenDetailService {
     @Autowired
     private AfagoalMainSender afagoalMainSender;
 
-    private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL价格波动";
+    private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL币种价格波动";
 
 
     @Transactional
