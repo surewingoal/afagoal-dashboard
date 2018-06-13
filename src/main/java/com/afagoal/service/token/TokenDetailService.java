@@ -41,7 +41,8 @@ import javax.mail.MessagingException;
 public class TokenDetailService {
 
     private static final int WATCHER_SIZE = 30;
-    private static final TokenWatcherEnum WATCHER_ENUM = TokenWatcherEnum.TOKEN_VALUE;
+    private static final BigDecimal IGNORE_VALUE = new BigDecimal("0.0000000001");
+    private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL币种价格波动";
 
     @Autowired
     private TokenDetailDao tokenDetailDao;
@@ -54,7 +55,7 @@ public class TokenDetailService {
     @Autowired
     private AfagoalMainSender afagoalMainSender;
 
-    private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL币种价格波动";
+
 
 
     @Transactional
@@ -99,11 +100,11 @@ public class TokenDetailService {
         if (CollectionUtils.isEmpty(historyValues)) {
             return;
         }
-        List<ValueWatcherCondition> conditions = watcherConditionDao.getByWatcherType(WATCHER_ENUM.getWatcherType());
+        List<ValueWatcherCondition> conditions = watcherConditionDao.getByWatcherType(TokenWatcherEnum.TOKEN_VALUE.getWatcherType());
         ValueDateModel todayValue = historyValues.remove(0);
 
         for (ValueWatcherCondition condition : conditions) {
-            ValueDateModel needWatch = WATCHER_ENUM.getWatcherMatch()
+            ValueDateModel needWatch = TokenWatcherEnum.TOKEN_VALUE.getWatcherMatch()
                     .match(todayValue.getValue(), historyValues, condition.getChangeRank(), condition.getCompareTimes());
             if (null != needWatch) {
                 createValueWatcher(needWatch, todayValue, condition, token);
@@ -112,8 +113,6 @@ public class TokenDetailService {
         }
 
     }
-
-    private static final BigDecimal IGNORE_VALUE = new BigDecimal("0.0000000001");
 
     private void createValueWatcher(ValueDateModel needWatch,
                                     ValueDateModel todayValue,
