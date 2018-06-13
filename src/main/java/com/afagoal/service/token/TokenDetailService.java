@@ -113,6 +113,8 @@ public class TokenDetailService {
 
     }
 
+    private static final BigDecimal IGNORE_VALUE = new BigDecimal("0.0000000001");
+
     private void createValueWatcher(ValueDateModel needWatch,
                                     ValueDateModel todayValue,
                                     ValueWatcherCondition condition,
@@ -128,12 +130,25 @@ public class TokenDetailService {
         valueWatcher.setTriggerDate(needWatch.getStatisticTime().toLocalDate());
         byte isUp = (byte) ((BigDecimal) todayValue.getValue()).compareTo(oldValue);
         valueWatcher.setChangeSign(isUp);
-        valueWatcher.setRemindInfo(createRemindInfo(needWatch, todayValue, token, condition, isUp));
+        BigDecimal realValueChange = null;
+        if (IGNORE_VALUE.compareTo(oldValue) < 0) {
+            realValueChange = nowValue.subtract(oldValue).divide(oldValue, 2, BigDecimal.ROUND_HALF_UP);
+            valueWatcher.setRealValueChange(realValueChange);
+        }
+        valueWatcher.setRemindInfo(createRemindInfo(needWatch, todayValue, token, condition, isUp, realValueChange));
         valueWatcherDao.save(valueWatcher);
     }
 
-    private String createRemindInfo(ValueDateModel needWatch, ValueDateModel todayValue, TokenSimpleDto token, ValueWatcherCondition condition, byte isUp) {
+    private String createRemindInfo(ValueDateModel needWatch,
+                                    ValueDateModel todayValue,
+                                    TokenSimpleDto token,
+                                    ValueWatcherCondition condition,
+                                    byte isUp,
+                                    BigDecimal realValueChange) {
         StringBuilder builder = new StringBuilder();
+        if (null == realValueChange) {
+            realValueChange = condition.getChangeRank();
+        }
         String upOrDown = isUp == 1 ? "上涨" : "下降";
         builder.append("您关注的币种:")
                 .append(token.getTokenName())
@@ -142,7 +157,7 @@ public class TokenDetailService {
                 .append(condition.getWatchDays())
                 .append("天内，价格")
                 .append(upOrDown)
-                .append(condition.getChangeRank().doubleValue() * 100)
+                .append(realValueChange.doubleValue() * 100)
                 .append(condition.getWatchUnit())
                 .append("。")
                 .append("<br/>")
