@@ -142,7 +142,7 @@ public class TokenDetailService {
                 .append(condition.getWatchDays())
                 .append("天内，价格")
                 .append(upOrDown)
-                .append(condition.getChangeRank())
+                .append(condition.getChangeRank().doubleValue() * 100)
                 .append(condition.getWatchUnit())
                 .append("。")
                 .append("<br/>")
@@ -163,7 +163,7 @@ public class TokenDetailService {
             return;
         }
         List<TokenUserFollow> followUsers = tokenUserFollowDao.findByTokenId(valueWatcher.getTokenId());
-
+        //TODO 群发
         if (!CollectionUtils.isEmpty(followUsers)) {
             followUsers.forEach(followUser -> {
                         try {
