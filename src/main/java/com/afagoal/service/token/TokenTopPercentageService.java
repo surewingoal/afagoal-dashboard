@@ -2,6 +2,7 @@ package com.afagoal.service.token;
 
 import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenTopPercentageDao;
+import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.TokenTopPercentage;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -35,18 +36,7 @@ public class TokenTopPercentageService {
     }
 
     private List<TokenTopPercentage> merge(List<TokenTopPercentage> todayPercentages, List<TokenTopPercentage> yesterdayPercentages) {
-        Map<Byte, TokenTopPercentage> oldPercentageMap = yesterdayPercentages.stream()
-                .collect(Collectors.toMap(
-                        oldPercentage -> oldPercentage.getTopType(),
-                        oldPercentage -> oldPercentage
-                ));
-        todayPercentages.forEach(percentage -> {
-            TokenTopPercentage oldPercentage = oldPercentageMap.get(percentage.getTopType());
-            if (null != oldPercentage) {
-                percentage.setYesterdayPercentage(oldPercentage.getPercentage());
-            }
-        });
-        return todayPercentages;
+        return null;
     }
 
     private List<TokenTopPercentage> tokenPercentageOfDay(LocalDateTime now, String tokenId) {
@@ -61,4 +51,7 @@ public class TokenTopPercentageService {
     }
 
 
+    public void watchTokenTopPercentage(TokenSimpleDto token) {
+
+    }
 }

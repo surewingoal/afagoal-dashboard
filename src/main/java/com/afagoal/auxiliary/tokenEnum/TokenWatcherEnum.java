@@ -11,15 +11,18 @@ import lombok.Getter;
  */
 @Getter
 public enum TokenWatcherEnum {
-    TOKEN_VALUE((byte) 1, DefaultWatcherMatch.watcherMatch);
+    TOKEN_VALUE((byte) 1, DefaultWatcherMatch.watcherMatch,"币种价格");
 
     private Byte watcherType;
 
     private WatcherMatch watcherMatch;
 
-    TokenWatcherEnum(Byte watcherType, WatcherMatch watcherMatch) {
+    private String intro;
+
+    TokenWatcherEnum(Byte watcherType, WatcherMatch watcherMatch,String intro) {
         this.watcherType = watcherType;
         this.watcherMatch = watcherMatch;
+        this.intro = intro;
     }
 
 }

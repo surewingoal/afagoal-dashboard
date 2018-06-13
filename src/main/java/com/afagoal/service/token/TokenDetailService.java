@@ -1,6 +1,7 @@
 package com.afagoal.service.token;
 
 import com.afagoal.auxiliary.tokenEnum.TokenWatcherEnum;
+import com.afagoal.auxiliary.tokenValueWatcher.ValueWatcherGenerator;
 import com.afagoal.mail.AfagoalMainSender;
 import com.afagoal.dao.blockchain.userFollow.TokenUserFollowDao;
 import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherConditionDao;
@@ -13,12 +14,9 @@ import com.afagoal.entity.blockchain.TokenDetail;
 import com.afagoal.entity.blockchain.userFollow.TokenUserFollow;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcher;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcherCondition;
-import com.afagoal.utils.date.DateUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +39,6 @@ import javax.mail.MessagingException;
 public class TokenDetailService {
 
     private static final int WATCHER_SIZE = 30;
-    private static final BigDecimal IGNORE_VALUE = new BigDecimal("0.0000000001");
     private static final String TOKEN_PRICE_CHANGE_SUBJECT = "AFAGOAL币种价格波动";
 
     @Autowired
@@ -105,69 +102,11 @@ public class TokenDetailService {
             ValueDateModel needWatch = TokenWatcherEnum.TOKEN_VALUE.getWatcherMatch()
                     .match(todayValue.getValue(), historyValues, condition.getChangeRank(), condition.getCompareTimes());
             if (null != needWatch) {
-                createValueWatcher(needWatch, todayValue, condition, token);
+                ValueWatcher valueWatcher = ValueWatcherGenerator.createValueWatcher(needWatch, todayValue, condition, token, TokenWatcherEnum.TOKEN_VALUE);
+                valueWatcherDao.save(valueWatcher);
                 break;
             }
         }
-
-    }
-
-    private void createValueWatcher(ValueDateModel needWatch,
-                                    ValueDateModel todayValue,
-                                    ValueWatcherCondition condition,
-                                    TokenSimpleDto token) {
-        ValueWatcher valueWatcher = new ValueWatcher();
-        valueWatcher.setToday(LocalDate.now());
-        BigDecimal nowValue = (BigDecimal) todayValue.getValue();
-        valueWatcher.setTodayValue(nowValue);
-        valueWatcher.setWatchType(condition.getWatchType());
-        valueWatcher.setTokenId(token.getId());
-        valueWatcher.setWatchConditionId(condition.getId());
-        BigDecimal oldValue = (BigDecimal) needWatch.getValue();
-        valueWatcher.setTriggerValue(oldValue);
-        valueWatcher.setTriggerDate(needWatch.getStatisticTime().toLocalDate());
-        byte isUp = (byte) ((BigDecimal) todayValue.getValue()).compareTo(oldValue);
-        valueWatcher.setChangeSign(isUp);
-        BigDecimal realValueChange = null;
-        if (IGNORE_VALUE.compareTo(oldValue) < 0) {
-            realValueChange = nowValue.subtract(oldValue).divide(oldValue, 2, BigDecimal.ROUND_HALF_UP);
-            valueWatcher.setRealValueChange(realValueChange);
-        }
-        valueWatcher.setRemindInfo(createRemindInfo(needWatch, todayValue, token, condition, isUp, realValueChange));
-        valueWatcherDao.save(valueWatcher);
-    }
-
-    private String createRemindInfo(ValueDateModel needWatch,
-                                    ValueDateModel todayValue,
-                                    TokenSimpleDto token,
-                                    ValueWatcherCondition condition,
-                                    byte isUp,
-                                    BigDecimal realValueChange) {
-        StringBuilder builder = new StringBuilder();
-        if (null == realValueChange) {
-            realValueChange = condition.getChangeRank();
-        }
-        String upOrDown = isUp == 1 ? "上涨" : "下降";
-        builder.append("您关注的币种:")
-                .append(token.getTokenName())
-                .append("最近价格波动比较大。")
-                .append("<br/>")
-                .append(condition.getWatchDays())
-                .append("天内，价格")
-                .append(upOrDown)
-                .append(realValueChange.doubleValue() * 100)
-                .append(condition.getWatchUnit())
-                .append("。")
-                .append("<br/>")
-                .append(DateUtils.format(needWatch.getStatisticTime().toLocalDate()))
-                .append("价格：")
-                .append(needWatch.getValue())
-                .append("$；")
-                .append("今日价格：")
-                .append("<br/>")
-                .append(todayValue.getValue())
-                .append("$。");
-        return builder.toString();
     }
 
     @Transactional

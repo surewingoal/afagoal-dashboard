@@ -33,7 +33,6 @@ public class TokenDetailTask {
 
     @Scheduled(cron = "0 10 4 * * ? ")
     public void tokenDetailMerge() {
-
         long now = System.currentTimeMillis();
         System.out.println("token_detail merge start at : " + now);
         Pageable pageable = new PageRequest(0, TokenTaskHolder.DEFAULT_PAGE_SIZE);
@@ -59,6 +58,7 @@ public class TokenDetailTask {
 
     @Scheduled(cron = "0 0 5 * * ? ")
     public void watchTokenValue() {
+        System.out.println("token_value_watch start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> tokens = tokenService.simpleTokens();
         tokens.forEach(token ->
                 TokenTaskHolder.TASK_EXECUTOR.execute(new TokenValueWatcherTask(token))
@@ -67,6 +67,7 @@ public class TokenDetailTask {
 
     @Scheduled(cron = "0 0 8 * * ? ")
     public void noticeUser() {
+        System.out.println("token_value_watch notice user start at : " + System.currentTimeMillis());
         List<ValueWatcher> todayWatchers = valueWatcherDao.todayWatcher();
         todayWatchers.forEach(valueWatcher ->
                 TokenTaskHolder.TASK_EXECUTOR.execute(() -> tokenDetailService.noticeUser(valueWatcher))
