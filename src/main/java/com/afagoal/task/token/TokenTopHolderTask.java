@@ -1,7 +1,9 @@
 package com.afagoal.task.token;
 
 import com.afagoal.dao.blockchain.TokenDao;
+import com.afagoal.dao.blockchain.userFollow.TokenAddressUserFollowDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
+import com.afagoal.dto.blockchain.TokenTopHolderSimpleDto;
 import com.afagoal.service.token.TokenService;
 import com.afagoal.service.token.TokenTopHolderService;
 
@@ -24,7 +26,8 @@ public class TokenTopHolderTask {
     private TokenTopHolderService tokenTopHolderService;
     @Autowired
     private TokenService tokenService;
-
+    @Autowired
+    private TokenAddressUserFollowDao tokenAddressUserFollowDao;
 
     @Scheduled(cron = "0 20 4 * * ? ")
     public void tokenTopHolderMerge() {
@@ -32,6 +35,16 @@ public class TokenTopHolderTask {
         List<TokenSimpleDto> simpleDtoList = tokenService.simpleTokens();
         simpleDtoList.forEach(token ->
                 TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopHolderRunnable(token.getId()))
+        );
+    }
+
+
+    @Scheduled(cron = "0 20 5 * * ? ")
+    public void tokenTopHolderWatch(){
+        System.out.println("token_top_holder watch start at : " + System.currentTimeMillis());
+        List<TokenTopHolderSimpleDto> followedAddress = tokenAddressUserFollowDao.followedAddress();
+        followedAddress.forEach(addressDto ->
+                TokenTaskHolder.TASK_EXECUTOR.execute(new TokenTopHolderWatcherRunnable(addressDto))
         );
     }
 
@@ -47,6 +60,22 @@ public class TokenTopHolderTask {
         @Override
         public void run() {
             tokenTopHolderService.mergeTopHolderInfo(this.getTokenId());
+        }
+    }
+
+    @Getter
+    private class TokenTopHolderWatcherRunnable implements Runnable{
+
+        TokenTopHolderSimpleDto addressDto;
+
+
+        public TokenTopHolderWatcherRunnable(TokenTopHolderSimpleDto addressDto) {
+            this.addressDto = addressDto;
+        }
+
+        @Override
+        public void run() {
+            tokenTopHolderService.watchTopHolder(addressDto);
         }
     }
 

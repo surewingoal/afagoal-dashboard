@@ -13,6 +13,7 @@ import lombok.Getter;
 @Getter
 public enum TokenWatcherEnum {
     TOKEN_VALUE((byte) 1, DefaultWatcherMatch.watcherMatch,RemindInfoGenerator.TOKEN_VALUE_GENERATOR),
+    TOKEN_TOP_HOLDER((byte) 2, DefaultWatcherMatch.watcherMatch,RemindInfoGenerator.TOKEN_TOP_HOLDER_GENERATOR),
     TOKEN_TOP_PERCENTAGE_10((byte) 3, DefaultWatcherMatch.watcherMatch,RemindInfoGenerator.TOP_PERCENTAGE_10_GENERATOR);
 
     private Byte watcherType;
