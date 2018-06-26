@@ -9,7 +9,7 @@ spring.datasource.dashboard:
     maxActive: 20
     maxIdleTime: 1800
     maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60 * 60 * 1000
+    timeBetweenEvictionRunsMillis: 3600000
     minEvictableIdleTimeMillis: 30000
     validationQuery: select 'x'
     testWhileIdle: true
