@@ -27,7 +27,7 @@ spring:
 
 
 afagoal.mail.from: 18296154779@163.com
-afagoal.session.enable: false
+afagoal.session.enable: true
 
 spring.mail.host: smtp.163.com
 spring.mail.port: 25
