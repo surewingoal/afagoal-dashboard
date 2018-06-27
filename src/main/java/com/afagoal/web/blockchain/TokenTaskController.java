@@ -44,7 +44,6 @@ public class TokenTaskController {
         return Response.ok("started top holder task !");
     }
 
-
     @PutMapping("/token_task/token_detail/watch")
     public Response tokenWatchDetail() {
         tokenDetailTask.watchTokenValue();
