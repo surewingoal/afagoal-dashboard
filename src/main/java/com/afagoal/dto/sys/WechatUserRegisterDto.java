@@ -85,7 +85,7 @@ public class WechatUserRegisterDto {
 
     public SysUser instanceUser() {
         SysUser user = new SysUser();
-        user.setPassword(MD5Utils.passwordSecurcy(this.getPassword()));
+        user.setPassword(MD5Utils.passwordEncode(this.getPassword()));
         user.setUserName(this.getUserName());
         user.setMobile(this.getMobile());
         user.setNickName(this.getWechatNickName());

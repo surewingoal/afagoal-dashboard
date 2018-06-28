@@ -57,7 +57,7 @@ public class AfagoalTokenController {
         if (StringUtils.isEmpty(password)) {
             return Response.ok("请填写密码！");
         }
-        password = MD5Utils.passwordSecurcy(password);
+        password = MD5Utils.passwordEncode(password);
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 username, password);
         try {

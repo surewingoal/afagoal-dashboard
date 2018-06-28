@@ -39,7 +39,7 @@ public class UserService {
     @Transactional
     public void createUser(SysUser user) {
         Assert.notNull(user, "用户信息不可为空！");
-        String password = MD5Utils.passwordSecurcy(user.getPassword());
+        String password = MD5Utils.passwordEncode(user.getPassword());
         user.setPassword(password);
         saveUser(user);
     }
