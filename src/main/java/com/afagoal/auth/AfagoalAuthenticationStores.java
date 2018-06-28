@@ -33,9 +33,14 @@ public class AfagoalAuthenticationStores implements AuthenticationStores {
     }
 
     @Override
-    public void removeAuthentication(String token) {
-        onlineAuthentication.remove(token);
+    public void timeout() {
+        onlineAuthentication.entrySet().forEach(entry -> {
+            if (entry.getValue().getTimeToLeave().isBefore(LocalDateTime.now())) {
+                onlineAuthentication.remove(entry.getKey());
+            }
+        });
     }
+
 
     @Override
     public Authentication getAuthentication(String token) {

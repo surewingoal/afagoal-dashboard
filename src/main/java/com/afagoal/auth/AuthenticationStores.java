@@ -12,9 +12,10 @@ public interface AuthenticationStores {
 
     void saveAuthentication(String token, Authentication authentication);
 
-    void removeAuthentication(String token);
+    void timeout();
 
     Authentication getAuthentication(String token);
 
     Collection<Authentication> onlineAuthentications();
+
 }
