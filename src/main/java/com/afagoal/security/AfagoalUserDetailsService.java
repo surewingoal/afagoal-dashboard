@@ -4,7 +4,9 @@ import com.afagoal.dao.system.SysUserDao;
 import com.afagoal.entity.system.SysUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,6 +40,19 @@ public class AfagoalUserDetailsService implements UserDetailsService {
         if (null == user) {
             throw new UsernameNotFoundException("用户不存在！");
         }
-        return new AfagoalUser(user.getUserName(), user.getPassword(), grantedAuthorities, user.getId());
+
+        AfagoalUser afagoalUser = new AfagoalUser(user.getUserName(), user.getPassword(),
+                grantedAuthorities, user.getId(), userDetails(user));
+
+        return afagoalUser;
+    }
+
+    private Map userDetails(SysUser user) {
+        Map details = new HashMap();
+        details.put("user_name", user.getUserName());
+        details.put("real_name", user.getRealName());
+        details.put("nick_name", user.getNickName());
+        details.put("user_id", user.getId());
+        return details;
     }
 }

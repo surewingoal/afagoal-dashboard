@@ -23,7 +23,7 @@
 |微信使用语言| wechat_language   |   String      |  否   |
 |微信所在国家| wechat_country    |  String       |  否   |
 
-* reuqest
+* request
 <br>
 
 ```
@@ -83,22 +83,11 @@
     "msg": null,
     "rc": 0,
     "data": {
-        "afagoal_token": "b83127fddd6e47dd99bdd4442235434b",
-        "user": {
-            "password": null,
-            "username": "littlefat11",
-            "authorities": [
-                {
-                    "authority": "BASE_USER"
-                }
-            ],
-            "accountNonExpired": true,
-            "accountNonLocked": true,
-            "credentialsNonExpired": true,
-            "enabled": true,
-            "id": 17,
-            "info": null
-        }
+        "real_name": null,
+        "afagoal_token": "d54ed9c146ab40bca5da4d496911553c",
+        "user_id": 17,
+        "user_name": "littlefat11",
+        "nick_name": "小肥"
     }
 }
 ```

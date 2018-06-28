@@ -3,9 +3,8 @@ package com.afagoal.web.login;
 import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.auth.AuthenticationStores;
 import com.afagoal.dto.sys.WechatUserRegisterDto;
-import com.afagoal.entity.system.SysUser;
 import com.afagoal.exception.UserRegisteredException;
-import com.afagoal.security.AfagoalPasswordEncoder;
+import com.afagoal.security.AfagoalUser;
 import com.afagoal.security.MD5Utils;
 import com.afagoal.service.sys.UserService;
 import com.afagoal.utildto.Response;
@@ -70,9 +69,9 @@ public class AfagoalTokenController {
 
             String tokenId = UUID.randomUUID().toString().replace("-", "");
             authenticationStores.saveAuthentication(tokenId, authentication);
-            Map result = new HashMap();
+            AfagoalUser afagoalUser = (AfagoalUser) authentication.getPrincipal();
+            Map result = new HashMap(afagoalUser.getDetails());
             result.put("afagoal_token", tokenId);
-            result.put("user", authentication.getPrincipal());
             return Response.ok(result);
         } catch (AuthenticationException e) {
             e.printStackTrace();
