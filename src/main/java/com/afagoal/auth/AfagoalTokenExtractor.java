@@ -35,10 +35,10 @@ public class AfagoalTokenExtractor implements TokenExtractor {
         String token = extractHeaderToken(request);
 
         if (token == null) {
-            System.out.println("Token not found in headers. Trying request parameters.");
+//            System.out.println("Token not found in headers. Trying request parameters.");
             token = request.getParameter("Authorization");
             if (token == null) {
-                System.out.println("Token not found in request parameters.  Not an OAuth2 request.");
+//                System.out.println("Token not found in request parameters.  Not an OAuth2 request.");
             }
         }
 

@@ -33,8 +33,8 @@ public class AfagoalUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUser user = sysUserDao.getUserByName(username);
+    public UserDetails loadUserByUsername(String key) throws UsernameNotFoundException {
+        SysUser user = sysUserDao.getUserByKey(key);
         if (null == user) {
             throw new UsernameNotFoundException("用户不存在！");
         }

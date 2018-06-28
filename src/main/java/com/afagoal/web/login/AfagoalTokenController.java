@@ -2,8 +2,11 @@ package com.afagoal.web.login;
 
 import com.afagoal.annotation.BehaviorLog;
 import com.afagoal.auth.AuthenticationStores;
+import com.afagoal.dto.sys.WechatUserRegisterDto;
 import com.afagoal.entity.system.SysUser;
+import com.afagoal.exception.UserRegisteredException;
 import com.afagoal.security.AfagoalPasswordEncoder;
+import com.afagoal.security.MD5Utils;
 import com.afagoal.service.sys.UserService;
 import com.afagoal.utildto.Response;
 
@@ -27,7 +30,7 @@ import java.util.UUID;
 
 /**
  * Created by BaoCai on 18/5/26.
- * Description:
+ * Description: 处理移动端登录
  */
 @Controller
 public class AfagoalTokenController {
@@ -53,9 +56,9 @@ public class AfagoalTokenController {
             return Response.ok("请填写用户名！");
         }
         if (StringUtils.isEmpty(password)) {
-            return Response.ok("请填写用密码！");
+            return Response.ok("请填写密码！");
         }
-        password = AfagoalPasswordEncoder.secrecy(password);
+        password = MD5Utils.passwordSecurcy(password);
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 username, password);
         try {
@@ -77,11 +80,19 @@ public class AfagoalTokenController {
         }
     }
 
-    @PostMapping("/afagoal_token/register")
+    @PostMapping("/register/wechat")
     @ResponseBody
-    @BehaviorLog("移动端用户注册")
-    public Response registerCommit(@RequestBody SysUser user) {
-        userService.createUser(user);
+    @BehaviorLog("wechat端用户注册")
+    public Response registerCommit(@RequestBody WechatUserRegisterDto user) {
+        String validResult = user.valid();
+        if (!StringUtils.isEmpty(validResult)) {
+            return Response.error(validResult);
+        }
+        try {
+            userService.createWechatUser(user);
+        } catch (UserRegisteredException e) {
+            return Response.error(e.getMessage());
+        }
         return Response.ok("注册成功！");
     }
 

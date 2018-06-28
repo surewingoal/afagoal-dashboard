@@ -26,8 +26,6 @@ spring:
     prefix: classpath:/templates/
 
 
-afagoal.mail.from: 18296154779@163.com
-afagoal.session.enable: true
 
 spring.mail.host: smtp.163.com
 spring.mail.port: 25
@@ -37,4 +35,8 @@ spring.mail.properties.mail.smtp.starttls.enable: true
 spring.mail.properties.mail.smtp.starttls.required: true
 spring.mail.properties.mail.smtp.timeout: 25000
 spring.mail.properties.mail.smtp.auth: true
+
+
+afagoal.session.enable: true
+afagoal.mail.from: 18296154779@163.com
 

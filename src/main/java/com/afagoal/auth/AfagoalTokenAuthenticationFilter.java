@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by BaoCai on 18/6/27.
@@ -38,7 +37,6 @@ public class AfagoalTokenAuthenticationFilter implements Filter {
 
         if (authentication == null) {
             final HttpServletRequest request = (HttpServletRequest) req;
-            final HttpServletResponse response = (HttpServletResponse) res;
             Authentication tokenValue = tokenExtractor.extract(request);
 
             if (null == tokenValue) {

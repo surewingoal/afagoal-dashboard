@@ -1,10 +1,14 @@
 package com.afagoal.service.sys;
 
 import com.afagoal.dao.system.SysUserDao;
+import com.afagoal.dao.system.SysUserExtDao;
 import com.afagoal.dao.system.SysUserRoleDao;
+import com.afagoal.dto.sys.WechatUserRegisterDto;
 import com.afagoal.entity.system.SysUser;
+import com.afagoal.entity.system.SysUserExt;
 import com.afagoal.entity.system.SysUserRole;
-import com.afagoal.security.AfagoalPasswordEncoder;
+import com.afagoal.exception.UserRegisteredException;
+import com.afagoal.security.MD5Utils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.List;
@@ -29,18 +33,40 @@ public class UserService {
     private SysUserDao sysUserDao;
     @Autowired
     private SysUserRoleDao sysUserRoleDao;
+    @Autowired
+    private SysUserExtDao sysUserExtDao;
 
     @Transactional
     public void createUser(SysUser user) {
         Assert.notNull(user, "用户信息不可为空！");
-        String password = AfagoalPasswordEncoder.secrecy(user.getPassword());
+        String password = MD5Utils.passwordSecurcy(user.getPassword());
         user.setPassword(password);
+        saveUser(user);
+    }
+
+    private void saveUser(SysUser user) {
+        checkUserExist(user);
         if (null == user.getId()) {
             sysUserDao.save(user);
         } else {
             sysUserDao.merge(user);
         }
         createDefaultRole(user);
+    }
+
+    private void checkUserExist(SysUser user) {
+        List<BooleanExpression> booleanExpressions = new ArrayList();
+        booleanExpressions.add(sysUserDao.getQEntity().userName.eq(user.getUserName()));
+        long count = sysUserDao.getCount(booleanExpressions);
+        if (count > 0) {
+            throw new UserRegisteredException("该用户名已被被注册！");
+        }
+        booleanExpressions.clear();
+        booleanExpressions.add(sysUserDao.getQEntity().mobile.eq(user.getMobile()));
+        count = sysUserDao.getCount(booleanExpressions);
+        if (count > 0) {
+            throw new UserRegisteredException("该电话号码已被被注册！");
+        }
     }
 
     private void createDefaultRole(SysUser user) {
@@ -55,4 +81,14 @@ public class UserService {
         sysUserRoleDao.save(userRole);
     }
 
+    @Transactional
+    public void createWechatUser(WechatUserRegisterDto userDto) {
+        SysUser user = userDto.instanceUser();
+        saveUser(user);
+
+        SysUserExt userExt = userDto.instanceUserExt();
+        userExt.setUserId(user.getId());
+
+        sysUserExtDao.save(userExt);
+    }
 }

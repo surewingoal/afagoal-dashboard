@@ -21,8 +21,4 @@ public class AfagoalPasswordEncoder implements PasswordEncoder {
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         return StringUtils.equals(encode(rawPassword),encodedPassword);
     }
-
-    public static String secrecy(String source){
-        return MD5Utils.md5Hex(source + AFAGOAL_KEY);
-    }
 }
