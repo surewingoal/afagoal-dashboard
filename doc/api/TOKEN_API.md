@@ -273,7 +273,7 @@
 
 ### <a name="币种TOP持有比例"></a>币种TOP持有比例
 
-* URL : /blockchain/tokens/{token_id}/top_holders
+* URL : /blockchain/tokens/{token_id}/top_percentages
 * 参数 : token_id : 币种ID
 * response
 
