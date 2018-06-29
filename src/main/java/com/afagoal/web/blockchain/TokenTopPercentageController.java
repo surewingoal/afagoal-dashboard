@@ -1,6 +1,7 @@
 package com.afagoal.web.blockchain;
 
 import com.afagoal.annotation.BehaviorLog;
+import com.afagoal.annotation.mvc.RestGetMapping;
 import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenTopPercentageDao;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
@@ -9,9 +10,11 @@ import com.afagoal.dto.blockchain.tokenTopPercentage.TokenTopPercentageEchartDto
 import com.afagoal.entity.blockchain.TokenTopPercentage;
 import com.afagoal.service.token.TokenService;
 import com.afagoal.utildto.PageData;
+import com.afagoal.utildto.Response;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -109,6 +113,13 @@ public class TokenTopPercentageController {
                                                         @RequestParam(value = "top_type", defaultValue = "10") Byte topType,
                                                         @RequestParam(defaultValue = "0", value = "page") int page,
                                                         @RequestParam(defaultValue = "1000", value = "size") int size) {
+        Pageable pageable = new PageRequest(page, size);
+        List<TokenTopPercentageEchartDto> dtos = topPercentageEchartDtos(tokenId, topType, pageable);
+
+        return dtos;
+    }
+
+    private List<TokenTopPercentageEchartDto> topPercentageEchartDtos(String tokenId, Byte topType, Pageable pageable) {
         List<BooleanExpression> booleanExpressionList = new ArrayList();
         booleanExpressionList.add(tokenTopPercentageDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
         booleanExpressionList.add(tokenTopPercentageDao.getQEntity().tokenId.eq(tokenId));
@@ -116,7 +127,6 @@ public class TokenTopPercentageController {
 
         List<OrderSpecifier> orderSpecifiers = new ArrayList();
         orderSpecifiers.add(tokenTopPercentageDao.getQEntity().statisticTime.asc());
-        Pageable pageable = new PageRequest(page, size);
 
         List<TokenTopPercentage> percentages =
                 tokenTopPercentageDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
@@ -127,4 +137,35 @@ public class TokenTopPercentageController {
     }
 
 
+    /****************************REST*********************************/
+
+    @RestGetMapping("/blockchain/tokens/{token_id}/top_percentages")
+    public Response tokenTopPercentages(@PathVariable(value = "token_id") String tokenId) {
+        List<BooleanExpression> booleanExpressionList = new ArrayList();
+        booleanExpressionList.add(tokenTopPercentageDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+        booleanExpressionList.add(tokenTopPercentageDao.getQEntity().tokenId.eq(tokenId));
+        booleanExpressionList.add(tokenTopPercentageDao.getQEntity().statisticTime
+                .between(LocalDateTime.now().plusDays(-1), LocalDateTime.now()));
+
+        List<OrderSpecifier> orderSpecifiers = new ArrayList();
+        orderSpecifiers.add(tokenTopPercentageDao.getQEntity().topType.asc());
+
+        List<TokenTopPercentage> percentages =
+                tokenTopPercentageDao.getEntities(booleanExpressionList, orderSpecifiers, null);
+
+        List<TokenTopPercentageDto> dtos = percentages.stream()
+                .map(percentage -> TokenTopPercentageDto.instance(percentage))
+                .collect(Collectors.toList());
+
+        return Response.ok(dtos);
+    }
+
+    @RestGetMapping("/blockchain/tokens/{token_id}/top_percentages/{top_type}")
+    public Response tokenTopPercentageDetails(@PathVariable(value = "token_id") String tokenId,
+                                              @PathVariable(value = "top_type") Byte topType) {
+        Pageable pageable = new PageRequest(0, 1000);
+        List<TokenTopPercentageEchartDto> dtos = topPercentageEchartDtos(tokenId, topType, pageable);
+
+        return Response.ok(dtos);
+    }
 }

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,7 @@ public class TokenTopHolderService {
     @Autowired
     private ValueWatcherDao valueWatcherDao;
 
-    
+
     @Transactional
     public void mergeTopHolderInfo(String tokenId) {
         LocalDateTime now = LocalDateTime.now();
@@ -87,7 +88,7 @@ public class TokenTopHolderService {
         List<OrderSpecifier> orders = new ArrayList();
         orders.add(tokenTopHolderDao.getQEntity().statisticTime.asc());
 
-        List<TokenTopHolder> tokenTopHolders = tokenTopHolderDao.getEntities(booleanExpressionList, null);
+        List<TokenTopHolder> tokenTopHolders = tokenTopHolderDao.getEntities(booleanExpressionList, orders, null);
 
         return tokenTopHolders.stream()
                 .map(tokenTopHolder -> TokenTopHolderEchartDto.instance(tokenTopHolder))
@@ -115,4 +116,23 @@ public class TokenTopHolderService {
         }
 
     }
+
+    public List<TokenTopHolder> todayTopHolders(String tokenId) {
+
+        if (StringUtils.isEmpty(tokenId)) {
+            throw new RuntimeException("请指定当前token!");
+        }
+
+        List<BooleanExpression> booleanExpressions = new ArrayList();
+        booleanExpressions.add(tokenTopHolderDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+        booleanExpressions.add(tokenTopHolderDao.getQEntity().tokenId.eq(tokenId));
+        booleanExpressions.add(tokenTopHolderDao.getQEntity().statisticTime
+                .between(LocalDateTime.now().plusDays(-1), LocalDateTime.now()));
+
+        List<OrderSpecifier> orders = new ArrayList();
+        orders.add(tokenTopHolderDao.getQEntity().rank.asc());
+
+        return tokenTopHolderDao.getEntities(booleanExpressions, orders, null);
+    }
+
 }

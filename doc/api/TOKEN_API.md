@@ -5,11 +5,15 @@
 	* [币种价格纪录](#币种价格纪录)
 	* [币种详情-价格相关](#币种详情-价格相关)
 	* [币种详情-固定信息](#币种详情-固定信息)
+	* [币种TOP持有者](#币种TOP持有者)
+	* [币种TOP持有者持仓变化](#币种TOP持有者持仓变化)
+	* [币种TOP持有比例](#币种TOP持有比例)
+	* [币种TOP持有比例变化趋势](#币种TOP持有比例变化趋势)
 
 ## <a name="币种相关"></a>币种相关
 ### <a name="币种列表"></a>币种列表
 
-* URL : /blockchain/token_details
+* URL : /blockchain/tokens
 * 参数
 <br>
 
@@ -56,7 +60,7 @@
 
 ### <a name="币种价格纪录"></a>币种价格纪录
 
-* URL : /blockchain/token_details/{token_id}/details
+* URL : /blockchain/tokens/{token_id}/details
 * 参数 : token_id : 币种ID
 * response 
 
@@ -82,7 +86,7 @@
 
 ### <a name="币种详情-价格相关"></a>币种详情-价格相关
 
-* URL : /blockchain/token_details/{token_id}/info
+* URL : /blockchain/tokens/{token_id}/value_info
 * 参数 : token_id : 币种ID
 * response 
 
@@ -179,5 +183,182 @@
             }
         ]
     }
+}
+```
+
+### <a name="币种TOP持有者"></a>币种TOP持有者
+
+* URL : /blockchain/tokens/{token_id}/top_holders
+* 参数 : token_id : 币种ID
+* response
+
+```
+{
+    "msg": null,
+    "rc": 0,
+    "data": [
+        {
+            "id": "9e98dc68-7af6-11e8-bfd8-525400376068",
+            "tokenName": "EOS",
+            "tokenCode": "EOS",
+            "tokenId": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+            "address": "0x00000000000000000000000000000000000000b1",
+            "rank": 1,
+            "quantily": 100000000.01,
+            "percentage": 10,
+            "yesterdayRank": 1,
+            "yesterdayQuantily": 100000000.01,
+            "yesterdayPercentage": 10,
+            "percentageChange": 0,
+            "statisticTime": "2018-06-29 01:13:47"
+        },
+        {
+            "id": "9e98dc69-7af6-11e8-bfd8-525400376068",
+            "tokenName": "EOS",
+            "tokenCode": "EOS",
+            "tokenId": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+            "address": "0x100634b885f54286762578042a1bfcbeacb91729",
+            "rank": 2,
+            "quantily": 75291097.61865,
+            "percentage": 7.5291,
+            "yesterdayRank": 2,
+            "yesterdayQuantily": 75291097.61865,
+            "yesterdayPercentage": 7.5291,
+            "percentageChange": 0,
+            "statisticTime": "2018-06-29 01:13:47"
+        }
+    ]
+}
+```
+
+
+### <a name="币种TOP持有者持仓变化"></a>币种TOP持有者持仓变化
+
+* URL : /blockchain/tokens/{token_id}/top_holders/{address}
+* 参数 : token_id : 币种ID
+* 参数 : address  : 持有者地址
+* 描述 : 某token下某address持有者持仓变化趋势
+* response
+
+```
+{
+    "msg": null,
+    "rc": 0,
+    "data": [
+        {
+            "id": "d531921d-68e3-11e8-bfd8-525400376068",
+            "rank": 2,
+            "percentage": 7.5291,
+            "quantily": 75291097.61865,
+            "statisticTime": "2018-06-06"
+        },
+        {
+            "id": "df545571-70bf-11e8-bfd8-525400376068",
+            "rank": 2,
+            "percentage": 7.5291,
+            "quantily": 75291097.61865,
+            "statisticTime": "2018-06-16"
+        },
+        {
+            "id": "eb6a08c5-7708-11e8-bfd8-525400376068",
+            "rank": 2,
+            "percentage": 7.5291,
+            "quantily": 75291097.61865,
+            "statisticTime": "2018-06-24"
+        }
+    ]
+}
+```
+
+
+### <a name="币种TOP持有比例"></a>币种TOP持有比例
+
+* URL : /blockchain/tokens/{token_id}/top_holders
+* 参数 : token_id : 币种ID
+* response
+
+```
+{
+    "msg": null,
+    "rc": 0,
+    "data": [
+        {
+            "id": "ac7cade6-7af6-11e8-bfd8-525400376068",
+            "tokenName": "EOS",
+            "tokenId": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+            "tokenCode": "EOS",
+            "topType": 10,
+            "yesterdayPercentage": 0,
+            "percentage": 49.67,
+            "statisticTime": "2018-06-29 01:14:10",
+            "holdNums": 496704568.49
+        },
+        {
+            "id": "aadecd66-7af6-11e8-bfd8-525400376068",
+            "tokenName": "EOS",
+            "tokenId": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+            "tokenCode": "EOS",
+            "topType": 25,
+            "yesterdayPercentage": 0,
+            "percentage": 64.76,
+            "statisticTime": "2018-06-29 01:14:08",
+            "holdNums": 647629172.16
+        },
+        {
+            "id": "a9c89b6e-7af6-11e8-bfd8-525400376068",
+            "tokenName": "EOS",
+            "tokenId": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+            "tokenCode": "EOS",
+            "topType": 50,
+            "yesterdayPercentage": 0,
+            "percentage": 70.25,
+            "statisticTime": "2018-06-29 01:14:06",
+            "holdNums": 702525171.75
+        },
+        {
+            "id": "a84c2d3c-7af6-11e8-bfd8-525400376068",
+            "tokenName": "EOS",
+            "tokenId": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0",
+            "tokenCode": "EOS",
+            "topType": 100,
+            "yesterdayPercentage": 0,
+            "percentage": 75.13,
+            "statisticTime": "2018-06-29 01:14:03",
+            "holdNums": 751337324.36
+        }
+    ]
+}
+```
+
+
+### <a name="币种TOP持有比例变化趋势"></a>币种TOP持有比例变化趋势
+
+* URL : /blockchain/tokens/{token_id}/top_percentages/{top_type}
+* 参数 : token_id : 币种ID
+* 参数 : top_type : top_type  10、25、50、100
+* 描述 : 某token下TOP(10、25、50、100)持有比例变更纪录
+* response
+
+```
+{
+    "msg": null,
+    "rc": 0,
+    "data": [
+        {
+            "statisticTime": "2018-06-27",
+            "percentage": 75.13,
+            "holdNums": 75133.732436
+        },
+        {
+            "statisticTime": "2018-06-28",
+            "percentage": 75.13,
+            "holdNums": 75133.732436
+        },
+        {
+            "statisticTime": "2018-06-29",
+            "percentage": 75.13,
+            "holdNums": 75133.732436
+        }
+    ]
 }
 ```

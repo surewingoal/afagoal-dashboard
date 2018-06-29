@@ -128,7 +128,7 @@ public class TokenDetailController {
     /**
      * @param orderBy 1:市值排名   2:交易量排名   3:涨幅   4:跌幅
      */
-    @RestGetMapping("/blockchain/token_details")
+    @RestGetMapping("/blockchain/tokens")
     public Response tokenDetails(@RequestParam(defaultValue = "1", value = "order_by") int orderBy,
                                  @RequestParam(required = false, value = "key") String key,
                                  @RequestParam(defaultValue = "0", value = "page") int page,
@@ -168,7 +168,7 @@ public class TokenDetailController {
         return Response.ok(new PageData(dtos, count.intValue()));
     }
 
-    @RestGetMapping("/blockchain/token_details/{token_id}/details")
+    @RestGetMapping("/blockchain/tokens/{token_id}/details")
     public Response tokenDetails(@PathVariable(value = "token_id") String tokenId,
                                  @RequestParam(defaultValue = "0", value = "page") int page,
                                  @RequestParam(defaultValue = "100", value = "size") int size) {
@@ -176,7 +176,7 @@ public class TokenDetailController {
         return Response.ok(dtos);
     }
 
-    @RestGetMapping("/blockchain/token_details/{token_id}/info")
+    @RestGetMapping("/blockchain/tokens/{token_id}/value_info")
     public Response tokenInfo(@PathVariable(value = "token_id") String tokenId) {
         TokenDetail detail = tokenDetailDao.todayDetail(tokenId);
         return Response.ok(TokenDetailDto.instance(detail));
