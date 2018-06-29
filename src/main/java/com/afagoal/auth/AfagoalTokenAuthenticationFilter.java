@@ -40,7 +40,7 @@ public class AfagoalTokenAuthenticationFilter implements Filter {
             Authentication tokenValue = tokenExtractor.extract(request);
 
             if (null == tokenValue) {
-                System.out.println("there has no token !");
+//                System.out.println("there has no token !");
             } else {
                 authentication = authenticationStores.getAuthentication((String) tokenValue.getPrincipal());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
