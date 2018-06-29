@@ -36,7 +36,9 @@ public class TokenDetailDto {
 
     private BigDecimal usdProfitability;  //usd盈利率
 
-    private String usd;
+    private BigDecimal usd;  //usd盈利率
+
+    private String usdStr;
 
     private BigDecimal ethProfitability;  //eth盈利率
 
@@ -60,6 +62,7 @@ public class TokenDetailDto {
         dto.setId(detail.getId());
         dto.setTransfersToken(detail.getTransfersToken());
         dto.setTransfersUsd(detail.getTransfersUsd());
+        dto.setUsd(detail.getUsd());
         if (null != detail.getCirculatingSupply()) {
             dto.setCirculatingSupply(NumUtils.moneyFormat(detail.getCirculatingSupply()));
         }
@@ -67,13 +70,13 @@ public class TokenDetailDto {
             dto.setTotalValue(NumUtils.moneyFormat(detail.getTotalValue()));
         }
         if (null != detail.getUsd()) {
-            dto.setUsd(NumUtils.moneyFormat(detail.getUsd()));
+            dto.setUsdStr(NumUtils.moneyFormat(detail.getUsd()));
         }
         if (null != detail.getEth()) {
-            dto.setEth(NumUtils.moneyFormat(detail.getEth(),NumUtils.UNIT_ETH));
+            dto.setEth(NumUtils.moneyFormat(detail.getEth(), NumUtils.UNIT_ETH));
         }
         dto.setEthProfitability(detail.getEthProfitability());
-        if(null != detail.getPriceChange()){
+        if (null != detail.getPriceChange()) {
             dto.setPriceChange(NumUtils.percentageFormat(detail.getPriceChange()));
         }
         dto.setTodayTransaction(detail.getTodayTransaction());

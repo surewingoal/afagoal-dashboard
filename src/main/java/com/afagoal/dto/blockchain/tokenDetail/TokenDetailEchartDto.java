@@ -20,6 +20,8 @@ public class TokenDetailEchartDto {
 
     private BigDecimal usd;
 
+    private BigDecimal eth;
+
     private String statisticTime;
 
     public static TokenDetailEchartDto instance(TokenDetail detail) {
@@ -28,6 +30,7 @@ public class TokenDetailEchartDto {
         }
         TokenDetailEchartDto dto = new TokenDetailEchartDto();
         dto.setId(detail.getId());
+        dto.setEth(detail.getEth());
         dto.setStatisticTime(DateUtils.format(detail.getStatisticTime().toLocalDate()));
         dto.setUsd(detail.getUsd());
         return dto;

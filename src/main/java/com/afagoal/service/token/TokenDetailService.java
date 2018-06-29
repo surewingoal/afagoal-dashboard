@@ -2,6 +2,8 @@ package com.afagoal.service.token;
 
 import com.afagoal.auxiliary.tokenEnum.TokenWatcherEnum;
 import com.afagoal.auxiliary.tokenValueWatcher.ValueWatcherGenerator;
+import com.afagoal.dto.blockchain.tokenDetail.TokenDetailDto;
+import com.afagoal.dto.blockchain.tokenDetail.TokenDetailEchartDto;
 import com.afagoal.mail.AfagoalMainSender;
 import com.afagoal.dao.blockchain.userFollow.TokenUserFollowDao;
 import com.afagoal.dao.blockchain.valueWatcher.ValueWatcherConditionDao;
@@ -14,6 +16,8 @@ import com.afagoal.entity.blockchain.TokenDetail;
 import com.afagoal.entity.blockchain.userFollow.TokenUserFollow;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcher;
 import com.afagoal.entity.blockchain.valueWatch.ValueWatcherCondition;
+import com.afagoal.utildto.PageData;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.io.UnsupportedEncodingException;
@@ -23,11 +27,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
 
@@ -127,5 +134,44 @@ public class TokenDetailService {
                     }
             );
         }
+    }
+
+    public PageData<TokenDetailDto> tokenDetails(String tokenId,
+                                                 int page,
+                                                 int size) {
+        List<BooleanExpression> booleanExpressionList = new ArrayList();
+        booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+
+        if (StringUtils.isNotEmpty(tokenId)) {
+            booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));
+        }
+
+        List<OrderSpecifier> orderSpecifiers = new ArrayList();
+        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.desc());
+
+        Pageable pageable = new PageRequest(page, size);
+
+        List<TokenDetail> details = tokenDetailDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
+        Long count = tokenDetailDao.getCount(booleanExpressionList);
+
+        List<TokenDetailDto> dtos = details.stream()
+                .map(detail -> TokenDetailDto.instance(detail))
+                .collect(Collectors.toList());
+
+        return new PageData(dtos, count.intValue());
+    }
+
+    public List<TokenDetailEchartDto> tokenValues(String tokenId, int page, int size) {
+        List<BooleanExpression> booleanExpressionList = new ArrayList();
+        booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
+        booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));
+        List<OrderSpecifier> orderSpecifiers = new ArrayList();
+        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.asc());
+        Pageable pageable = new PageRequest(page, size);
+        List<TokenDetail> details = tokenDetailDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
+        List<TokenDetailEchartDto> dtos = details.stream()
+                .map(detail -> TokenDetailEchartDto.instance(detail))
+                .collect(Collectors.toList());
+        return dtos;
     }
 }

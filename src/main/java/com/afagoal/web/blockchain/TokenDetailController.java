@@ -1,19 +1,23 @@
 package com.afagoal.web.blockchain;
 
 import com.afagoal.annotation.BehaviorLog;
+import com.afagoal.annotation.mvc.RestGetMapping;
 import com.afagoal.constant.BaseConstant;
 import com.afagoal.dao.blockchain.TokenDetailDao;
 import com.afagoal.dto.blockchain.tokenDetail.TokenDetailDto;
 import com.afagoal.dto.blockchain.tokenDetail.TokenDetailEchartDto;
 import com.afagoal.dto.blockchain.TokenSimpleDto;
 import com.afagoal.entity.blockchain.TokenDetail;
+import com.afagoal.service.token.TokenDetailService;
 import com.afagoal.service.token.TokenService;
 import com.afagoal.utildto.PageData;
+import com.afagoal.utildto.Response;
 import com.afagoal.utils.date.DateUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,6 +45,8 @@ public class TokenDetailController {
     private TokenDetailDao tokenDetailDao;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private TokenDetailService tokenDetailService;
 
     @RequestMapping("/blockchain/token_detail")
     @BehaviorLog("币种每日详情")
@@ -91,50 +98,14 @@ public class TokenDetailController {
     @RequestMapping("/blockchain/token_detail/list")
     @ResponseBody
     @BehaviorLog("币种每日详情列表")
-    public PageData<TokenDetailDto> list(@RequestParam(value = "start_date", required = false) String startDate,
-                                         @RequestParam(value = "end_date", required = false) String endDate,
-                                         @RequestParam(value = "token_id", required = false) String tokenId,
-                                         @RequestParam(value = "key", required = false) String key,
+    public PageData<TokenDetailDto> list(@RequestParam(value = "token_id", required = false) String tokenId,
                                          @RequestParam(defaultValue = "0", value = "page") int page,
-                                         @RequestParam(defaultValue = "10", value = "size") int size) {
-        List<BooleanExpression> booleanExpressionList = new ArrayList();
-        booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
-        LocalDate end = LocalDate.now();
-        LocalDate start = LocalDate.now().plusDays(-60);
-        if (StringUtils.isNotEmpty(endDate)) {
-            end = DateUtils.valueOfDate(endDate);
-        }
-        if (StringUtils.isNotEmpty(startDate)) {
-            start = DateUtils.valueOfDate(startDate);
-        }
+                                         @RequestParam(defaultValue = "100", value = "size") int size) {
         if (StringUtils.isEmpty(tokenId)) {
             TokenSimpleDto hottestToken = tokenService.hottestToken();
             tokenId = hottestToken.getId();
         }
-        if (StringUtils.isNotEmpty(key)) {
-            booleanExpressionList.add(tokenDetailDao.getQEntity().tokenCode.like("%" + key + "%")
-                    .or(tokenDetailDao.getQEntity().tokenName.like("%" + key + "%")
-                    ));
-        }
-        if (StringUtils.isNotEmpty(tokenId)) {
-            booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));
-        }
-        booleanExpressionList.add(tokenDetailDao.getQEntity().statisticTime.between(start.atStartOfDay(), end.atTime(23, 59, 59)));
-
-
-        List<OrderSpecifier> orderSpecifiers = new ArrayList();
-        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.desc());
-
-        Pageable pageable = new PageRequest(page, size);
-
-        List<TokenDetail> details = tokenDetailDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
-        Long count = tokenDetailDao.getCount(booleanExpressionList);
-
-        List<TokenDetailDto> dtos = details.stream()
-                .map(detail -> TokenDetailDto.instance(detail))
-                .collect(Collectors.toList());
-
-        return new PageData(dtos, count.intValue());
+        return tokenDetailService.tokenDetails(tokenId, page, size);
     }
 
     @RequestMapping("/blockchain/token_detail/echart_list")
@@ -147,17 +118,68 @@ public class TokenDetailController {
             TokenSimpleDto hottestToken = tokenService.hottestToken();
             tokenId = hottestToken.getId();
         }
+
+        return tokenDetailService.tokenValues(tokenId, page, size);
+    }
+
+
+    /***********************REST*************************/
+
+    /**
+     * @param orderBy 1:市值排名   2:交易量排名   3:涨幅   4:跌幅
+     */
+    @RestGetMapping("/blockchain/token_details")
+    public Response tokenDetails(@RequestParam(defaultValue = "1", value = "order_by") int orderBy,
+                                 @RequestParam(required = false, value = "key") String key,
+                                 @RequestParam(defaultValue = "0", value = "page") int page,
+                                 @RequestParam(defaultValue = "100", value = "size") int size) {
+
         List<BooleanExpression> booleanExpressionList = new ArrayList();
         booleanExpressionList.add(tokenDetailDao.getQEntity().state.ne(BaseConstant.DELETE_STATE));
-        booleanExpressionList.add(tokenDetailDao.getQEntity().tokenId.eq(tokenId));
+        if (StringUtils.isNotEmpty(key)) {
+            booleanExpressionList.add(tokenDetailDao.getQEntity().tokenCode.like("%" + key + "%")
+                    .or(tokenDetailDao.getQEntity().tokenName.like("%" + key + "%")
+                    ));
+        }
+
+        booleanExpressionList.add(tokenDetailDao.getQEntity()
+                .statisticTime.between(LocalDateTime.now().plusDays(-1), LocalDateTime.now()));
+
         List<OrderSpecifier> orderSpecifiers = new ArrayList();
-        orderSpecifiers.add(tokenDetailDao.getQEntity().statisticTime.asc());
+        if (orderBy == 1) {
+            orderSpecifiers.add(tokenDetailDao.getQEntity().totalValue.desc());
+        } else if (orderBy == 2) {
+            orderSpecifiers.add(tokenDetailDao.getQEntity().todayTransaction.desc());
+        } else if (orderBy == 3) {
+            //TODO   涨跌幅排序
+        } else if (orderBy == 4) {
+
+        }
+
         Pageable pageable = new PageRequest(page, size);
+
         List<TokenDetail> details = tokenDetailDao.getEntities(booleanExpressionList, orderSpecifiers, pageable);
-        List<TokenDetailEchartDto> dtos = details.stream()
-                .map(detail -> TokenDetailEchartDto.instance(detail))
+        Long count = tokenDetailDao.getCount(booleanExpressionList);
+
+        List<TokenDetailDto> dtos = details.stream()
+                .map(detail -> TokenDetailDto.instance(detail))
                 .collect(Collectors.toList());
-        return dtos;
+
+        return Response.ok(new PageData(dtos, count.intValue()));
+    }
+
+    @RestGetMapping("/blockchain/token_details/{token_id}/details")
+    public Response tokenDetails(@PathVariable(value = "token_id") String tokenId,
+                                 @RequestParam(defaultValue = "0", value = "page") int page,
+                                 @RequestParam(defaultValue = "100", value = "size") int size) {
+        List<TokenDetailEchartDto> dtos = tokenDetailService.tokenValues(tokenId, page, size);
+        return Response.ok(dtos);
+    }
+
+    @RestGetMapping("/blockchain/token_details/{token_id}/info")
+    public Response tokenInfo(@PathVariable(value = "token_id") String tokenId) {
+        TokenDetail detail = tokenDetailDao.todayDetail(tokenId);
+        return Response.ok(TokenDetailDto.instance(detail));
     }
 
 }
