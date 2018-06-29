@@ -31,7 +31,7 @@ public class TokenDetailTask {
     @Autowired
     private ValueWatcherDao valueWatcherDao;
 
-    @Scheduled(cron = "0 10 4 * * ? ")
+//    @Scheduled(cron = "0 10 4 * * ? ")
     public void tokenDetailMerge() {
         long now = System.currentTimeMillis();
         System.out.println("token_detail merge start at : " + now);
@@ -56,7 +56,7 @@ public class TokenDetailTask {
 
     }
 
-    @Scheduled(cron = "0 0 5 * * ? ")
+//    @Scheduled(cron = "0 0 5 * * ? ")
     public void watchTokenValue() {
         System.out.println("token_value_watch start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> tokens = tokenService.simpleTokens();
@@ -65,7 +65,7 @@ public class TokenDetailTask {
         );
     }
 
-    @Scheduled(cron = "0 0 8 * * ? ")
+//    @Scheduled(cron = "0 0 8 * * ? ")
     public void noticeUser() {
         System.out.println("token_value_watch notice user start at : " + System.currentTimeMillis());
         List<ValueWatcher> todayWatchers = valueWatcherDao.todayWatcher();

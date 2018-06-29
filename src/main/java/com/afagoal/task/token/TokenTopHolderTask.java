@@ -29,7 +29,7 @@ public class TokenTopHolderTask {
     @Autowired
     private TokenAddressUserFollowDao tokenAddressUserFollowDao;
 
-    @Scheduled(cron = "0 20 4 * * ? ")
+//    @Scheduled(cron = "0 20 4 * * ? ")
     public void tokenTopHolderMerge() {
         System.out.println("token_top_holder merge start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> simpleDtoList = tokenService.simpleTokens();
@@ -39,7 +39,7 @@ public class TokenTopHolderTask {
     }
 
 
-    @Scheduled(cron = "0 20 5 * * ? ")
+//    @Scheduled(cron = "0 20 5 * * ? ")
     public void tokenTopHolderWatch(){
         System.out.println("token_top_holder watch start at : " + System.currentTimeMillis());
         List<TokenTopHolderSimpleDto> followedAddress = tokenAddressUserFollowDao.followedAddress();

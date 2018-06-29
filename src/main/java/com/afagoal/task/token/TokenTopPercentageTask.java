@@ -24,7 +24,7 @@ public class TokenTopPercentageTask {
     @Autowired
     private TokenService tokenService;
 
-    @Scheduled(cron = "0 10 5 * * ? ")
+//    @Scheduled(cron = "0 10 5 * * ? ")
     public void tokenTopPercentageWatch() {
         System.out.println("token_top_percentage_watch start at : " + System.currentTimeMillis());
         List<TokenSimpleDto> tokens = tokenService.simpleTokens();
