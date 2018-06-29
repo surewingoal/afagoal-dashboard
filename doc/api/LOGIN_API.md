@@ -2,8 +2,14 @@
 
 * 服务器地址：***https://dashboard.afagoal.top***
 
-## 注册
-### 微信端注册
+* [注册](#注册)
+	* [微信端注册](#微信端注册) 
+* [登录](#登录)
+	* [移动端登录](#移动端登录)
+
+
+## <a name="注册"></a>注册
+### <a name="微信端注册"></a>微信端注册
 * URL : /register/wechat
 * 参数
 <br>
@@ -65,8 +71,8 @@
 }
 ```
 
-## 登录
-### 移动端登录
+## <a name="登录"></a>登录
+### <a name="移动端登录"></a>移动端登录
 * url : /afagoal_token/login
 * 参数
 <br>
@@ -95,5 +101,3 @@
 * 登录后访问接口带上header ***Authorization:afagoal b83127fddd6e47dd99bdd4442235434b***
 
 * 测试接口：https://dashboard.afagoal.top/blockchain/token/list
-
-## TOKEN相关

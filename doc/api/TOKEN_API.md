@@ -1,6 +1,13 @@
 # TOKEN API
-## 币种相关
-### 币种列表
+
+* [币种相关](#币种相关)
+	* [币种列表](#币种列表) 	
+	* [币种价格纪录](#币种价格纪录)
+	* [币种详情:价格相关](#币种详情:价格相关)
+	* [币种详情:固定信息](#币种详情:固定信息)
+
+## <a name="币种相关"></a>币种相关
+### <a name="币种列表"></a>币种列表
 
 * URL : /blockchain/token_details
 * 参数
@@ -47,7 +54,7 @@
 }
 ```
 
-### 币种价格变动
+### <a name="币种价格纪录"></a>币种价格纪录
 
 * URL : /blockchain/token_details/{token_id}/details
 * 参数 : token_id : 币种ID
@@ -73,7 +80,7 @@
 }
 ```
 
-### 币种详情:价格相关
+### <a name="币种详情:价格相关"></a>币种详情:价格相关
 
 * URL : /blockchain/token_details/{token_id}/info
 * 参数 : token_id : 币种ID
@@ -104,7 +111,7 @@
 }
 ```
 
-### 币种详情:固定信息
+### <a name="币种详情:固定信息"></a>币种详情:固定信息
 
 * URL : /blockchain/tokens/{token_id}/info
 * 参数 : token_id : 币种ID
