@@ -95,3 +95,5 @@
 * 登录后访问接口带上header ***Authorization:afagoal b83127fddd6e47dd99bdd4442235434b***
 
 * 测试接口：https://dashboard.afagoal.top/blockchain/token/list
+
+## TOKEN相关
